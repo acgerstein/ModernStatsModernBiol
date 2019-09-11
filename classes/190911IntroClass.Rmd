@@ -1,0 +1,73 @@
+---
+title: "IntroClass_Stat4600-MBIO7160"
+author: "Aleeza Gerstein"
+date: '2019-09-11'
+output:
+  pdf_document: 
+    latex_engine: xelatex
+header-includes:
+- \usepackage[fontsize=10pt]{scrextend}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<!-- This file was created by Aleeza Gerstein, adapted from Jenny Bryan https://happygitwithr.com, https://github.com/jennybc/here_here and 
+https://malco.io/2018/11/05/why-should-i-use-the-here-package/ -->
+
+```{r}
+library(tidyverse)
+```
+
+# We are going to use GitHub for our course notes and assignment
+
+Git/Github is a way to manage version control, in the cloud. In the words of Jenny Bryan "Git manages the evolution of a set of files – called a repository – in a sane, highly structured way. If you have no idea what I’m talking about, think of it as the “Track Changes” features from Microsoft Word on steroids." GitHub is the webhosting service we will use for Git (others do exist e.g., Bitbucket, GitLab, but GitHub is the most common). 
+
+For our class we're going to have everyone set up a dedicated repository, and ask that all the work you do for the class is kept there (and kept current).
+
+There are quite a few steps we need to take to make this work:
+1) Dedicate a directory (a.k.a “folder”) to it.
+2) Make it an RStudio Project.
+Make it a Git repository.
+Go about your usual business. But instead of only saving individual files, periodically you make a commit, which takes a multi-file snapshot of the entire project.
+Have you ever versioned a file by adding your initials or the date? That is effectively a commit, albeit only for a single file: it is a version that is significant to you and that you might want to inspect or revert to later.
+Push commits to GitHub periodically.
+This is like sharing a document with colleagues on DropBox or sending it out as an email attachment. It signals you’re ready to make your work visible to others and invite comment or edits.
+
+#### Checking the data for missing and duplicated entries is critically important
+In the assignemnt one dataset there were two entries for Guinea and different country names used for 19 countries. It is imperative to continually check to make sure the number of unique items in a dataset or variable is what you think it should be (and you should always have an expectation).  
+
+#### Decisions about what to present (and what not to present) should be made purposefully.  
+The amount of text you need is the minimal amount to completely convey the information. Too much text is just as bad as too little text. 
+
+#### Axes labels are important.  
+The best one will almost never be the variable name. For numerical variables the axis label should state the variable as well as the units.  
+When axis titles are used (which is not common for publication figures) they should tell the story, not just recapitulate what was written in the axes labels.
+ 
+#### Don't nest .proj files 
+Because it interferes with `here()` ... 
+
+---
+\newpage
+
+# The here package
+Unsuprisingly (at this point) see posts by Jenny Bryan (https://github.com/jennybc/here_here) and Malcolm Barrett
+(https://malco.io/2018/11/05/why-should-i-use-the-here-package/)
+
+RStudio projects let us set up a local working directory, which makes it easier for someone else to access your files with the same folder and file structure.  
+The here package let's us write file paths that work across operating systems: it detects the root directory and writes let's us build paths accordingly.  If you are familiar with `file.path()` it is similar, except more robust ouside of projects.  
+Importantly the root directory is *not* where your `*.rmd` script is! It is where your `*.Rproj` file is!
+Combined with git, this means that everything can be entirely reproductible.
+
+```{r}
+getwd()
+dir()
+
+#load the here package
+library(here)
+here("data", "portal_data_joined.csv")
+pdj <- read_csv(here("data", "portal_data_joined.csv"), col_type = cols())
+pdj
+```
+
