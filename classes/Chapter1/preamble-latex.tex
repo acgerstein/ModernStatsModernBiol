@@ -1,0 +1,10 @@
+\usepackage{float}
+\let\origfigure\figure
+\let\endorigfigure\endfigure
+\renewenvironment{figure}[1][2] {
+    \expandafter\origfigure\expandafter[H]
+} {
+    \endorigfigure
+}
+\let\oldrule=\rule
+\renewcommand{\rule}[1]{\oldrule{\linewidth}}
