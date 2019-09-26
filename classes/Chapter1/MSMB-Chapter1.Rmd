@@ -97,6 +97,7 @@ rbinom(1, prob = 2/3, size = 12)
 
 ***
 \textcolor{red}{Question 1.2: Repeat this function call a number of times. Why isn't the answer always the same?}
+
 Beause it is a probability function.
 
 ***
@@ -160,7 +161,7 @@ dbinom(3, prob = 2/3, size = 4)
 When the probability of success *p* is small and the number of trial *n* is large, the binomial distribution $B(n, p)$ can be faithfully approximated by a simpler distribution, the **poisson distribution** with rate parameter $\lambda = np$.
 
 ***
-\textcolor{red}{Question 1.5: what is the probability mass distribution of observing 0:12 mutations ina  genome of $n = 10^4$ nucleotides, when the probability of mutation is *p* = 5 $\times$ $10^{-4}$ per nucleotide? Is it similar when modeled by the binomial $B(n, p)$ distribution and by the poisson $\lambda = np$ distribution?}
+\textcolor{red}{Question 1.5: what is the probability mass distribution of observing 0:12 mutations in a  genome of $n = 10^4$ nucleotides, when the probability of mutation is **p** = 5 $\times$ $10^{-4}$ per nucleotide? Is it similar when modeled by the binomial $B(n, p)$ distribution and by the poisson $\lambda = np$ distribution?}
 
 ```{r testbinomvspois, echo = FALSE, fig.width = 4, fig.height = 4}
 plot(dbinom(0:12, prob = 5e-4, size = 1e4),
@@ -178,13 +179,17 @@ For instance, take $\lambda$ = 5 and compute $P(X = 3)$
 5^3 * exp(-5) / factorial(3)
 ```
 
-\textcolor{red}{Task: simulate a mutation process along 10, 000 positions with a mutation rate of $5\times10^{-4}$ and count the number of mutations. Repat this many times and plot the distribution.
+**
+
+\textcolor{red}{Task: simulate a mutation process along 10, 000 positions with a mutation rate of $5\times10^{-4}$ and count the number of mutations. Repat this many times and plot the distribution.}
 
 ```{r gen-simpoisson, fig.keep = 'high', fig.cap = "Simulated distribution of B(10000, $10^{-4}$) for (ref:gen-simpoisson-1) simulations.", fig.width = 7, fig.height = 5.5}
 rbinom(1, prob = 5e-4, size = 10000)
 simulations = rbinom(n = 300000, prob = 5e-4, size = 10000)
 barplot(table(simulations), col = "lavender")
 ```
+
+***
 
 ### 1.3.4 A generative model for epitope detection
 
@@ -194,7 +199,7 @@ The general form is *$X|Y$ as "given" or "conditional on". Thus, "X happens cond
 . The data for one patien looks like this:
 
 \textcolor{blue}{WHAT IS THIS NOMENCLATURE?}
-```{r brack100, echo = FALSE}
+```{r brack100, echo = TRUE}
 P1 <- `[<-` (rep(0, 100), 22, 1)
 ```
 
@@ -218,9 +223,10 @@ par(new=T)
 hist(poiss, breaks=40, col="red", xlim=c(0, 100), main="", ylim=c(0, 15), xlab="", ylab="")
 ```
 
+***
 
 
-```{r typicalP, fig.keep = 'high', fig.cap = "Plot of typical data from our generative model for the background, i.\\,e., for the false positive hits: 100 positions along the protein, at each position the count is drawn from a Poisson(0.5) random variable.", echo=FALSE, fig.width = 6, fig.height = 4}
+```{r typicalP, fig.keep = 'high', fig.cap = "Plot of typical data from our generative model for the background, i.\\,e., for the false positive hits: 100 positions along the protein, at each position the count is drawn from a Poisson(0.5) random variable.", echo=FALSE, fig.width = 6, fig.height = 4, eval =FALSE}
 s100 = rpois(100, lambda=0.5)
 barplot(s100, ylim = c(0, 7), width = 0.7, xlim = c(-0.5,100.5),
   names.arg = seq(along = s100), col="lavender")
@@ -263,13 +269,16 @@ ppois(6, 0.5, lower.tail = FALSE)
 ```{r}
 1 - ppois(10*(15:25), lambda = 100)  # becomes 0 (cancellation)
 ppois(10*(15:25), lambda = 100, lower.tail = FALSE)  # no cancellation
-    ```
+```
 ?
+
 ***
 
 (1.1) We use $\epsilon = P(X \geq 7) = 1 - P(X \leq 6) \approx 10^{-6}$ (1.1)
 
-** Extreme value analysis for the poisson distirubiton **
+**Extreme value analysis for the poisson distribution**
+
+***
 
 \textcolor{red}{Question 1.6: The above calculation is not correct if we want to compute the probability that we observe these data if there is no epitope}
 
@@ -287,6 +296,8 @@ Because we suppose these 100 events are independent, we can use our result from 
 \[
 \Pi_{i=1}^{100} P(x_i \leq 6 ) = (P(x_i \leq 6))^{100} = (1- \epsilon)^{100}
 \]
+
+***
 
 **Actually calculating the numbers**
 
@@ -315,7 +326,7 @@ If we knew instead the number of patients and the length of the proteins but did
 
 ***
 
-\textcolor{blue}{Task: Experiment with the random number generator that generates all possible numbers between 0 and 1 through the function called `runif`. Use it to generate  random variable with four levels (A, C, T, G) where $p_A = \frac{1}{8}$, $p_B = \frac{3}{8}$, $p_C = \frac{3}{8}$, $p_G = \frac{1}{8}$
+\textcolor{blue}{Task: Experiment with the random number generator that generates all possible numbers between 0 and 1 through the function called `runif`. Use it to generate  random variable with four levels (A, C, T, G) where $p_A = \frac{1}{8}$, $p_B = \frac{3}{8}$, $p_C = \frac{3}{8}$, $p_G = \frac{1}{8}$}
 
 ```{r runif}
 ?sample
@@ -325,25 +336,30 @@ If we knew instead the number of patients and the length of the proteins but did
 
 **Mathematical formulation** 
 
+***
+
 \textcolor{red}{Question 1.7: Suppose we have four boxes that are equally likely. Using the formula, what is the probability of observing four in the first box, two in the second box and none in the two other boxes?}
 
 ```{r dmultinom}
 dmultinom(c(4, 2, 0, 0), prob = rep(1/4, 4))
 ```
 
+***
+
 \textcolor{blue}{Formula?}
 
 Run simulations to test whether the data are consistent with each box having the same probability. 
-Suppose eight characters of four differentm equally likely types:
+Suppose eight characters of four different equally likely types:
 
 ```{r pvec}
 pvec = rep(1/4, 4)
 t(rmultinom(1, prob = pvec, size = 8))
 ```
 
+
 ***
 
-\texcolor{red}{Question 1.9: How do you interpret the difference between `rmultinom(n=9, prob=pvec, size =1)` and `rmultimon(n=1, prob = pvec, size =8)`?}
+\textcolor{red}{Question 1.9: How do you interpret the difference between `rmultinom(n=9, prob=pvec, size =1)` and `rmultimon(n=1, prob = pvec, size =8)`?}
 
 n is the number of random draws
 size is the number of objects that are put into K boxes
@@ -439,7 +455,7 @@ Thus with a sequence length of 20 we have a power of about 20% to detect differe
 
 ***
 
-\textcolor{red}{Suggest a new sequence length that will ensure the power is acceptable}
+\textcolor{red}{Task: Suggest a new sequence length that will ensure the power is acceptable}
 
 ```{r}
 for(i in 20:30){
@@ -452,33 +468,97 @@ for(i in 20:30){
 ```
 
 
+# 1.7 Exercises
 
-```{r ProbaDiagram, eval = TRUE, echo = FALSE, fig.show = 'hold', fig.keep = 'high', fig.cap = "We have studied how a probability model has a distribution we call this $F$. $F$ often depends on parameters, which are denoted by Greek letters, such as $\\theta$. The observed data are generated via the brown arrow and are represented by Roman letters such as $x$. The vertical bar in the probability computation stands for **supposing that** or **conditional on**"----
-knitr::include_graphics(c('images/ProbaDiagram.png'))
-```
+\textcolor{red}{Exercise 1.1: The R functions that start with `r` to generate random discrete data such as `pois`, `binom` `multinon`. If we need a theoretical computation of probability we use the same functions with `d` such as `dbinom` which calculates the probabilities of events in the discrete binomial distribution or `dnorm` which calculates the **probability density function** for the continuous normal distribution. When computing tail probabilities such as $P(X>a)$ it's convenient to use the cumulative distribution functions which start with `p`. Find two other disrete distributions}
+
+dnbinom: negative binomial
+dhyper: hypergeometric 
+
+\textcolor{red}{Exercise 1.2: How would you calculate the probability mass at the value X = 2 for a binomial B(10, 0.3) with `dbinom`? Use `dbinom` to compute the cumulative distribution at value 2, corresponding to $P(X \leq 2)$ and check your answer with another R function}
 
 ```{r}
-dbinom(2, size = 10, prob = 0.3)
-pbinom(2, size = 10, prob = 0.3)
+dbinom(x =2, size = 10, prob = 0.3)
+pbinom(q =2, size = 10, prob=0.3)
+
+dbinom(x =0, size = 10, prob = 0.3) + dbinom(x =1, size = 10, prob = 0.3) + dbinom(x =2, size = 10, prob = 0.3)
+
 sum(sapply(0:2, dbinom, size = 10, prob = 0.3))
 ```
 
-```{r poismax, echo = FALSE}
-poismax = function(lambda, n, m) {
-  epsilon = 1 - ppois(m - 1, lambda)
-  1 - exp( -n * epsilon)
+\textcolor{red}{Exercise 1.3: Write a function to compute the probability of having a maximum as big as m when looking across `n` poisson variables with rate `lambda`}
+
+```{r}
+probm <- function(m, n, lambda){
+  epsilon = 1 - ppois(q = m -1, lambda)
+  1 - exp(-n*epsilon)
 }
 ```
 
-```{r posimaxout}
-poismax(lambda = 0.5, n = 100, m = 7)
-poismax(lambda = mean(e100), n = 100, m = 7)
+\textcolor{red}{Exercise 1.4: Rewrite 1.3 to have default values for it's parameters}
+
+```{r}
+poismax <- function(m = 5, n = 200, lambda = 0.5){
+  epsilon = 1 - ppois(q = m -1, lambda)
+  1 - exp(-n*epsilon)
+}
 ```
 
-```{r, eval = FALSE}
+\textcolor{red}{Exercise 1.5: In the epitope example, use a simulation to find the probability of having a maximum of 9 or larger in 100 trials. How many simulations do you need if you would like to prove that "the probability is smaller than 0.000001"?}
+
+You need $1/0.000001$ = 1000000 simulations.
+
+```{r}
+poismax(m=9, n = 100, lambda = 0.5)
+
+maxes = replicate(1000000, {
+  max(rpois(100, 0.5))
+})
+max(maxes)
+mean(maxes >= 9)
+```
+
+\textcolor{red}{Exerpcise 1.6}
+
+\textcolor{red}{Exerpcise 1.7: Generate 100 instances of a Poisson(3) random variable.What is the mean? What is the variance as computed by the R funcition 'var'?}
+
+```{r}
+t <- rpois(100, 3)
+mean(t)
+var(t)
+```
+
+\textcolor{red}{Exercise 1.8: Is the mitochondrial sequence of *C. elegans* consisten with a model of equally likely nucleotides?}
+
+\textcolor{red}{a. Explore the nucleotide frequency of chromosme M}
+```{r, eval = TRUE}
 if (!requireNamespace("BiocManager", quietly = TRUE))
      install.packages("BiocManager")
 BiocManager::install(c("Biostrings", "BSgenome.Celegans.UCSC.ce2"))
+
+library("BSgenome.Celegans.UCSC.ce2")
+Celegans
+Celegans$chrM
+alphabetFrequency(Celegans$chrM)[1:4]
+alphabetFrequency(Celegans$chrM)[1:4]/sum(alphabetFrequency(Celegans$chrM)[1:4])
+```
+\textcolor{red}{b. Test whether the data is consistent with a uniform model}
+```{r}
+pvec <- rep(1/4, 4)
+sumM <- sum(alphabetFrequency(Celegans$chrM)[1:4])
+dmultinom(alphabetFrequency(Celegans$chrM)[1:4], prob=rep(1/4, 4))
+dmultinom(c(4335, 1225, 2055, 6179), prob=c(0.31, 0.09, 0.15, 0.45))
+rmultinom(1, length(Celegans$chrM), prob=pvec)
+
+obsunder0 = rmultinom(1, length(Celegans$chrM), prob=pvec)
+expected0 = pvec*sumM
+sum((obsunder0[,1]-expected0))^2/expected0
+
+stat <- function(obsvd, exptd = sumM * pvec) {
+  sum((obsvd - exptd)^2 / exptd)
+}
+
+S0 <- apply(obsunder0, 2, stat)
 ```
 
 ```{r BSgenome.Celegans.UCSC.ce2, message=FALSE, warning=FALSE, eval = FALSE}
@@ -526,27 +606,3 @@ oenull = replicate(B,
 hist(oenull, breaks = 100, col = "skyblue", main="")
 ```
 
-```{r assert, echo = FALSE, eval = FALSE}
-stopifnot( oe/10 > max(oenull) )
-```
-
-### Question 1.1
-```{r Q1}
-genotype <- c("AA","AO","BB","AO","OO","AO","AA","BO","BO",
-             "AO","BB","AO","BO","AB","OO","AB","BB","AO","AO")
-#How to create a factor that has some levcels not yet in your data?
-genotypeF = factor(genotype, levels = c(unique(genotype), "CC"))
-levels(genotypeF)
-table(genotypeF)
-```
-
-### Question 1.4
-```{r Q4}
-dbinom(3, prob = 2/3, size = 4)
-```
-
-### Question 1.5
-```{r Q5}
-probabilities_Q5_binom <- dbinom(0:12, prob = 5E-4, size = 1E4)
-probabilities_Q5_poisson <- dpois(0:12, lambda = 5E-4*1E4)
-```
