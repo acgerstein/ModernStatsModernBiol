@@ -472,8 +472,8 @@ for(i in 20:30){
 
 \textcolor{red}{Exercise 1.1: The R functions that start with `r` to generate random discrete data such as `pois`, `binom` `multinon`. If we need a theoretical computation of probability we use the same functions with `d` such as `dbinom` which calculates the probabilities of events in the discrete binomial distribution or `dnorm` which calculates the **probability density function** for the continuous normal distribution. When computing tail probabilities such as $P(X>a)$ it's convenient to use the cumulative distribution functions which start with `p`. Find two other disrete distributions}
 
-dnbinom: negative binomial
-dhyper: hypergeometric 
+dnbinom: negative binomial - the number of successes in a sequence of independent and identically distributed Bernoulli trials before a specified (non-random) number of failures (denoted r) occurs.
+dhyper: hypergeometric - probability of {\displaystyle k} k successes (random draws for which the object drawn has a specified feature) in {\displaystyle n} n draws, without replacement 
 
 \textcolor{red}{Exercise 1.2: How would you calculate the probability mass at the value X = 2 for a binomial B(10, 0.3) with `dbinom`? Use `dbinom` to compute the cumulative distribution at value 2, corresponding to $P(X \leq 2)$ and check your answer with another R function}
 
@@ -489,9 +489,9 @@ sum(sapply(0:2, dbinom, size = 10, prob = 0.3))
 \textcolor{red}{Exercise 1.3: Write a function to compute the probability of having a maximum as big as m when looking across `n` poisson variables with rate `lambda`}
 
 ```{r}
-probm <- function(m, n, lambda){
-  epsilon = 1 - ppois(q = m -1, lambda)
-  1 - exp(-n*epsilon)
+poismax <- function(m, n, lambda){
+  prob = 1 - ppois(m -1, lambda)^n
+  prob
 }
 ```
 
@@ -528,7 +528,7 @@ mean(t)
 var(t)
 ```
 
-\textcolor{red}{Exercise 1.8: Is the mitochondrial sequence of *C. elegans* consisten with a model of equally likely nucleotides?}
+\textcolor{red}{Exercise 1.8: Is the mitochondrial sequence of *C. elegans* consistent with a model of equally likely nucleotides?}
 
 \textcolor{red}{a. Explore the nucleotide frequency of chromosme M}
 ```{r, eval = TRUE}
@@ -548,6 +548,9 @@ pvec <- rep(1/4, 4)
 sumM <- sum(alphabetFrequency(Celegans$chrM)[1:4])
 dmultinom(alphabetFrequency(Celegans$chrM)[1:4], prob=rep(1/4, 4))
 dmultinom(c(4335, 1225, 2055, 6179), prob=c(0.31, 0.09, 0.15, 0.45))
+dmultinom(c(4, 3, 1), prob=c(0.5, 0.4, 0.1))
+dmultinom(c(4, 3, 1), prob=c(1/3, 1/3, 1/3))
+
 rmultinom(1, length(Celegans$chrM), prob=pvec)
 
 obsunder0 = rmultinom(1, length(Celegans$chrM), prob=pvec)
