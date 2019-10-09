@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  7 OCT 2019 22:22
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  7 OCT 2019 22:01
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**MSMB-Chapter2.tex
-(./MSMB-Chapter2.tex
+**MSMB-Chapter1.tex
+(./MSMB-Chapter1.tex
 LaTeX2e <2018-04-01> patch level 2
 Babel <3.18> and hyphenation patterns for 84 language(s) loaded.
 (/usr/local/texlive/2018/texmf-dist/tex/latex/base/article.cls
@@ -500,68 +500,45 @@ Package: titling 2009/09/04 v2.1d maketitle typesetting
 \thanksmarkwidth=\skip49
 \thanksmargin=\skip50
 \droptitle=\skip51
-) (/usr/local/texlive/2018/texmf-dist/tex/latex/mathtools/mathtools.sty
-Package: mathtools 2018/01/08 v1.21 mathematical typesetting tools
-(/usr/local/texlive/2018/texmf-dist/tex/latex/tools/calc.sty
-Package: calc 2017/05/25 v4.3 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count118
-\calc@Bcount=\count119
-\calc@Adimen=\dimen131
-\calc@Bdimen=\dimen132
-\calc@Askip=\skip52
-\calc@Bskip=\skip53
-LaTeX Info: Redefining \setlength on input line 80.
-LaTeX Info: Redefining \addtolength on input line 81.
-\calc@Ccount=\count120
-\calc@Cskip=\skip54
-) (/usr/local/texlive/2018/texmf-dist/tex/latex/mathtools/mhsetup.sty
-Package: mhsetup 2017/03/31 v1.3 programming setup (MH)
+) (/usr/local/texlive/2018/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count118
+\float@exts=\toks25
+\float@box=\box29
+\@float@everytoks=\toks26
+\@floatcapt=\box30
 )
-LaTeX Info: Thecontrolsequence`\('isalreadyrobust on input line 129.
-LaTeX Info: Thecontrolsequence`\)'isalreadyrobust on input line 129.
-LaTeX Info: Thecontrolsequence`\['isalreadyrobust on input line 129.
-LaTeX Info: Thecontrolsequence`\]'isalreadyrobust on input line 129.
-\g_MT_multlinerow_int=\count121
-\l_MT_multwidth_dim=\dimen133
-\origjot=\skip55
-\l_MT_shortvdotswithinadjustabove_dim=\dimen134
-\l_MT_shortvdotswithinadjustbelow_dim=\dimen135
-\l_MT_above_intertext_sep=\dimen136
-\l_MT_below_intertext_sep=\dimen137
-\l_MT_above_shortintertext_sep=\dimen138
-\l_MT_below_shortintertext_sep=\dimen139
-)
-No file MSMB-Chapter2.aux.
-\openout1 = `MSMB-Chapter2.aux'.
+No file MSMB-Chapter1.aux.
+\openout1 = `MSMB-Chapter1.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 130.
-LaTeX Font Info:    ... okay on input line 130.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 130.
-LaTeX Font Info:    ... okay on input line 130.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 130.
-LaTeX Font Info:    ... okay on input line 130.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 130.
-LaTeX Font Info:    ... okay on input line 130.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 130.
-LaTeX Font Info:    ... okay on input line 130.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 130.
-LaTeX Font Info:    ... okay on input line 130.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 130.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 130.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 138.
+LaTeX Font Info:    ... okay on input line 138.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 138.
+LaTeX Font Info:    ... okay on input line 138.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 138.
+LaTeX Font Info:    ... okay on input line 138.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 138.
+LaTeX Font Info:    ... okay on input line 138.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 138.
+LaTeX Font Info:    ... okay on input line 138.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 138.
+LaTeX Font Info:    ... okay on input line 138.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 138.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 138.
 
 (/usr/local/texlive/2018/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 130.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 130.
-LaTeX Font Info:    ... okay on input line 130.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 130.
-LaTeX Font Info:    ... okay on input line 130.
-LaTeX Font Info:    Try loading font information for T1+lmr on input line 130.
+LaTeX Font Info:    ... okay on input line 138.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 138.
+LaTeX Font Info:    ... okay on input line 138.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 138.
+LaTeX Font Info:    ... okay on input line 138.
+LaTeX Font Info:    Try loading font information for T1+lmr on input line 138.
 (/usr/local/texlive/2018/texmf-dist/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Info: Redefining \microtypecontext on input line 130.
+LaTeX Info: Redefining \microtypecontext on input line 138.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using protrusion set `basicmath'.
@@ -609,34 +586,34 @@ File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-\AtBeginShipoutBox=\box29
-Package hyperref Info: Link coloring OFF on input line 130.
+\AtBeginShipoutBox=\box31
+Package hyperref Info: Link coloring OFF on input line 138.
 (/usr/local/texlive/2018/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 (/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
-\c@section@level=\count122
+\c@section@level=\count119
 )
-LaTeX Info: Redefining \ref on input line 130.
-LaTeX Info: Redefining \pageref on input line 130.
-LaTeX Info: Redefining \nameref on input line 130.
+LaTeX Info: Redefining \ref on input line 138.
+LaTeX Info: Redefining \pageref on input line 138.
+LaTeX Info: Redefining \nameref on input line 138.
 \@outlinefile=\write4
-\openout4 = `MSMB-Chapter2.out'.
+\openout4 = `MSMB-Chapter1.out'.
 
 (/usr/local/texlive/2018/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count123
-\scratchdimen=\dimen140
-\scratchbox=\box30
-\nofMPsegments=\count124
-\nofMParguments=\count125
-\everyMPshowfont=\toks25
-\MPscratchCnt=\count126
-\MPscratchDim=\dimen141
-\MPnumerator=\count127
-\makeMPintoPDFobject=\count128
-\everyMPtoPDFconversion=\toks26
+\scratchcounter=\count120
+\scratchdimen=\dimen131
+\scratchbox=\box32
+\nofMPsegments=\count121
+\nofMParguments=\count122
+\everyMPshowfont=\toks27
+\MPscratchCnt=\count123
+\MPscratchDim=\dimen132
+\MPnumerator=\count124
+\makeMPintoPDFobject=\count125
+\everyMPtoPDFconversion=\toks28
 ) (/usr/local/texlive/2018/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
 (/usr/local/texlive/2018/texmf-dist/tex/latex/oberdiek/grfext.sty
@@ -652,264 +629,163 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-LaTeX Font Info:    Try loading font information for T1+lmtt on input line 140.
-
-(/usr/local/texlive/2018/texmf-dist/tex/latex/lm/t1lmtt.fd
-File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 141.
-<MSMB-Chapter2_files/figure-latex/barplot_pois-1.pdf, id=4, 253.94875pt x 183.6
-8625pt>
-File: MSMB-Chapter2_files/figure-latex/barplot_pois-1.pdf Graphic file (type pd
-f)
-<use MSMB-Chapter2_files/figure-latex/barplot_pois-1.pdf>
-Package pdftex.def Info: MSMB-Chapter2_files/figure-latex/barplot_pois-1.pdf  u
-sed on input line 149.
-(pdftex.def)             Requested size: 253.95586pt x 183.69138pt.
-<MSMB-Chapter2_files/figure-latex/stat-rooto-1.pdf, id=5, 176.66pt x 150.5625pt
->
-File: MSMB-Chapter2_files/figure-latex/stat-rooto-1.pdf Graphic file (type pdf)
-
-<use MSMB-Chapter2_files/figure-latex/stat-rooto-1.pdf>
-Package pdftex.def Info: MSMB-Chapter2_files/figure-latex/stat-rooto-1.pdf  use
-d on input line 173.
-(pdftex.def)             Requested size: 176.66225pt x 150.5644pt.
-LaTeX Font Info:    Try loading font information for OT1+lmr on input line 177.
+LaTeX Font Info:    Try loading font information for OT1+lmr on input line 147.
 
 (/usr/local/texlive/2018/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OML+lmm on input line 177.
+LaTeX Font Info:    Try loading font information for OML+lmm on input line 147.
 
 (/usr/local/texlive/2018/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 177
+LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 147
 .
 (/usr/local/texlive/2018/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMX+lmex on input line 177
+LaTeX Font Info:    Try loading font information for OMX+lmex on input line 147
 .
 (/usr/local/texlive/2018/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 177.
+(Font)              <10> on input line 147.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 177.
+(Font)              <7> on input line 147.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 177.
-LaTeX Font Info:    Try loading font information for U+msa on input line 177.
+(Font)              <5> on input line 147.
+LaTeX Font Info:    Try loading font information for U+msa on input line 147.
 (/usr/local/texlive/2018/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 ) (/usr/local/texlive/2018/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 177.
+LaTeX Font Info:    Try loading font information for U+msb on input line 147.
 (/usr/local/texlive/2018/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) (/usr/local/texlive/2018/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
-<MSMB-Chapter2_files/figure-latex/Q1-1.pdf, id=6, 429.605pt x 222.8325pt>
-File: MSMB-Chapter2_files/figure-latex/Q1-1.pdf Graphic file (type pdf)
-<use MSMB-Chapter2_files/figure-latex/Q1-1.pdf>
-Package pdftex.def Info: MSMB-Chapter2_files/figure-latex/Q1-1.pdf  used on inp
-ut line 194.
-(pdftex.def)             Requested size: 429.61049pt x 222.83534pt.
+LaTeX Font Info:    Try loading font information for T1+lmtt on input line 158.
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/lm/t1lmtt.fd
+File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10> not available
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 159.
+<MSMB-Chapter1_files/figure-latex/Poisson5-1.pdf, id=4, 358.33875pt x 183.68625
+pt>
+File: MSMB-Chapter1_files/figure-latex/Poisson5-1.pdf Graphic file (type pdf)
+<use MSMB-Chapter1_files/figure-latex/Poisson5-1.pdf>
+Package pdftex.def Info: MSMB-Chapter1_files/figure-latex/Poisson5-1.pdf  used 
+on input line 189.
+(pdftex.def)             Requested size: 358.35974pt x 183.69698pt.
 [1
 
-{/usr/local/texlive/2018/texmf-var/fonts/map/pdftex/updmap/pdftex.map} <./MSMB-
-Chapter2_files/figure-latex/Q1-1.pdf>] [2 <./MSMB-Chapter2_files/figure-latex/b
-arplot_pois-1.pdf> <./MSMB-Chapter2_files/figure-latex/stat-rooto-1.pdf>]
-<MSMB-Chapter2_files/figure-latex/chap2-r-poislikel-1-1.pdf, id=48, 190.7125pt 
-x 256.96pt>
-File: MSMB-Chapter2_files/figure-latex/chap2-r-poislikel-1-1.pdf Graphic file (
-type pdf)
-<use MSMB-Chapter2_files/figure-latex/chap2-r-poislikel-1-1.pdf>
-Package pdftex.def Info: MSMB-Chapter2_files/figure-latex/chap2-r-poislikel-1-1
-.pdf  used on input line 253.
-(pdftex.def)             Requested size: 190.72075pt x 256.97112pt.
-<MSMB-Chapter2_files/figure-latex/likely1-1.pdf, id=49, 258.9675pt x 251.94125p
-t>
-File: MSMB-Chapter2_files/figure-latex/likely1-1.pdf Graphic file (type pdf)
-<use MSMB-Chapter2_files/figure-latex/likely1-1.pdf>
-Package pdftex.def Info: MSMB-Chapter2_files/figure-latex/likely1-1.pdf  used o
-n input line 317.
-(pdftex.def)             Requested size: 258.96684pt x 251.94063pt.
-[3] [4 <./MSMB-Chapter2_files/figure-latex/chap2-r-poislikel-1-1.pdf> <./MSMB-C
-hapter2_files/figure-latex/likely1-1.pdf>]
-<MSMB-Chapter2_files/figure-latex/chap2-r-loglikelihood-1-1.pdf, id=78, 186.697
-5pt x 154.5775pt>
-File: MSMB-Chapter2_files/figure-latex/chap2-r-loglikelihood-1-1.pdf Graphic fi
-le (type pdf)
-<use MSMB-Chapter2_files/figure-latex/chap2-r-loglikelihood-1-1.pdf>
-Package pdftex.def Info: MSMB-Chapter2_files/figure-latex/chap2-r-loglikelihood
--1-1.pdf  used on input line 358.
-(pdftex.def)             Requested size: 186.70558pt x 154.58417pt.
-LaTeX Font Info:    Try loading font information for TS1+lmtt on input line 380
+{/usr/local/texlive/2018/texmf-var/fonts/map/pdftex/updmap/pdftex.map}pdfTeX wa
+rning (ext4): destination with the same identifier (name{figure.1}) has been al
+ready used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.210 `
+       `When we measure a categorical variable on a sample, we often want to <.
+/MSMB-Chapter1_files/figure-latex/Poisson5-1.pdf>] [2] [3]
+<MSMB-Chapter1_files/figure-latex/binombarplot-1.pdf, id=45, 289.08pt x 115.431
+24pt>
+File: MSMB-Chapter1_files/figure-latex/binombarplot-1.pdf Graphic file (type pd
+f)
+<use MSMB-Chapter1_files/figure-latex/binombarplot-1.pdf>
+Package pdftex.def Info: MSMB-Chapter1_files/figure-latex/binombarplot-1.pdf  u
+sed on input line 425.
+(pdftex.def)             Requested size: 289.07928pt x 115.43095pt.
+<MSMB-Chapter1_files/figure-latex/testbinomvspois-1.pdf, id=46, 271.0125pt x 21
+5.80624pt>
+File: MSMB-Chapter1_files/figure-latex/testbinomvspois-1.pdf Graphic file (type
+ pdf)
+<use MSMB-Chapter1_files/figure-latex/testbinomvspois-1.pdf>
+Package pdftex.def Info: MSMB-Chapter1_files/figure-latex/testbinomvspois-1.pdf
+  used on input line 466.
+(pdftex.def)             Requested size: 271.0201pt x 215.81229pt.
+[4pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) 
+has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.468 \begin{center}
+                    \rule{0.5\linewidth}{\linethickness}\end{center} <./MSMB-Ch
+apter1_files/figure-latex/binombarplot-1.pdf>]
+<MSMB-Chapter1_files/figure-latex/gen-simpoisson-1.pdf, id=61, 427.5975pt x 294
+.09875pt>
+File: MSMB-Chapter1_files/figure-latex/gen-simpoisson-1.pdf Graphic file (type 
+pdf)
+<use MSMB-Chapter1_files/figure-latex/gen-simpoisson-1.pdf>
+Package pdftex.def Info: MSMB-Chapter1_files/figure-latex/gen-simpoisson-1.pdf 
+ used on input line 508.
+(pdftex.def)             Requested size: 427.59645pt x 294.09802pt.
+[5 <./MSMB-Chapter1_files/figure-latex/testbinomvspois-1.pdf>]
+LaTeX Font Info:    Try loading font information for TS1+lmtt on input line 529
 .
 (/usr/local/texlive/2018/texmf-dist/tex/latex/lm/ts1lmtt.fd
 File: ts1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) [5 <./MSMB-Chapter2_files/figure-latex/chap2-r-loglikelihood-1-1.pdf>]
-<MSMB-Chapter2_files/figure-latex/unnamed-chunk-6-1.pdf, id=93, 422.57875pt x 2
-41.90375pt>
-File: MSMB-Chapter2_files/figure-latex/unnamed-chunk-6-1.pdf Graphic file (type
+) [6pdfTeX warning (ext4): destination with the same identifier (name{figure.3}
+) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.555 \end{Shaded}
+                   <./MSMB-Chapter1_files/figure-latex/gen-simpoisson-1.pdf>]
+<MSMB-Chapter1_files/figure-latex/unnamed-chunk-4-1.pdf, id=89, 435.6275pt x 25
+0.9375pt>
+File: MSMB-Chapter1_files/figure-latex/unnamed-chunk-4-1.pdf Graphic file (type
  pdf)
-<use MSMB-Chapter2_files/figure-latex/unnamed-chunk-6-1.pdf>
-Package pdftex.def Info: MSMB-Chapter2_files/figure-latex/unnamed-chunk-6-1.pdf
-  used on input line 513.
-(pdftex.def)             Requested size: 422.5906pt x 241.91052pt.
-[6] [7 <./MSMB-Chapter2_files/figure-latex/unnamed-chunk-6-1.pdf>]
-<MSMB-Chapter2_files/figure-latex/chap2-r-quant12-1-1.pdf, id=110, 247.92625pt 
-x 210.7875pt>
-File: MSMB-Chapter2_files/figure-latex/chap2-r-quant12-1-1.pdf Graphic file (ty
-pe pdf)
-<use MSMB-Chapter2_files/figure-latex/chap2-r-quant12-1-1.pdf>
-Package pdftex.def Info: MSMB-Chapter2_files/figure-latex/chap2-r-quant12-1-1.p
-df  used on input line 637.
-(pdftex.def)             Requested size: 247.92564pt x 210.78699pt.
-[8 <./MSMB-Chapter2_files/figure-latex/chap2-r-quant12-1-1.pdf>]
-<MSMB-Chapter2_files/figure-latex/chap2-r-qqplot3-1-1.pdf, id=124, 211.79124pt 
-x 212.795pt>
-File: MSMB-Chapter2_files/figure-latex/chap2-r-qqplot3-1-1.pdf Graphic file (ty
-pe pdf)
-<use MSMB-Chapter2_files/figure-latex/chap2-r-qqplot3-1-1.pdf>
-Package pdftex.def Info: MSMB-Chapter2_files/figure-latex/chap2-r-qqplot3-1-1.p
-df  used on input line 661.
-(pdftex.def)             Requested size: 211.79718pt x 212.80095pt.
-<MSMB-Chapter2_files/figure-latex/ChargaffBars-1.pdf, id=125, 465.74pt x 222.83
-25pt>
-File: MSMB-Chapter2_files/figure-latex/ChargaffBars-1.pdf Graphic file (type pd
-f)
-<use MSMB-Chapter2_files/figure-latex/ChargaffBars-1.pdf>
-Package pdftex.def Info: MSMB-Chapter2_files/figure-latex/ChargaffBars-1.pdf  u
-sed on input line 699.
-(pdftex.def)             Requested size: 465.74596pt x 222.83534pt.
-[9 <./MSMB-Chapter2_files/figure-latex/chap2-r-qqplot3-1-1.pdf>]
-<MSMB-Chapter2_files/figure-latex/chap2-r-permstatChf-1-1.pdf, id=141, 192.72pt
- x 147.55125pt>
-File: MSMB-Chapter2_files/figure-latex/chap2-r-permstatChf-1-1.pdf Graphic file
- (type pdf)
-<use MSMB-Chapter2_files/figure-latex/chap2-r-permstatChf-1-1.pdf>
-Package pdftex.def Info: MSMB-Chapter2_files/figure-latex/chap2-r-permstatChf-1
--1.pdf  used on input line 733.
-(pdftex.def)             Requested size: 192.71951pt x 147.55087pt.
-[10 <./MSMB-Chapter2_files/figure-latex/ChargaffBars-1.pdf> <./MSMB-Chapter2_fi
-les/figure-latex/chap2-r-permstatChf-1-1.pdf>] [11]
-<MSMB-Chapter2_files/figure-latex/chap2-r-HardyWeinberg-1-1.pdf, id=168, 436.63
-126pt x 262.9825pt>
-File: MSMB-Chapter2_files/figure-latex/chap2-r-HardyWeinberg-1-1.pdf Graphic fi
-le (type pdf)
-<use MSMB-Chapter2_files/figure-latex/chap2-r-HardyWeinberg-1-1.pdf>
-Package pdftex.def Info: MSMB-Chapter2_files/figure-latex/chap2-r-HardyWeinberg
--1-1.pdf  used on input line 882.
-(pdftex.def)             Requested size: 436.63019pt x 262.98184pt.
-
-Overfull \vbox (0.256pt too high) detected at line 926
- []
-
-[12 <./MSMB-Chapter2_files/figure-latex/chap2-r-HardyWeinberg-1-1.pdf>]
-<MSMB-Chapter2_files/figure-latex/HWtern-1.pdf, id=181, 245.91875pt x 202.7575p
-t>
-File: MSMB-Chapter2_files/figure-latex/HWtern-1.pdf Graphic file (type pdf)
-<use MSMB-Chapter2_files/figure-latex/HWtern-1.pdf>
-Package pdftex.def Info: MSMB-Chapter2_files/figure-latex/HWtern-1.pdf  used on
- input line 930.
-(pdftex.def)             Requested size: 245.92563pt x 202.76318pt.
-<MSMB-Chapter2_files/figure-latex/quesTern-1.pdf, id=182, 237.88875pt x 194.727
-5pt>
-File: MSMB-Chapter2_files/figure-latex/quesTern-1.pdf Graphic file (type pdf)
-<use MSMB-Chapter2_files/figure-latex/quesTern-1.pdf>
-Package pdftex.def Info: MSMB-Chapter2_files/figure-latex/quesTern-1.pdf  used 
-on input line 945.
-(pdftex.def)             Requested size: 237.8954pt x 194.73294pt.
-<MSMB-Chapter2_files/figure-latex/newMNdata-1.pdf, id=183, 237.88875pt x 194.72
-75pt>
-File: MSMB-Chapter2_files/figure-latex/newMNdata-1.pdf Graphic file (type pdf)
-<use MSMB-Chapter2_files/figure-latex/newMNdata-1.pdf>
-Package pdftex.def Info: MSMB-Chapter2_files/figure-latex/newMNdata-1.pdf  used
- on input line 957.
-(pdftex.def)             Requested size: 237.8954pt x 194.73294pt.
-[13 <./MSMB-Chapter2_files/figure-latex/HWtern-1.pdf> <./MSMB-Chapter2_files/fi
-gure-latex/quesTern-1.pdf>]
-<MSMB-Chapter2_files/figure-latex/chap2-r-seqlogo-1-1.pdf, id=204, 292.09125pt 
-x 297.11pt>
-File: MSMB-Chapter2_files/figure-latex/chap2-r-seqlogo-1-1.pdf Graphic file (ty
-pe pdf)
-<use MSMB-Chapter2_files/figure-latex/chap2-r-seqlogo-1-1.pdf>
-Package pdftex.def Info: MSMB-Chapter2_files/figure-latex/chap2-r-seqlogo-1-1.p
-df  used on input line 984.
-(pdftex.def)             Requested size: 292.10388pt x 297.12286pt.
-[14 <./MSMB-Chapter2_files/figure-latex/newMNdata-1.pdf>] [15 <./MSMB-Chapter2_
-files/figure-latex/chap2-r-seqlogo-1-1.pdf>]
-<MSMB-Chapter2_files/figure-latex/statsfourstateMC-1.pdf, id=228, 271.0125pt x 
-236.885pt>
-File: MSMB-Chapter2_files/figure-latex/statsfourstateMC-1.pdf Graphic file (typ
-e pdf)
-<use MSMB-Chapter2_files/figure-latex/statsfourstateMC-1.pdf>
-Package pdftex.def Info: MSMB-Chapter2_files/figure-latex/statsfourstateMC-1.pd
-f  used on input line 1042.
-(pdftex.def)             Requested size: 271.0201pt x 236.89163pt.
-<MSMB-Chapter2_files/figure-latex/histobeta2-1.pdf, id=229, 236.885pt x 240.9pt
->
-File: MSMB-Chapter2_files/figure-latex/histobeta2-1.pdf Graphic file (type pdf)
-
-<use MSMB-Chapter2_files/figure-latex/histobeta2-1.pdf>
-Package pdftex.def Info: MSMB-Chapter2_files/figure-latex/histobeta2-1.pdf  use
-d on input line 1084.
-(pdftex.def)             Requested size: 236.89163pt x 240.90674pt.
-<MSMB-Chapter2_files/figure-latex/chap2-r-histmarginal-1-1.pdf, id=230, 213.798
-75pt x 142.5325pt>
-File: MSMB-Chapter2_files/figure-latex/chap2-r-histmarginal-1-1.pdf Graphic fil
-e (type pdf)
-<use MSMB-Chapter2_files/figure-latex/chap2-r-histmarginal-1-1.pdf>
-Package pdftex.def Info: MSMB-Chapter2_files/figure-latex/chap2-r-histmarginal-
-1-1.pdf  used on input line 1104.
-(pdftex.def)             Requested size: 213.79822pt x 142.53214pt.
-[16 <./MSMB-Chapter2_files/figure-latex/statsfourstateMC-1.pdf>] [17 <./MSMB-Ch
-apter2_files/figure-latex/histobeta2-1.pdf> <./MSMB-Chapter2_files/figure-latex
-/chap2-r-histmarginal-1-1.pdf>]
-<MSMB-Chapter2_files/figure-latex/chap2-r-densityposterior-1-1.pdf, id=264, 227
-.85126pt x 176.66pt>
-File: MSMB-Chapter2_files/figure-latex/chap2-r-densityposterior-1-1.pdf Graphic
- file (type pdf)
-<use MSMB-Chapter2_files/figure-latex/chap2-r-densityposterior-1-1.pdf>
-Package pdftex.def Info: MSMB-Chapter2_files/figure-latex/chap2-r-densityposter
-ior-1-1.pdf  used on input line 1120.
-(pdftex.def)             Requested size: 227.85416pt x 176.66225pt.
-<MSMB-Chapter2_files/figure-latex/chap2-r-qqplotbeta-1-1.pdf, id=265, 225.84375
-pt x 186.6975pt>
-File: MSMB-Chapter2_files/figure-latex/chap2-r-qqplotbeta-1-1.pdf Graphic file 
-(type pdf)
-<use MSMB-Chapter2_files/figure-latex/chap2-r-qqplotbeta-1-1.pdf>
-Package pdftex.def Info: MSMB-Chapter2_files/figure-latex/chap2-r-qqplotbeta-1-
-1.pdf  used on input line 1169.
-(pdftex.def)             Requested size: 225.85352pt x 186.70558pt.
-[18 <./MSMB-Chapter2_files/figure-latex/chap2-r-densityposterior-1-1.pdf>] [19 
-<./MSMB-Chapter2_files/figure-latex/chap2-r-qqplotbeta-1-1.pdf>]
-<MSMB-Chapter2_files/figure-latex/poissonness-1.pdf, id=292, 252.945pt x 321.2p
-t>
-File: MSMB-Chapter2_files/figure-latex/poissonness-1.pdf Graphic file (type pdf
+<use MSMB-Chapter1_files/figure-latex/unnamed-chunk-4-1.pdf>
+Package pdftex.def Info: MSMB-Chapter1_files/figure-latex/unnamed-chunk-4-1.pdf
+  used on input line 557.
+(pdftex.def)             Requested size: 435.62643pt x 250.93687pt.
+<MSMB-Chapter1_files/figure-latex/epitopedata-1.pdf, id=90, 306.14375pt x 188.7
+05pt>
+File: MSMB-Chapter1_files/figure-latex/epitopedata-1.pdf Graphic file (type pdf
 )
-<use MSMB-Chapter2_files/figure-latex/poissonness-1.pdf>
-Package pdftex.def Info: MSMB-Chapter2_files/figure-latex/poissonness-1.pdf  us
-ed on input line 1341.
-(pdftex.def)             Requested size: 252.94823pt x 321.20412pt.
-! Extra }, or forgotten $.
-<recently read> \egroup 
-                        
-l.1343 sequence \texttt{Ecoli$NC_010473}.}
-                                           
+<use MSMB-Chapter1_files/figure-latex/epitopedata-1.pdf>
+Package pdftex.def Info: MSMB-Chapter1_files/figure-latex/epitopedata-1.pdf  us
+ed on input line 563.
+(pdftex.def)             Requested size: 306.14299pt x 188.70453pt.
+[7pdfTeX warning (ext4): destination with the same identifier (name{figure.4}) 
+has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.580 \begin{Shaded}
+                     <./MSMB-Chapter1_files/figure-latex/unnamed-chunk-4-1.pdf>
+ <./MSMB-Chapter1_files/figure-latex/epitopedata-1.pdf>] [8] [9] [10]
+<MSMB-Chapter1_files/figure-latex/histS0-1.pdf, id=128, 427.5975pt x 241.90375p
+t>
+File: MSMB-Chapter1_files/figure-latex/histS0-1.pdf Graphic file (type pdf)
+<use MSMB-Chapter1_files/figure-latex/histS0-1.pdf>
+Package pdftex.def Info: MSMB-Chapter1_files/figure-latex/histS0-1.pdf  used on
+ input line 932.
+(pdftex.def)             Requested size: 427.59645pt x 241.90315pt.
+[11] [12pdfTeX warning (ext4): destination with the same identifier (name{figur
+e.5}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.1006 \end{verbatim}
+                      <./MSMB-Chapter1_files/figure-latex/histS0-1.pdf>]
+! Missing $ inserted.
+<inserted text> 
+                $
+l.1092 ...ometric - probability of \{\displaystyle
+                                                   k\} k successes (random 
 Here is how much of TeX's memory you used:
- 13167 strings out of 492649
- 199506 string characters out of 6129622
- 306970 words of memory out of 5000000
- 16801 multiletter control sequences out of 15000+600000
- 44943 words of font info for 63 fonts, out of 8000000 for 9000
+ 12681 strings out of 492649
+ 187246 string characters out of 6129622
+ 295986 words of memory out of 5000000
+ 16268 multiletter control sequences out of 15000+600000
+ 52238 words of font info for 96 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 32i,6n,38p,482b,461s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 32i,6n,38p,629b,455s stack positions out of 5000i,500n,10000p,200000b,80000s
 
 !  ==> Fatal error occurred, no output PDF file produced!

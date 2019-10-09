@@ -1,0 +1,1545 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={MSMB-Chapter1-GersteinNotes},
+            pdfauthor={Aleeza Gerstein},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{MSMB-Chapter1-GersteinNotes}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Aleeza Gerstein}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{2019-09-16}
+
+\usepackage{float}
+\let\origfigure\figure
+\let\endorigfigure\endfigure
+\renewenvironment{figure}[1][2] {
+    \expandafter\origfigure\expandafter[H]
+} {
+    \endorigfigure
+}
+\let\oldrule=\rule
+\renewcommand{\rule}[1]{\oldrule{\linewidth}}
+
+\begin{document}
+\maketitle
+
+\section{Chapter 1: Generative models for discrete
+data}\label{chapter-1-generative-models-for-discrete-data}
+
+\subsection{Example where we know the probability model for the
+process}\label{example-where-we-know-the-probability-model-for-the-process}
+
+Mutation in human genome occur at a rate \(5x10^{-4}\) per nucleotide
+per replication cycle. After one cycle, the number of mutations in a
+genome of size \(10^4\) = 10,000 nucleotides will follow a \emph{Poisson
+distribution} with rate 5. Therefore the \textbf{probability model}
+predicts 5 mutations over one replication cycle, and the standard error
+is \(\sqrt{5}\).
+
+Thus the \emph{rate parameter} \(\lambda\) = 5 and we can generate the
+probability of seeing three events as:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dpois}\NormalTok{(}\DataTypeTok{x =} \DecValTok{3}\NormalTok{, }\DataTypeTok{lambda =} \DecValTok{5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.1403739
+\end{verbatim}
+
+Generate an entire distribution of all values from 0:12 as
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{.oldopt =}\StringTok{ }\KeywordTok{options}\NormalTok{(}\DataTypeTok{digits =} \DecValTok{2}\NormalTok{)}
+\KeywordTok{dpois}\NormalTok{(}\DataTypeTok{x =} \DecValTok{0}\OperatorTok{:}\DecValTok{12}\NormalTok{, }\DataTypeTok{lambda =} \DecValTok{5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] 0.0067 0.0337 0.0842 0.1404 0.1755 0.1755 0.1462 0.1044 0.0653 0.0363
+## [11] 0.0181 0.0082 0.0034
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{barplot}\NormalTok{(}\KeywordTok{dpois}\NormalTok{(}\DecValTok{0}\OperatorTok{:}\DecValTok{12}\NormalTok{, }\DecValTok{5}\NormalTok{), }\DataTypeTok{names.arg =} \DecValTok{0}\OperatorTok{:}\DecValTok{12}\NormalTok{, }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+\centering
+\includegraphics{MSMB-Chapter1_files/figure-latex/Poisson5-1.pdf}
+\caption{Probabilities of seeing 0,1,2,\ldots{},12 mutations, as modeled
+by the Poisson(5) distribution. The plot shows that we will often see 4
+or 5 mutations but rarely as many as 12. The distribution continues to
+higher numbers (\(13,...\)), but the probabilities will be successively
+smaller, and here we don't visualize them.}
+\end{figure}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{options}\NormalTok{(.oldopt)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{1.3 Using discrete probability
+models}\label{using-discrete-probability-models}
+
+There are binary events such as mutations (occurs/does not occur) - a
+categorical variable with two \textbf{levels} Other events can have many
+different levels.
+
+``When we measure a categorical variable on a sample, we often want to
+tally the freequencies of the different levels in a vector of counts. R
+calls these variables \textbf{factors}''
+
+Capture the different blood genotypes for 19 subjects in a vector:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{genotype <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"AA"}\NormalTok{,}\StringTok{"AO"}\NormalTok{,}\StringTok{"BB"}\NormalTok{,}\StringTok{"AO"}\NormalTok{,}\StringTok{"OO"}\NormalTok{,}\StringTok{"AO"}\NormalTok{,}\StringTok{"AA"}\NormalTok{,}\StringTok{"BO"}\NormalTok{,}\StringTok{"BO"}\NormalTok{,}
+             \StringTok{"AO"}\NormalTok{,}\StringTok{"BB"}\NormalTok{,}\StringTok{"AO"}\NormalTok{,}\StringTok{"BO"}\NormalTok{,}\StringTok{"AB"}\NormalTok{,}\StringTok{"OO"}\NormalTok{,}\StringTok{"AB"}\NormalTok{,}\StringTok{"BB"}\NormalTok{,}\StringTok{"AO"}\NormalTok{,}\StringTok{"AO"}\NormalTok{)}
+\KeywordTok{table}\NormalTok{(genotype)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## genotype
+## AA AB AO BB BO OO 
+##  2  2  7  3  3  2
+\end{verbatim}
+
+R automatically detects the factor levels.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{genotypeF =}\StringTok{ }\KeywordTok{factor}\NormalTok{(genotype)}
+
+\CommentTok{#You an access the levels liek this:}
+\KeywordTok{levels}\NormalTok{(genotypeF)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "AA" "AB" "AO" "BB" "BO" "OO"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{table}\NormalTok{(genotypeF)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## genotypeF
+## AA AB AO BB BO OO 
+##  2  2  7  3  3  2
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\textcolor{red}{Question 1.1  What is you want to create a factor that has some levels not yet in your data?}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{genotypeF}\OperatorTok{$}\NormalTok{levels <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\KeywordTok{levels}\NormalTok{(genotypeF), }\StringTok{"ZZ"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+``If the order in which the data are observed doesn't matter we call the
+random variable \textbf{exchangeable}. In this case the vector of
+frequencies is \textbf{sufficient} to capture all the relevant
+information in the data. It is an effective way to summarize/compress
+the data''
+
+\subsubsection{1.3.1 Bernoulli trials}\label{bernoulli-trials}
+
+When there are two possible events with (potentially) unequal
+probabilities.
+
+15 bernoulli trials with success equal to 0.5:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{rbinom}\NormalTok{(}\DecValTok{15}\NormalTok{, }\DataTypeTok{prob =} \FloatTok{0.5}\NormalTok{, }\DataTypeTok{size =} \DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] 1 0 0 0 0 1 1 0 0 0 1 0 1 1 1
+\end{verbatim}
+
+Called with **paremeters*; first is n, the number of trials, \(prob\) is
+the probability of success, \(size = 1\) indicate each individual trial
+is one toss.
+
+12 bernoulli trials with unequal probility of success:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{rbinom}\NormalTok{(}\DecValTok{12}\NormalTok{, }\DataTypeTok{prob =} \DecValTok{2}\OperatorTok{/}\DecValTok{3}\NormalTok{, }\DataTypeTok{size =} \DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] 0 1 1 1 0 0 0 1 1 0 1 1
+\end{verbatim}
+
+\subsubsection{1.3.2 Binomial success
+counts}\label{binomial-success-counts}
+
+If you only care about how many successes are in one category then the
+order of the trials doesn't matter and you can set the \(size\)
+parameter to the number desired and take the sum of the cells in the
+output vector
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{rbinom}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DataTypeTok{prob =} \DecValTok{2}\OperatorTok{/}\DecValTok{3}\NormalTok{, }\DataTypeTok{size =} \DecValTok{12}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 10
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\textcolor{red}{Question 1.2: Repeat this function call a number of times. Why isn't the answer always the same?}
+
+Beause it is a probability function.
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+This is also called a random two-box model, when there are only two
+possible outcomes; we only need to specify \emph{p} the probability of
+success since the \emph{complementary} event will occur with probability
+1 - \emph{p}. If the events are independent of each other
+(\emph{exchangeable}) we only record the number of successes.
+
+The number of successes in 15 bernoulli trials with a probabilty of
+success 0.3 is called a **binomial* random variable that follows the
+B(15, 0.3) distribution. To generate samples:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{235569515}\NormalTok{)}
+\KeywordTok{rbinom}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DataTypeTok{prob =} \FloatTok{0.3}\NormalTok{, }\DataTypeTok{size =} \DecValTok{15}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 5
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\textcolor{red}{Question 1.3: Repeat this function call 10 times. What seems to be the most common outcome?}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{i <-}\StringTok{ }\DecValTok{0}
+\NormalTok{trial <-}\StringTok{ }\KeywordTok{c}\NormalTok{()}
+\ControlFlowTok{while}\NormalTok{(i }\OperatorTok{<}\StringTok{ }\DecValTok{11}\NormalTok{)\{}
+\NormalTok{  i <-}\StringTok{ }\NormalTok{i }\OperatorTok{+}\DecValTok{1}
+\NormalTok{  trial[i] <-}\StringTok{ }\KeywordTok{rbinom}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DataTypeTok{prob =} \FloatTok{0.3}\NormalTok{, }\DataTypeTok{size =} \DecValTok{15}\NormalTok{)}
+\NormalTok{\}}
+\NormalTok{  trial}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] 5 2 2 4 5 3 5 7 2 5 2
+\end{verbatim}
+
+or
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{.freqoutcome <-}\StringTok{ }\NormalTok{(}\DecValTok{0}\OperatorTok{:}\DecValTok{15}\NormalTok{)[}\KeywordTok{which.max}\NormalTok{(}\KeywordTok{dbinom}\NormalTok{(}\DecValTok{0}\OperatorTok{:}\DecValTok{15}\NormalTok{, }\DataTypeTok{prob =} \FloatTok{0.3}\NormalTok{, }\DecValTok{15}\NormalTok{))]}
+\NormalTok{.freqoutcome}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 4
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+The complete \textbf{probability mass distribution} is available by
+typing:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{probabilities =}\StringTok{ }\KeywordTok{dbinom}\NormalTok{(}\DecValTok{0}\OperatorTok{:}\DecValTok{15}\NormalTok{, }\DataTypeTok{prob =} \FloatTok{0.3}\NormalTok{, }\DataTypeTok{size =} \DecValTok{15}\NormalTok{)}
+\KeywordTok{round}\NormalTok{(probabilities, }\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] 0.00 0.03 0.09 0.17 0.22 0.21 0.15 0.08 0.03 0.01 0.00 0.00 0.00 0.00
+## [15] 0.00 0.00
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{c}\NormalTok{(}\DecValTok{0}\OperatorTok{:}\DecValTok{15}\NormalTok{)[}\KeywordTok{which}\NormalTok{(probabilities}\OperatorTok{==}\KeywordTok{max}\NormalTok{(probabilities))]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 4
+\end{verbatim}
+
+Barplot of above probabilities
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{barplot}\NormalTok{(probabilities, }\DataTypeTok{names.arg =} \DecValTok{0}\OperatorTok{:}\DecValTok{15}\NormalTok{, }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+\centering
+\includegraphics{MSMB-Chapter1_files/figure-latex/binombarplot-1.pdf}
+\caption{Theoretical distribution of \(B(15,0.3)\) . The highest bar is
+at \(x = 4\). We have chosen to represent theoretical values in red
+throughout.}
+\end{figure}
+
+The number of trial is the \emph{size} parameter and is often written
+\emph{n} while the probability of success i \emph{p}. For \(X\)
+distributed as a binomial distribution with parameters (\emph{n},
+\emph{p}), written \(X\) \textasciitilde{} \(B(n,p)\), the probability
+of seeing \(X\) = \(k\) success is
+
+P(\(X\) = k) = \((\frac{n}{k})p^k(1-p)^{n-k}\)
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\textcolor{red}{Question 1.4: What is the output of the formula for k = 3, p = 2/3, n = 4?}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dbinom}\NormalTok{(}\DecValTok{3}\NormalTok{, }\DataTypeTok{prob =} \DecValTok{2}\OperatorTok{/}\DecValTok{3}\NormalTok{, }\DataTypeTok{size =} \DecValTok{4}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.3950617
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\subsection{1.3.3 Poisson distributions}\label{poisson-distributions}
+
+When the probability of success \emph{p} is small and the number of
+trial \emph{n} is large, the binomial distribution \(B(n, p)\) can be
+faithfully approximated by a simpler distribution, the \textbf{poisson
+distribution} with rate parameter \(\lambda = np\).
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\textcolor{red}{Question 1.5: what is the probability mass distribution of observing 0:12 mutations in a  genome of $n = 10^4$ nucleotides, when the probability of mutation is **p** = 5 $\times$ $10^{-4}$ per nucleotide? Is it similar when modeled by the binomial $B(n, p)$ distribution and by the poisson $\lambda = np$ distribution?}
+
+\includegraphics{MSMB-Chapter1_files/figure-latex/testbinomvspois-1.pdf}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+The Poisson depends only on the product of \(np\). The mathematical
+formula is: \(P(X = k) = \frac{\lambda^ke^{-k}}{k!}\)
+
+For instance, take \(\lambda\) = 5 and compute \(P(X = 3)\)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{5}\OperatorTok{^}\DecValTok{3} \OperatorTok{*}\StringTok{ }\KeywordTok{exp}\NormalTok{(}\OperatorTok{-}\DecValTok{5}\NormalTok{) }\OperatorTok{/}\StringTok{ }\KeywordTok{factorial}\NormalTok{(}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.1403739
+\end{verbatim}
+
+**
+
+\textcolor{red}{Task: simulate a mutation process along 10, 000 positions with a mutation rate of $5\times10^{-4}$ and count the number of mutations. Repat this many times and plot the distribution.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{rbinom}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DataTypeTok{prob =} \FloatTok{5e-4}\NormalTok{, }\DataTypeTok{size =} \DecValTok{10000}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{simulations =}\StringTok{ }\KeywordTok{rbinom}\NormalTok{(}\DataTypeTok{n =} \DecValTok{300000}\NormalTok{, }\DataTypeTok{prob =} \FloatTok{5e-4}\NormalTok{, }\DataTypeTok{size =} \DecValTok{10000}\NormalTok{)}
+\KeywordTok{barplot}\NormalTok{(}\KeywordTok{table}\NormalTok{(simulations), }\DataTypeTok{col =} \StringTok{"lavender"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+\centering
+\includegraphics{MSMB-Chapter1_files/figure-latex/gen-simpoisson-1.pdf}
+\caption{Simulated distribution of B(10000, \(10^{-4}\)) for
+(ref:gen-simpoisson-1) simulations.}
+\end{figure}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\subsubsection{1.3.4 A generative model for epitope
+detection}\label{a-generative-model-for-epitope-detection}
+
+ELISA assay the detects epitopes at 100 different independent positions.
+The false positive rate is 1\% We can say that p(declare epitope
+\textbar{} no epitope) = 1\% or, declaring an epitope when there is no
+epitope is 1\%. The general form is *\(X|Y\) as ``given'' or
+``conditional on''. Thus, ``X happens conditional on Y being the
+case''.``* . The data for one patien looks like this:
+
+\textcolor{blue}{WHAT IS THIS NOMENCLATURE?}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{P1 <-}\StringTok{ `}\DataTypeTok{[<-}\StringTok{`}\NormalTok{ (}\KeywordTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{100}\NormalTok{), }\DecValTok{22}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\textcolor{red}{Task: Verify by simulation that the sum of 50 independent Bernoulli variables with p = 0.01 is - to good enough approximation - the same as a Poisson(0.5) random variable}
+
+If there are no epitopes and the counts follow a Poisson(0.01)
+distribution. Each individual position and patient has a probability of
+1 in 100 of being a 1. At any given position after seeing 50 patients,
+we expect the sum to have a Poisson distribution with parameter 0.5.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{bernoul <-}\StringTok{ }\KeywordTok{c}\NormalTok{()}
+\NormalTok{poiss <-}\StringTok{ }\KeywordTok{c}\NormalTok{()}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\DecValTok{100}\NormalTok{)\{}
+\NormalTok{  bernoul[i] <-}\StringTok{ }\KeywordTok{sum}\NormalTok{(}\KeywordTok{rbinom}\NormalTok{(}\DataTypeTok{n =} \DecValTok{100}\NormalTok{, }\DataTypeTok{prob =} \FloatTok{0.01}\NormalTok{, }\DataTypeTok{size =} \DecValTok{50}\NormalTok{))}
+\NormalTok{  poiss[i] <-}\StringTok{ }\KeywordTok{sum}\NormalTok{(}\KeywordTok{rpois}\NormalTok{(}\DecValTok{100}\NormalTok{, }\DataTypeTok{lambda =} \FloatTok{0.5}\NormalTok{))}
+\NormalTok{\}}
+\KeywordTok{hist}\NormalTok{(bernoul, }\DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{100}\NormalTok{), }\DataTypeTok{breaks=}\DecValTok{50}\NormalTok{, }\DataTypeTok{col=}\StringTok{"blue"}\NormalTok{, }\DataTypeTok{main=}\StringTok{""}\NormalTok{, }\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{15}\NormalTok{), }\DataTypeTok{xlab =}\StringTok{"sum of detections after 50 patients"}\NormalTok{, }\DataTypeTok{ylab =} \StringTok{"frequency"}\NormalTok{)}
+\KeywordTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{, }\DataTypeTok{col=}\KeywordTok{c}\NormalTok{(}\StringTok{"blue"}\NormalTok{, }\StringTok{"red"}\NormalTok{), }\DataTypeTok{legend=}\KeywordTok{c}\NormalTok{(}\StringTok{"bernoulli"}\NormalTok{, }\StringTok{"poisson"}\NormalTok{), }\DataTypeTok{pch=}\DecValTok{22}\NormalTok{, }\DataTypeTok{pt.bg =}\KeywordTok{c}\NormalTok{(}\StringTok{"blue"}\NormalTok{, }\StringTok{"red"}\NormalTok{))}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{new=}\NormalTok{T)}
+\KeywordTok{hist}\NormalTok{(poiss, }\DataTypeTok{breaks=}\DecValTok{40}\NormalTok{, }\DataTypeTok{col=}\StringTok{"red"}\NormalTok{, }\DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{100}\NormalTok{), }\DataTypeTok{main=}\StringTok{""}\NormalTok{, }\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{15}\NormalTok{), }\DataTypeTok{xlab=}\StringTok{""}\NormalTok{, }\DataTypeTok{ylab=}\StringTok{""}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{MSMB-Chapter1_files/figure-latex/unnamed-chunk-4-1.pdf}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\begin{figure}
+\centering
+\includegraphics{MSMB-Chapter1_files/figure-latex/epitopedata-1.pdf}
+\caption{Output of the ELISA array results for 50 patients in the 100
+positions.}
+\end{figure}
+
+What are the chances of seeing a value as large as 7, if no epitope is
+present?
+
+If you look for the probability of seeing a number as big as 7 (or
+larger) when considering one Poisson(0.5) random variable, you can
+calculate the closed form as \(\sum_{k=7}^{\infty} P(X=k)\)
+
+This is the same as 1 - P(X \(<=\) 6).
+
+P(X \(<=\) 6) is the \textbf{cumulative distribution function} at 6 and
+we use the function \texttt{ppois} for computing it.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{1} \OperatorTok{-}\StringTok{ }\KeywordTok{ppois}\NormalTok{(}\DecValTok{6}\NormalTok{, }\FloatTok{0.5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1.00238e-06
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ppois}\NormalTok{(}\DecValTok{6}\NormalTok{, }\FloatTok{0.5}\NormalTok{, }\DataTypeTok{lower.tail =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1.00238e-06
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\textcolor{blue}{Task: What is the meaning of `lower.tail`?} ``Setting
+lower.tail = FALSE allows to get much more precise results when the
+default, lower.tail = TRUE would return 1, see the example below.''
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{1} \OperatorTok{-}\StringTok{ }\KeywordTok{ppois}\NormalTok{(}\DecValTok{10}\OperatorTok{*}\NormalTok{(}\DecValTok{15}\OperatorTok{:}\DecValTok{25}\NormalTok{), }\DataTypeTok{lambda =} \DecValTok{100}\NormalTok{)  }\CommentTok{# becomes 0 (cancellation)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] 1.233094e-06 1.261664e-08 7.085799e-11 2.252643e-13 4.440892e-16
+##  [6] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00
+## [11] 0.000000e+00
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ppois}\NormalTok{(}\DecValTok{10}\OperatorTok{*}\NormalTok{(}\DecValTok{15}\OperatorTok{:}\DecValTok{25}\NormalTok{), }\DataTypeTok{lambda =} \DecValTok{100}\NormalTok{, }\DataTypeTok{lower.tail =} \OtherTok{FALSE}\NormalTok{)  }\CommentTok{# no cancellation}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] 1.233094e-06 1.261664e-08 7.085800e-11 2.253110e-13 4.174239e-16
+##  [6] 4.626179e-19 3.142097e-22 1.337219e-25 3.639328e-29 6.453883e-33
+## [11] 7.587807e-37
+\end{verbatim}
+
+?
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+(1.1) We use
+\(\epsilon = P(X \geq 7) = 1 - P(X \leq 6) \approx 10^{-6}\) (1.1)
+
+\textbf{Extreme value analysis for the poisson distribution}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\textcolor{red}{Question 1.6: The above calculation is not correct if we want to compute the probability that we observe these data if there is no epitope}
+
+We looked at all positions to find the maximum (7), which is more likely
+to occur than if we looked at only one position. So instead of asking
+what are the chances of seeing a Poisson(0.5) as large as 7, we should
+ask what are the chances that the maximum of 100 Poisson(0.5) trials is
+as large as 7. Use \textbf{extreme value theorem} Order the data
+\(x_1, x_2, .. x_{100}\) so that \(x_{1}\) is the smallest value and
+\(x_{100}\) is the largest of the counts over the 100 positions.
+Together this set \(x_1, x_2, .. x_{100}\) is called the \textbf{rank
+statistic} of this sample of 100 values.
+
+Then the maximum value being as large as 7 is the \emph{complementary
+event} of having all 100 counts be smaller or equal to 6. Two
+\emph{complementary events} have probabilities that sum to 1.
+
+\[P(x_{(100)}\geq 7)=1-P(x_{(100)} \leq 6)=1-
+\Pi_{i=1}^{100} P(x_i \leq 6 )\]
+
+Because we suppose these 100 events are independent, we can use our
+result from 1.1 above:
+
+\textcolor{blue}{huh.} \[
+\Pi_{i=1}^{100} P(x_i \leq 6 ) = (P(x_i \leq 6))^{100} = (1- \epsilon)^{100}
+\]
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\textbf{Actually calculating the numbers}
+
+\textbf{Computing probabilities by simulation}
+
+Use a \emph{monte carlo} method: a computer simulation based on our
+generative model that finds the probabilities of the events we're
+interested in. Essentially generate Figure 1.7 again and again and see
+how often the biggest spike is 7 or greater.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{maxes =}\StringTok{ }\KeywordTok{replicate}\NormalTok{(}\DecValTok{100000}\NormalTok{, \{}
+  \KeywordTok{max}\NormalTok{(}\KeywordTok{rpois}\NormalTok{(}\DecValTok{100}\NormalTok{, }\FloatTok{0.5}\NormalTok{))}
+\NormalTok{\})}
+\KeywordTok{table}\NormalTok{(maxes)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## maxes
+##     1     2     3     4     5     6     7     9 
+##     8 23072 60805 14354  1604   141    15     1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{mean}\NormalTok{( maxes }\OperatorTok{>=}\StringTok{ }\DecValTok{7}\NormalTok{ )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.00016
+\end{verbatim}
+
+That's the same as the number of times maxes was 7 or greater divided by
+100000. Potential limitation of Monte Carlo simulations is that the
+inverse of the number of simulations is the `granularity'. What we have
+done is an example of \textbf{probability or generative modeling}: all
+parameters are known and the theory allows us to work by
+\textbf{deduction} in a top-down fashion.
+
+If we knew instead the number of patients and the length of the proteins
+but did not know the distribution of the data then we have to use
+\textbf{statistical modeling}. If we only have the data then we
+\textbf{fit} a reasonable distirubiton to describe it.
+
+\subsection{1.4 Multinomial distributions: the case of
+DNA}\label{multinomial-distributions-the-case-of-dna}
+
+\textbf{More than two outcomes}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\textcolor{blue}{Task: Experiment with the random number generator that generates all possible numbers between 0 and 1 through the function called `runif`. Use it to generate  random variable with four levels (A, C, T, G) where $p_A = \frac{1}{8}$, $p_B = \frac{3}{8}$, $p_C = \frac{3}{8}$, $p_G = \frac{1}{8}$}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{?sample}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\textbf{Mathematical formulation}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\textcolor{red}{Question 1.7: Suppose we have four boxes that are equally likely. Using the formula, what is the probability of observing four in the first box, two in the second box and none in the two other boxes?}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dmultinom}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{), }\DataTypeTok{prob =} \KeywordTok{rep}\NormalTok{(}\DecValTok{1}\OperatorTok{/}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.003662109
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\textcolor{blue}{Formula?}
+
+Run simulations to test whether the data are consistent with each box
+having the same probability. Suppose eight characters of four different
+equally likely types:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pvec =}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{1}\OperatorTok{/}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{)}
+\KeywordTok{t}\NormalTok{(}\KeywordTok{rmultinom}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DataTypeTok{prob =}\NormalTok{ pvec, }\DataTypeTok{size =} \DecValTok{8}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2] [,3] [,4]
+## [1,]    2    3    3    0
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\textcolor{red}{Question 1.9: How do you interpret the difference between `rmultinom(n=9, prob=pvec, size =1)` and `rmultimon(n=1, prob = pvec, size =8)`?}
+
+n is the number of random draws size is the number of objects that are
+put into K boxes
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{t}\NormalTok{(}\KeywordTok{rmultinom}\NormalTok{(}\DataTypeTok{n=}\DecValTok{8}\NormalTok{, }\DataTypeTok{prob=}\NormalTok{pvec, }\DataTypeTok{size =}\DecValTok{1}\NormalTok{)) }\CommentTok{#8 trials with one ball thrown into 1 of 4 boxes}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2] [,3] [,4]
+## [1,]    0    1    0    0
+## [2,]    0    1    0    0
+## [3,]    0    0    0    1
+## [4,]    0    1    0    0
+## [5,]    0    0    0    1
+## [6,]    1    0    0    0
+## [7,]    0    0    1    0
+## [8,]    0    1    0    0
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{t}\NormalTok{(}\KeywordTok{rmultinom}\NormalTok{(}\DataTypeTok{n=}\DecValTok{1}\NormalTok{, }\DataTypeTok{prob =}\NormalTok{ pvec, }\DataTypeTok{size =}\DecValTok{8}\NormalTok{)) }\CommentTok{#one trial with 8 balls thrown into 4 boxes}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2] [,3] [,4]
+## [1,]    4    1    1    2
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\subsection{1.4.1 Simulating for Power}\label{simulating-for-power}
+
+Important Q: How big a sample size do I need?
+
+\emph{Power} is the probability of detecting something if it is there,
+i.e., the \emph{true positive rate} Conventionally want power of
+\(\geq\) 80\%. i.e., if the same experiment is run many times, about
+20\% of the time it will fail to yield significant results even it it
+should.
+
+Generate 1000 simulations from the null hypothesis using the
+\texttt{rmultinom} function. Display only the first 11 columns.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{obsunder0 =}\StringTok{ }\KeywordTok{rmultinom}\NormalTok{(}\DecValTok{1000}\NormalTok{, }\DataTypeTok{prob =}\NormalTok{ pvec, }\DataTypeTok{size =} \DecValTok{20}\NormalTok{)}
+\KeywordTok{dim}\NormalTok{(obsunder0)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1]    4 1000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{obsunder0[, }\DecValTok{1}\OperatorTok{:}\DecValTok{11}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11]
+## [1,]    7    5    3    3    2    4    6    7    4     6     4
+## [2,]    4    4    8    4    5    6    6    4   10     2     7
+## [3,]    3    5    7   10    7    3    3    4    2     9     6
+## [4,]    6    6    2    3    6    7    5    5    4     3     3
+\end{verbatim}
+
+Eah column is a simulated instance. Teh numbers vary a lot. The expected
+value is 20/4 = 5 but in some cases it goes up much higher.
+
+\subsubsection{Creating a test}\label{creating-a-test}
+
+Knowing the expected value (1/4) isn't enough. We also need a measure of
+\textbf{variability} to describe how much variability is expected and
+how much is too much. Use the following statistic that is computed as
+the sum of squares of the squre of the differences between the observed
+calue and the expected value relative to the expected value. I.e.,
+\(\chi\)-square.
+
+stat = \(\sum_i = \frac{(E_i - x_i)^2}{E_i}\)
+
+How do the first three columns of the generated data differ from what we
+expect?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{expected0 =}\StringTok{ }\NormalTok{pvec }\OperatorTok{*}\StringTok{ }\DecValTok{20}
+\KeywordTok{sum}\NormalTok{((obsunder0[, }\DecValTok{1}\NormalTok{] }\OperatorTok{-}\StringTok{ }\NormalTok{expected0)}\OperatorTok{^}\DecValTok{2} \OperatorTok{/}\StringTok{ }\NormalTok{expected0)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{sum}\NormalTok{((obsunder0[, }\DecValTok{2}\NormalTok{] }\OperatorTok{-}\StringTok{ }\NormalTok{expected0)}\OperatorTok{^}\DecValTok{2} \OperatorTok{/}\StringTok{ }\NormalTok{expected0)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.4
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{sum}\NormalTok{((obsunder0[, }\DecValTok{3}\NormalTok{] }\OperatorTok{-}\StringTok{ }\NormalTok{expected0)}\OperatorTok{^}\DecValTok{2} \OperatorTok{/}\StringTok{ }\NormalTok{expected0)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 5.2
+\end{verbatim}
+
+The values differ. Encapsulate the formula for \texttt{stat} in a
+fumction.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{stat =}\StringTok{ }\ControlFlowTok{function}\NormalTok{(obsvd, }\DataTypeTok{exptd =} \DecValTok{20} \OperatorTok{*}\StringTok{ }\NormalTok{pvec) \{}
+  \KeywordTok{sum}\NormalTok{((obsvd }\OperatorTok{-}\StringTok{ }\NormalTok{exptd)}\OperatorTok{^}\DecValTok{2} \OperatorTok{/}\StringTok{ }\NormalTok{exptd)}
+\NormalTok{\}}
+\KeywordTok{stat}\NormalTok{(obsunder0[, }\DecValTok{1}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2
+\end{verbatim}
+
+Then compute the measure for all 1000 instances and call it \(S0\) which
+contains values generated under \(H_0\). COnsider the histogram of
+\(S0\) to be the \emph{null distribution}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{S0 =}\StringTok{ }\KeywordTok{apply}\NormalTok{(obsunder0, }\DecValTok{2}\NormalTok{, stat)}
+\KeywordTok{summary}\NormalTok{(S0)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   0.000   1.200   2.600   2.904   4.000  14.000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{hist}\NormalTok{(S0, }\DataTypeTok{breaks =} \DecValTok{50}\NormalTok{, }\DataTypeTok{col =} \StringTok{"lavender"}\NormalTok{, }\DataTypeTok{main =} \StringTok{""}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+\centering
+\includegraphics{MSMB-Chapter1_files/figure-latex/histS0-1.pdf}
+\caption{The histogram of simulated values \texttt{S0} of the statistic
+\texttt{stat} under the null (fair) distribution provides an
+approximation of the \textbf{sampling distribution} of the statistic
+\texttt{stat}.}
+\end{figure}
+
+From this can approximate the 95\% quantile:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{q95 =}\StringTok{ }\KeywordTok{quantile}\NormalTok{(S0, }\DataTypeTok{probs =} \FloatTok{0.95}\NormalTok{)}
+\NormalTok{q95}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 95% 
+## 7.6
+\end{verbatim}
+
+That tells us that 5\% of the values are larger than 7.6. This becomes
+our criteria for testing: we wil reject the null hypothesis that the
+data come from a fair proess if the weighted sum of squares `stat' is
+larger than 7.6.
+
+\emph{Determine the test power} Now compute the probability that our
+test will detect data that do not come from the null hypothesis.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pvecA =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{3}\OperatorTok{/}\DecValTok{8}\NormalTok{, }\DecValTok{1}\OperatorTok{/}\DecValTok{4}\NormalTok{, }\DecValTok{3}\OperatorTok{/}\DecValTok{12}\NormalTok{, }\DecValTok{1}\OperatorTok{/}\DecValTok{8}\NormalTok{)}
+\NormalTok{observed =}\StringTok{ }\KeywordTok{rmultinom}\NormalTok{(}\DecValTok{1000}\NormalTok{, }\DataTypeTok{prob =}\NormalTok{ pvecA, }\DataTypeTok{size =} \DecValTok{20}\NormalTok{)}
+\KeywordTok{dim}\NormalTok{(observed)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1]    4 1000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{observed[, }\DecValTok{1}\OperatorTok{:}\DecValTok{7}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2] [,3] [,4] [,5] [,6] [,7]
+## [1,]   10    6    6    8    6    6   10
+## [2,]    6    8    3    3    5    4    4
+## [3,]    3    5    7    6    8    6    5
+## [4,]    1    1    4    3    1    4    1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{apply}\NormalTok{(observed, }\DecValTok{1}\NormalTok{, mean)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 7.405 4.982 5.088 2.525
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{expectedA =}\StringTok{ }\NormalTok{pvecA }\OperatorTok{*}\StringTok{ }\DecValTok{20}
+\NormalTok{expectedA}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 7.5 5.0 5.0 2.5
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{stat}\NormalTok{(observed[, }\DecValTok{1}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 9.2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{S1 =}\StringTok{ }\KeywordTok{apply}\NormalTok{(observed, }\DecValTok{2}\NormalTok{, stat)}
+\NormalTok{q95}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 95% 
+## 7.6
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{sum}\NormalTok{(S1 }\OperatorTok{>}\StringTok{ }\NormalTok{q95)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 209
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{power =}\StringTok{ }\KeywordTok{mean}\NormalTok{(S1 }\OperatorTok{>}\StringTok{ }\NormalTok{q95)}
+\NormalTok{power}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.209
+\end{verbatim}
+
+Thus with a sequence length of 20 we have a power of about 20\% to
+detect difference between a fair generating process and our
+\textbf{alternative}.
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\textcolor{red}{Task: Suggest a new sequence length that will ensure the power is acceptable}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{20}\OperatorTok{:}\DecValTok{30}\NormalTok{)\{}
+\NormalTok{  expectedA =}\StringTok{ }\NormalTok{pvecA }\OperatorTok{*}\StringTok{ }\NormalTok{i}
+\NormalTok{  observed =}\StringTok{ }\KeywordTok{rmultinom}\NormalTok{(}\DecValTok{1000}\NormalTok{, }\DataTypeTok{prob =}\NormalTok{ pvecA, }\DataTypeTok{size =}\NormalTok{ i)}
+\NormalTok{  S1 =}\StringTok{ }\KeywordTok{apply}\NormalTok{(observed, }\DecValTok{2}\NormalTok{, stat)}
+\NormalTok{  power =}\StringTok{ }\KeywordTok{mean}\NormalTok{(S1 }\OperatorTok{>}\StringTok{ }\NormalTok{q95)}
+  \KeywordTok{print}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(i ,}\StringTok{" = "}\NormalTok{, power))}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "20 = 0.235"
+## [1] "21 = 0.265"
+## [1] "22 = 0.318"
+## [1] "23 = 0.373"
+## [1] "24 = 0.465"
+## [1] "25 = 0.499"
+## [1] "26 = 0.591"
+## [1] "27 = 0.702"
+## [1] "28 = 0.798"
+## [1] "29 = 0.84"
+## [1] "30 = 0.911"
+\end{verbatim}
+
+\section{1.7 Exercises}\label{exercises}
+
+\textcolor{red}{Exercise 1.1: The R functions that start with `r` to generate random discrete data such as `pois`, `binom` `multinon`. If we need a theoretical computation of probability we use the same functions with `d` such as `dbinom` which calculates the probabilities of events in the discrete binomial distribution or `dnorm` which calculates the **probability density function** for the continuous normal distribution. When computing tail probabilities such as $P(X>a)$ it's convenient to use the cumulative distribution functions which start with `p`. Find two other disrete distributions}
+
+dnbinom: negative binomial - the number of successes in a sequence of
+independent and identically distributed Bernoulli trials before a
+specified (non-random) number of failures (denoted r) occurs. dhyper:
+hypergeometric - probability of \{\displaystyle k\} k successes (random
+draws for which the object drawn has a specified feature) in
+\{\displaystyle n\} n draws, without replacement
+
+\textcolor{red}{Exercise 1.2: How would you calculate the probability mass at the value X = 2 for a binomial B(10, 0.3) with `dbinom`? Use `dbinom` to compute the cumulative distribution at value 2, corresponding to $P(X \leq 2)$ and check your answer with another R function}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dbinom}\NormalTok{(}\DataTypeTok{x =}\DecValTok{2}\NormalTok{, }\DataTypeTok{size =} \DecValTok{10}\NormalTok{, }\DataTypeTok{prob =} \FloatTok{0.3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.2334744
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pbinom}\NormalTok{(}\DataTypeTok{q =}\DecValTok{2}\NormalTok{, }\DataTypeTok{size =} \DecValTok{10}\NormalTok{, }\DataTypeTok{prob=}\FloatTok{0.3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.3827828
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dbinom}\NormalTok{(}\DataTypeTok{x =}\DecValTok{0}\NormalTok{, }\DataTypeTok{size =} \DecValTok{10}\NormalTok{, }\DataTypeTok{prob =} \FloatTok{0.3}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{dbinom}\NormalTok{(}\DataTypeTok{x =}\DecValTok{1}\NormalTok{, }\DataTypeTok{size =} \DecValTok{10}\NormalTok{, }\DataTypeTok{prob =} \FloatTok{0.3}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{dbinom}\NormalTok{(}\DataTypeTok{x =}\DecValTok{2}\NormalTok{, }\DataTypeTok{size =} \DecValTok{10}\NormalTok{, }\DataTypeTok{prob =} \FloatTok{0.3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.3827828
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{sum}\NormalTok{(}\KeywordTok{sapply}\NormalTok{(}\DecValTok{0}\OperatorTok{:}\DecValTok{2}\NormalTok{, dbinom, }\DataTypeTok{size =} \DecValTok{10}\NormalTok{, }\DataTypeTok{prob =} \FloatTok{0.3}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.3827828
+\end{verbatim}
+
+\textcolor{red}{Exercise 1.3: Write a function to compute the probability of having a maximum as big as m when looking across `n` poisson variables with rate `lambda`}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{poismax <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(m, n, lambda)\{}
+\NormalTok{  prob =}\StringTok{ }\DecValTok{1} \OperatorTok{-}\StringTok{ }\KeywordTok{ppois}\NormalTok{(m }\OperatorTok{-}\DecValTok{1}\NormalTok{, lambda)}\OperatorTok{^}\NormalTok{n}
+\NormalTok{  prob}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\textcolor{red}{Exercise 1.4: Rewrite 1.3 to have default values for it's parameters}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{poismax <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(}\DataTypeTok{m =} \DecValTok{5}\NormalTok{, }\DataTypeTok{n =} \DecValTok{200}\NormalTok{, }\DataTypeTok{lambda =} \FloatTok{0.5}\NormalTok{)\{}
+\NormalTok{  epsilon =}\StringTok{ }\DecValTok{1} \OperatorTok{-}\StringTok{ }\KeywordTok{ppois}\NormalTok{(}\DataTypeTok{q =}\NormalTok{ m }\OperatorTok{-}\DecValTok{1}\NormalTok{, lambda)}
+  \DecValTok{1} \OperatorTok{-}\StringTok{ }\KeywordTok{exp}\NormalTok{(}\OperatorTok{-}\NormalTok{n}\OperatorTok{*}\NormalTok{epsilon)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\textcolor{red}{Exercise 1.5: In the epitope example, use a simulation to find the probability of having a maximum of 9 or larger in 100 trials. How many simulations do you need if you would like to prove that "the probability is smaller than 0.000001"?}
+
+You need \(1/0.000001\) = 1000000 simulations.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{poismax}\NormalTok{(}\DataTypeTok{m=}\DecValTok{9}\NormalTok{, }\DataTypeTok{n =} \DecValTok{100}\NormalTok{, }\DataTypeTok{lambda =} \FloatTok{0.5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 3.43549e-07
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{maxes =}\StringTok{ }\KeywordTok{replicate}\NormalTok{(}\DecValTok{1000000}\NormalTok{, \{}
+  \KeywordTok{max}\NormalTok{(}\KeywordTok{rpois}\NormalTok{(}\DecValTok{100}\NormalTok{, }\FloatTok{0.5}\NormalTok{))}
+\NormalTok{\})}
+\KeywordTok{max}\NormalTok{(maxes)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 8
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{mean}\NormalTok{(maxes }\OperatorTok{>=}\StringTok{ }\DecValTok{9}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0
+\end{verbatim}
+
+\textcolor{red}{Exerpcise 1.6}
+
+\textcolor{red}{Exerpcise 1.7: Generate 100 instances of a Poisson(3) random variable.What is the mean? What is the variance as computed by the R funcition 'var'?}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{t <-}\StringTok{ }\KeywordTok{rpois}\NormalTok{(}\DecValTok{100}\NormalTok{, }\DecValTok{3}\NormalTok{)}
+\KeywordTok{mean}\NormalTok{(t)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2.91
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{var}\NormalTok{(t)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 3.254444
+\end{verbatim}
+
+\textcolor{red}{Exercise 1.8: Is the mitochondrial sequence of *C. elegans* consistent with a model of equally likely nucleotides?}
+
+\textcolor{red}{a. Explore the nucleotide frequency of chromosme M}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\NormalTok{ (}\OperatorTok{!}\KeywordTok{requireNamespace}\NormalTok{(}\StringTok{"BiocManager"}\NormalTok{, }\DataTypeTok{quietly =} \OtherTok{TRUE}\NormalTok{))}
+     \KeywordTok{install.packages}\NormalTok{(}\StringTok{"BiocManager"}\NormalTok{)}
+\NormalTok{BiocManager}\OperatorTok{::}\KeywordTok{install}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"Biostrings"}\NormalTok{, }\StringTok{"BSgenome.Celegans.UCSC.ce2"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Bioconductor version 3.9 (BiocManager 1.30.7), R 3.6.1 (2019-07-05)
+\end{verbatim}
+
+\begin{verbatim}
+## Installing package(s) 'Biostrings', 'BSgenome.Celegans.UCSC.ce2'
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## The downloaded binary packages are in
+##  /var/folders/k8/2j2_fd395576zyzqtpbl9jy00000gn/T//Rtmpmn3hRC/downloaded_packages
+\end{verbatim}
+
+\begin{verbatim}
+## installing the source package 'BSgenome.Celegans.UCSC.ce2'
+\end{verbatim}
+
+\begin{verbatim}
+## Update old packages: 'data.table'
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(}\StringTok{"BSgenome.Celegans.UCSC.ce2"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: BSgenome
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: BiocGenerics
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: parallel
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'BiocGenerics'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:parallel':
+## 
+##     clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+##     clusterExport, clusterMap, parApply, parCapply, parLapply,
+##     parLapplyLB, parRapply, parSapply, parSapplyLB
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:stats':
+## 
+##     IQR, mad, sd, var, xtabs
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     anyDuplicated, append, as.data.frame, basename, cbind,
+##     colnames, dirname, do.call, duplicated, eval, evalq, Filter,
+##     Find, get, grep, grepl, intersect, is.unsorted, lapply, Map,
+##     mapply, match, mget, order, paste, pmax, pmax.int, pmin,
+##     pmin.int, Position, rank, rbind, Reduce, rownames, sapply,
+##     setdiff, sort, table, tapply, union, unique, unsplit, which,
+##     which.max, which.min
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: S4Vectors
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: stats4
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'S4Vectors'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:base':
+## 
+##     expand.grid
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: IRanges
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: GenomeInfoDb
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: GenomicRanges
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: Biostrings
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: XVector
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'Biostrings'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:base':
+## 
+##     strsplit
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: rtracklayer
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Celegans}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Worm genome:
+## # organism: Caenorhabditis elegans (Worm)
+## # provider: UCSC
+## # provider version: ce2
+## # release date: Mar. 2004
+## # release name: WormBase v. WS120
+## # 7 sequences:
+## #   chrI   chrII  chrIII chrIV  chrV   chrX   chrM                       
+## # (use 'seqnames()' to see all the sequence names, use the '$' or '[['
+## # operator to access a given sequence)
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Celegans}\OperatorTok{$}\NormalTok{chrM}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   13794-letter "DNAString" instance
+## seq: CAGTAAATAGTTTAATAAAAATATAGCATTTGGG...TTATAGATATATACTTTGTATATATCTATATTA
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{alphabetFrequency}\NormalTok{(Celegans}\OperatorTok{$}\NormalTok{chrM)[}\DecValTok{1}\OperatorTok{:}\DecValTok{4}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    A    C    G    T 
+## 4335 1225 2055 6179
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{alphabetFrequency}\NormalTok{(Celegans}\OperatorTok{$}\NormalTok{chrM)[}\DecValTok{1}\OperatorTok{:}\DecValTok{4}\NormalTok{]}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(}\KeywordTok{alphabetFrequency}\NormalTok{(Celegans}\OperatorTok{$}\NormalTok{chrM)[}\DecValTok{1}\OperatorTok{:}\DecValTok{4}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          A          C          G          T 
+## 0.31426707 0.08880673 0.14897782 0.44794838
+\end{verbatim}
+
+\textcolor{red}{b. Test whether the data is consistent with a uniform model}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pvec <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{1}\OperatorTok{/}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{)}
+\NormalTok{sumM <-}\StringTok{ }\KeywordTok{sum}\NormalTok{(}\KeywordTok{alphabetFrequency}\NormalTok{(Celegans}\OperatorTok{$}\NormalTok{chrM)[}\DecValTok{1}\OperatorTok{:}\DecValTok{4}\NormalTok{])}
+\KeywordTok{dmultinom}\NormalTok{(}\KeywordTok{alphabetFrequency}\NormalTok{(Celegans}\OperatorTok{$}\NormalTok{chrM)[}\DecValTok{1}\OperatorTok{:}\DecValTok{4}\NormalTok{], }\DataTypeTok{prob=}\KeywordTok{rep}\NormalTok{(}\DecValTok{1}\OperatorTok{/}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dmultinom}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{4335}\NormalTok{, }\DecValTok{1225}\NormalTok{, }\DecValTok{2055}\NormalTok{, }\DecValTok{6179}\NormalTok{), }\DataTypeTok{prob=}\KeywordTok{c}\NormalTok{(}\FloatTok{0.31}\NormalTok{, }\FloatTok{0.09}\NormalTok{, }\FloatTok{0.15}\NormalTok{, }\FloatTok{0.45}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 4.857213e-07
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dmultinom}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{1}\NormalTok{), }\DataTypeTok{prob=}\KeywordTok{c}\NormalTok{(}\FloatTok{0.5}\NormalTok{, }\FloatTok{0.4}\NormalTok{, }\FloatTok{0.1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.112
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dmultinom}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{1}\NormalTok{), }\DataTypeTok{prob=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{/}\DecValTok{3}\NormalTok{, }\DecValTok{1}\OperatorTok{/}\DecValTok{3}\NormalTok{, }\DecValTok{1}\OperatorTok{/}\DecValTok{3}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.04267642
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{rmultinom}\NormalTok{(}\DecValTok{1}\NormalTok{, }\KeywordTok{length}\NormalTok{(Celegans}\OperatorTok{$}\NormalTok{chrM), }\DataTypeTok{prob=}\NormalTok{pvec)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1]
+## [1,] 3448
+## [2,] 3442
+## [3,] 3411
+## [4,] 3493
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{obsunder0 =}\StringTok{ }\KeywordTok{rmultinom}\NormalTok{(}\DecValTok{1}\NormalTok{, }\KeywordTok{length}\NormalTok{(Celegans}\OperatorTok{$}\NormalTok{chrM), }\DataTypeTok{prob=}\NormalTok{pvec)}
+\NormalTok{expected0 =}\StringTok{ }\NormalTok{pvec}\OperatorTok{*}\NormalTok{sumM}
+\KeywordTok{sum}\NormalTok{((obsunder0[,}\DecValTok{1}\NormalTok{]}\OperatorTok{-}\NormalTok{expected0))}\OperatorTok{^}\DecValTok{2}\OperatorTok{/}\NormalTok{expected0}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0 0 0 0
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{stat <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(obsvd, }\DataTypeTok{exptd =}\NormalTok{ sumM }\OperatorTok{*}\StringTok{ }\NormalTok{pvec) \{}
+  \KeywordTok{sum}\NormalTok{((obsvd }\OperatorTok{-}\StringTok{ }\NormalTok{exptd)}\OperatorTok{^}\DecValTok{2} \OperatorTok{/}\StringTok{ }\NormalTok{exptd)}
+\NormalTok{\}}
+
+\NormalTok{S0 <-}\StringTok{ }\KeywordTok{apply}\NormalTok{(obsunder0, }\DecValTok{2}\NormalTok{, stat)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(}\StringTok{"BSgenome.Celegans.UCSC.ce2"}\NormalTok{)}
+\NormalTok{Celegans}
+\KeywordTok{seqnames}\NormalTok{(Celegans)}
+\NormalTok{Celegans}\OperatorTok{$}\NormalTok{chrM}
+\KeywordTok{class}\NormalTok{(Celegans}\OperatorTok{$}\NormalTok{chrM)}
+\KeywordTok{length}\NormalTok{(Celegans}\OperatorTok{$}\NormalTok{chrM)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(}\StringTok{"Biostrings"}\NormalTok{)}
+\NormalTok{lfM =}\StringTok{ }\KeywordTok{letterFrequency}\NormalTok{(Celegans}\OperatorTok{$}\NormalTok{chrM, }\DataTypeTok{letters=}\KeywordTok{c}\NormalTok{(}\StringTok{"A"}\NormalTok{, }\StringTok{"C"}\NormalTok{, }\StringTok{"G"}\NormalTok{, }\StringTok{"T"}\NormalTok{))}
+\NormalTok{lfM}
+\KeywordTok{sum}\NormalTok{(lfM)}
+\NormalTok{lfM }\OperatorTok{/}\StringTok{ }\KeywordTok{sum}\NormalTok{(lfM)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{t}\NormalTok{(}\KeywordTok{rmultinom}\NormalTok{(}\DecValTok{1}\NormalTok{, }\KeywordTok{length}\NormalTok{(Celegans}\OperatorTok{$}\NormalTok{chrM), }\DataTypeTok{p =} \KeywordTok{rep}\NormalTok{(}\DecValTok{1}\OperatorTok{/}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{length}\NormalTok{(Celegans}\OperatorTok{$}\NormalTok{chrM) }\OperatorTok{/}\StringTok{ }\DecValTok{4}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{oestat =}\StringTok{ }\ControlFlowTok{function}\NormalTok{(o, e) \{}
+  \KeywordTok{sum}\NormalTok{((e}\OperatorTok{-}\NormalTok{o)}\OperatorTok{^}\DecValTok{2} \OperatorTok{/}\StringTok{ }\NormalTok{e)}
+\NormalTok{\}}
+\NormalTok{oe =}\StringTok{ }\KeywordTok{oestat}\NormalTok{(}\DataTypeTok{o =}\NormalTok{ lfM, }\DataTypeTok{e =} \KeywordTok{length}\NormalTok{(Celegans}\OperatorTok{$}\NormalTok{chrM) }\OperatorTok{/}\StringTok{ }\DecValTok{4}\NormalTok{)}
+\NormalTok{oe}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{B =}\StringTok{ }\DecValTok{10000}
+\NormalTok{n =}\StringTok{ }\KeywordTok{length}\NormalTok{(Celegans}\OperatorTok{$}\NormalTok{chrM)}
+\NormalTok{expected =}\StringTok{ }\KeywordTok{rep}\NormalTok{(n }\OperatorTok{/}\StringTok{ }\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{)}
+\NormalTok{oenull =}\StringTok{ }\KeywordTok{replicate}\NormalTok{(B,}
+  \KeywordTok{oestat}\NormalTok{(}\DataTypeTok{e =}\NormalTok{ expected, }\DataTypeTok{o =} \KeywordTok{rmultinom}\NormalTok{(}\DecValTok{1}\NormalTok{, n, }\DataTypeTok{p =} \KeywordTok{rep}\NormalTok{(}\DecValTok{1}\OperatorTok{/}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{))))}
+\end{Highlighting}
+\end{Shaded}
+
+
+\end{document}

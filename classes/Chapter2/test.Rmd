@@ -144,6 +144,7 @@ dmultinom(lf, prob = rep(0.25, 4))
 
 ***
 
+
 ```{r}
 letterFrq = vapply(staph, letterFrequency, FUN.VALUE = numeric(4),
                    letters = "ACGT", OR = 0)
@@ -155,6 +156,8 @@ round(prop10, digits = 2)
 p0 = rowMeans(prop10)
 p0
 ```
+
+\textcolor{blue}{Outer probaqbility}
 
 ```{r outerex}
 cs = colSums(tab10)
@@ -168,19 +171,17 @@ randomtab10 = sapply(cs, function(s) { rmultinom(1, s, p0) } )
 all(colSums(randomtab10) == cs)
 ```
 
-```{r assertgenrandomtabs, echo = FALSE}
-stopifnot(all(colSums(randomtab10) == cs))
-```
-
 ```{r chap2-r-quant12-1, fig.keep = 'high', fig.cap = "Histogram of `simulstat`. The value of `S1` is marked by the vertical red line, those of the 0.95 and 0.99 quantiles (see next section) by the dotted lines.", fig.width = 4, fig.height = 3.5}
 stat = function(obsvd, exptd = 20 * pvec) {
   sum((obsvd - exptd)^2 / exptd)
 }
 B = 1000
+
 simulstat = replicate(B, {
   randomtab10 = sapply(cs, function(s) { rmultinom(1, s, p0) })
   stat(randomtab10, expectedtab10)
 })
+
 S1 = stat(tab10, expectedtab10)
 sum(simulstat >= S1)
 
@@ -190,12 +191,21 @@ abline(v = quantile(simulstat, probs = c(0.95, 0.99)),
        col = c("darkgreen", "blue"), lty = 2)
 ```
 
-```{r quantiles3, results = "hide"}
-qs = ppoints(100)
-quantile(simulstat, qs)
-quantile(qchisq(qs, df = 30), qs)
+***
+\textcolor{red}{Question 2.10 a) Compare the `simulstat` values and 1000 randomly generated $\chi^2_{30}$ random numbers by displaying them in histograms with 50 bins each.}
+```{r}
+X30 <- rchisq(1000, 30)
+hist(X30, breaks =50)
 ```
 
+b) Compute the quanties of the `simulstat` values and compare them to those of the $\chi^2_{30}$ distribution.}
+```{r quantiles3, results = "hide"}
+qs = ppoints(100)
+squant <- quantile(simulstat, qs)
+quant <- quantile(qchisq(qs, df = 30), qs)
+plot(squant, quant)
+abline(0, 1)
+```
 
 ```{r chap2-r-qqplot3-1, fig.keep = 'high', fig.cap = "Our simulated statistic\'s distribution compared to $\\chi_{30}^2$ using a QQ-plot, which shows the theoretical **quantiles** for the $\\chi^2_{30}$ distribution on the horizontal axis and the sampled ones on the vertical axis.", fig.width = 3.4, fig.height = 4}
 qqplot(qchisq(ppoints(B), df = 30), simulstat, main = "",
@@ -203,18 +213,21 @@ qqplot(qchisq(ppoints(B), df = 30), simulstat, main = "",
 abline(a = 0, b = 1, col = "red")
 ```
 
+Compute the p-value that the counts are distributed with multinomial probability $p_A$ = 0.35, $p_C$ = 0.15, $p_G$ = 0.2 $p_T$ = 0.3 we observe a value as high as 70.1:
+
 ```{r pvalueBias}
 1 - pchisq(S1, df = 30)
 ```
 
+## 2.7 Chagaff's Rule
 
+Chagaff published percentages of the masses of different organisms for nucleotides:
 ```{r Chargaff}
 load(url("http://bios221.stanford.edu/data/ChargaffTable.RData"))
 ChargaffTable
 ```
 
 ```{r ChargaffBars, fig.keep = 'high', fig.cap = "Barplots for the different rows in `ChargaffTable`. Can you spot the pattern?", fig.margin = FALSE, echo = FALSE, fig.width = 7, fig.height = 3.4}
-stopifnot(nrow(ChargaffTable) == 8)
 mycolors = c("chocolate", "aquamarine4", "cadetblue4", "coral3",
              "chartreuse4","darkgoldenrod4","darkcyan","brown4")
 par(mfrow=c(2, 4), mai = c(0, 0.7, 0.7, 0))
@@ -227,6 +240,12 @@ for (i in 1:8) {
 }
 ```
 
+***
+\textcolor{red}{Question 2.13: Do these data seem to come from equally likely multinomial categories? Can you suggest an alternative pattern? Can you do a quantitative analysis of the pattern?}
+
+No. G = C = 0.2; A = T= 0.3
+
+\textcolor{blue}{Explain this why `statChf`}
 ```{r chap2-r-permstatChf-1, fig.keep = 'high', fig.cap = "Histogram of our statistic `statChf` computed from simulations using per-row permutations of the columns. The value it yields for the observed data is shown by the red line.", fig.width = 3.2, fig.height = 3}
 statChf = function(x){
   sum((x[, "C"] - x[, "G"])^2 + (x[, "A"] - x[, "T"])^2)
@@ -243,14 +262,14 @@ hist(permstat, breaks = 100, main = "", col = "lavender")
 abline(v = chfstat, lwd = 2, col = "red")
 ```
 
-```{r vcdHC}
-HairEyeColor[,, "Female"]
-```
+***
 
-```{r answerHC}
-str(HairEyeColor)
-? HairEyeColor
-```
+***
+\textcolor{blue}{Question 2.14: When comparing `pChf` we only looked at the values in the null distribution smaller than the observed value. Why did we do this in a one-sided way here?}
+
+***
+
+## 2.7.1 Two categorical variables
 
 ```{r Deuto}
 load(url("http://bios221.stanford.edu/data/Deuteranopia.RData"))
@@ -260,6 +279,8 @@ Deuteranopia
 ```{r chisq.test.Deuteranopia}
 chisq.test(Deuteranopia)
 ```
+
+## 2.7.2 A special multinomial: Hardy-Weinberg equilibrium
 
 ```{r chap2-r-HardyWeinberg-1, fig.keep = 'high', fig.cap = "Plot of the log-likelihood for the (ref:chap2-r-HardyWeinberg-1-1) data."}
 library("HardyWeinberg")
@@ -302,22 +323,39 @@ HWTernaryPlot(genotypeFrequencies[pops, ],
               mcex = 0.75, vertex.cex = 1)
 ```
 
-```{r quesTern, echo = -1}
-HWTernaryPlot(genotypeFrequencies[pops, ],
-              markerlab = Mourant$Country[pops],
+***
+
+\textcolor{red}{Question 2.16: Make the ternary plot as in the code above then add the other data points to it. What do you notice? You can back up your discussion with the `HWChisq` function}
+
+```{r}
+HWTernaryPlot(genotypeFrequencies[-pops, ],
+              markerlab = Mourant$Country[-pops],
               alpha = 0.0001, curvecols = c("red", rep("purple", 4)),
               mcex = 0.75, vertex.cex = 1)
-HWTernaryPlot(genotypeFrequencies[-pops, ], alpha = 0.0001,
-              newframe = FALSE, cex = 0.5)
+unique(Mourant$Population)
+
+t <- apply(genotypeFrequencies, 1, function(x) HWChisq(x)$pval)
+Mourant$p.val <- t
+subset(Mourant, p.val < 0.05)
 ```
 
-```{r newMNdata}
+***
+
+***
+
+\textcolor{red}{Question 2.17: Divide all total frequencies by 50, keeping the same proportions for each of the genotypes, and recreate the ternary plot. a) what happens to the points? b) what happens to the confience regions?}
+
+```{r}
 newgf = round(genotypeFrequencies / 50)
-HWTernaryPlot(newgf[pops, ],
-              markerlab = Mourant$Country[pops],
+HWTernaryPlot(newgf,
+              markerlab = Mourant$Country,
               alpha = 0.0001, curvecols = c("red", rep("purple", 4)),
               mcex = 0.75, vertex.cex = 1)
 ```
+
+Confidence regions get bigger
+
+## 2.7.3 Concatenating several multinomials: sequence motifs and logos
 
 ```{r chap2-r-seqlogo-1, fig.keep = 'high', fig.cap = "Here is a diagram called a sequence logo for the position dependent multinomial used to model the Kozak motif. It codifies the amount of variation in each of the positions on a log scale. The large letters represent positions where there is no uncertainty about which nucleotide occurs.", fig.margin = FALSE, fig.height=5, fig.width=5}
 library("seqLogo")
@@ -326,6 +364,8 @@ kozak
 pwm = makePWM(kozak)
 seqLogo(pwm, ic.scale = FALSE)
 ```
+
+## 2.8 Modelling sequence dependencies: Markov chains
 
 ```{r 4stateMC, echo = FALSE}
 library("markovchain")
@@ -347,14 +387,26 @@ plot.igraph(MCgraph, edge.label = edgelab,
             vertex.size = 40, xlim = c(-1, 1.25))
 ```
 
+# 2.9 Baysian thinking
 
+The *baysian paradigm* is a practical approach in which *prior* and *posterior* distributions are used as models of our knowledge **before** and **after** collecting some data and making an observation. 
+We formalize our prior probability as $P(H)$. After seeing the data we have the posterior probability, $P(H|D)$. 
+
+## 2.9.1  Example: Haplotype frequencies
 ```{r haplo6}
 haplo6 <- read.table("../../data/haplotype6.txt",header = TRUE)
 haplo6
 ```
 
+## 2.9.2 Simulation study of the Bayesian paradigm for the binomial
+
+Instead of assuming our parameter $\Theta$ has one single value, the bayesian world view allows us to see it as a draw from a statistical distribution. When we are looking at a parameter that expresses a proportion or a probability, and that takes its values between 0 and 1, it is convenient to use the *beta distribution*
+
+\textcolor{blue}{Why 50 \& 350 for alpha and beta?}
+
 ```{r histobeta2, fig.keep = 'high', fig.cap = "Beta distributions with $\\alpha=10,20,50$ and $\\beta=30,60,150$ used as a {prior} for a probability of success. These three distributions have the same mean ($\\frac{\\alpha}{\\alpha +\\beta}$), but different concentrations around the mean.", echo = FALSE, fig.width = 3.5, fig.height = 3.5}
 library(tidyverse)
+theta = rbeta(100000, 50, 350)
 theta = thetas[1:500]
 dfbetas = data.frame(theta,
                      db1= dbeta(theta,10,30),
@@ -370,59 +422,115 @@ ggplot(datalong) +
                         labels=c("B(10,30)", "B(20,60)","B(50,150)"))
 ```
 
-```{r chap2-r-histmarginal-1, fig.keep = 'high', fig.cap = "Marginal Distribution of $Y$.", fig.width = 3.5, fig.height = 3.5}
+### The distribution of $\gamma$
+
+What is the distribution of Y if $\Theta$ itself also varies according to some distribution. We call this the *marginal* distribution of Y.
+
+```{r}
 rtheta = rbeta(100000, 50, 350)
 y = vapply(rtheta, function(th) {
   rbinom(1, prob = th, size = 300)
 }, numeric(1))
 hist(y, breaks = 50, col = "orange", main = "", xlab = "")
+
+Mode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+Mode(y)
 ```
+
+\textcolor{red}{Question 2.18: Verify that we can get the same result as in the above code chunk by using R's vectorization capabilities and writing `rbinom(length(rtheta), rtheta, size = 300`.}
 
 ```{r freqquesvectorize, echo = FALSE}
-set.seed(0xbebe)
-.w1 = vapply(rtheta, function(th) rbinom(1, prob = th, size = 300), integer(1))
-set.seed(0xbebe)
-.w2 = rbinom(length(rtheta), rtheta, size = 300)
-stopifnot(identical(.w1, .w2))
+#size is the number of trials, probability is the success on each trial, rtheta is a random number drawn from the beta distribution (a = 30, b= 350)
+t = rbinom(length(rtheta), size = 300, prob=rtheta)
 ```
 
-```{r chap2-r-densityposterior-1, fig.keep = 'high', fig.cap = "Only choosing the values of the distribution with $Y=40$ gives the posterior distribution of $\\theta$. The histogram (green) shows the simulated values for the posteriror distribution, the line the theoretical density of a beta distribution with the theoretical posterior parameters.", fig.width = 3.5, fig.height = 3.5}
-thetaPostEmp = rtheta[ y == 40 ]
+Compute the posterior distribution of $\Theta$ byu conditioning on outcomes where Y is 40. Cmpare it to the theoretical posterior `densPostTheory`. \textcolor{blue}{HELP!}
+
+```{r}
+
+rtheta = rbeta(100000, 50, 350) #there are 10,000 observations, pulled from a beta distribution with shape param 50, 350
+#y = vapply(rtheta, function(th) {rbinom(1, prob = th, size = 300)}, numeric(1))
+#y is a vector of length rtheta where a single observation was drawn from the binomial disribution 300 times, with the probability of success equal to rtheta. 
+# y = 40 is asking for the rtheta values that quasi-by-chance gave 40/300 successes from the binomial distribution draws
+
+thetaPostEmp = rtheta[y == 40]  #~ 45% of all y values are equal to 40; 40 is a most common result
 hist(thetaPostEmp, breaks = 40, col = "chartreuse4", main = "",
      probability = TRUE, xlab = expression("posterior"~theta))
 densPostTheory  =  dbeta(thetas, 90, 610)
 lines(thetas, densPostTheory, type="l", lwd = 3)
 ```
 
+Check the means of both distributions computed above and see that they are close to four significant digits:
+
+Calculate the integral under the curve
+
 ```{r comparetheory1}
 mean(thetaPostEmp)
+mean(rtheta)
 dtheta = thetas[2]-thetas[1]
 sum(thetas * densPostTheory * dtheta)
+plot(thetas, densPostTheory)
 ```
 
+To approximate the mean of the theoretical distribution `densPostTheory` we computed the integral $\int^1_0\Theta f(\Theta) d\Theta$ using numerical integration, i.e., the sum over the integrand. Use *monte carlo integration* instead.
+\textcolor{blue}{Again, where do the shape numbers 90, 610 come from?? Why is this equivalent??}
 ```{r mcint}
 thetaPostMC = rbeta(n = 1e6, 90, 610)
 mean(thetaPostMC)
 ```
 
+Check the concordance between Monte Carlo simulation sample `thetaPostMC` and our sample `thetaPostEmp` using a Q-Q plot
 ```{r chap2-r-qqplotbeta-1, fig.keep = 'high', fig.cap = "QQ-plot of our Monte Carlo sample `thetaPostMC` from the theoretical distribution and our simulation sample `thetaPostEmp`. We could also similarly compare either of these two distributions to the theoretical distribution function `pbeta(., 90, 610)`. If the curve lies on the line $y=x$ this indicates a good agreement. There are some random differences at the tails.", fig.width = 3.5, fig.height = 3.5}
 qqplot(thetaPostMC, thetaPostEmp, type = "l", asp = 1)
 abline(a = 0, b = 1, col = "blue")
 ```
 
-```{r postbeta}
-densPost2 = dbeta(thetas, 115, 735)
-mcPost2   = rbeta(1e6, 115, 735)
+\textcolor{red}{Question 2.19}{What is the difference between the simulation that results in `thetaPostEmp` and the Monte Carlo simulation that leads to `thetaPostMC`?}
 
-sum(thetas * densPost2 * dtheta)  # mean, by numeric integration
-mean(mcPost2)                     # mean, by MC
-thetas[which.max(densPost2)]      # MAP estimate
+### Posterior distribution is also a beta
+The parameters $\alpha$ = 90 and $\beta$ = 610 were obtained by summing the prior parameters $\alpha$ = 50 and $\beta$ = 350 with the observed successes y = 40 and the observed failures n-y = 260, obtaining the posterior
+
+**$beta(90, 610) = beta(\alpha + y, \beta + (n - y))$**
+
+We can use this to give the best estimate we can for $\Theta$ with its uncertainty given by the posterior distribution. This is called the MAP estimate, $\frac{\alpha-1}{\alpha + \beta -2}$ = $\frac{89}{698}$ = 0.1275
+
+*Suppose we have a second series of data* After seeing our previous data we now have a new prior, beta(90, 610). 
+Now we collect a new data set with n = 150 observations and only y = 25 successes
+
+The new posterior will be beta(90+25 = 115, 610+125 = 735); the mean is $\frac{115}{115+735}$ = 0.135, thus one estimate of $\Theta$ is 0.135.
+
+The theoretical *maximum a posteriori (MAP) estimate* would be the mode of beta(115, 735) = 0.134.
+
+```{r}
+densPost2 = dbeta(thetas, 115, 735)
+mcPost2 = rbeta(1e6, 115, 735)
+
+sum(thetas*densPost2*dtheta)  #mean, by numeric integration
+mean(mcPost2)  #mean, by MC
+thetas[which.max(densPost2)]
+
+plot(thetas, densPost2)
+abline(v=thetas[which.max(densPost2)], col="red")
 ```
 
+\textcolor{blue}{Question 2.20}{Redo all the computations replacing our original prior with a softer prior (less peaked), meaning that we use less prior information. How much does that change the final result?}
 
-```{r quantilespost}
+```{r}
+rtheta = rbeta(100000, 50, 100) #there are 10,000 observations, pulled from a beta distribution with shape param 50, 350
+densPostTheory  =  dbeta(thetas, 90, 610)
+```
+
+### Confidence statements for the proportion parameter
+Reach a conclusion about where the proportion actually lies given the data. The *posterior credibility interval* is a bayesian analog of a confidence interval. We can take the 2.5th and 97.5th percentiles of the posterior distribution $P(L \leq \Theta \leq U) = 0.95$ as
+```{r}
 quantile(mcPost2, c(0.025, 0.975))
 ```
+
+## 2.10 Example: occurence of a nucleotide pattern in a genome
 
 ```{r callBios}
 library("Biostrings")
@@ -450,8 +558,8 @@ ag[1:2]
 ```{r BSGenomeEcoli, results="hide"}
 library("BSgenome.Ecoli.NCBI.20080805")
 Ecoli
-shineDalgarno = "AGGAGGT"
-ecoli = Ecoli$NC_010473
+shineDalgarno <- "AGGAGGT"
+ecoli <- Ecoli$NC_010473
 ```
 
 ```{r window}
@@ -465,30 +573,53 @@ numMatches = vapply(seq_along(starts), function(i) {
 table(numMatches)
 ```
 
-```{r poissonness, fig.keep = 'high', fig.cap = "Evaluation of a Poisson model for motif counts along the sequence \\texttt{Ecoli$NC_010473}.", fig.width = 4, fig.height = 5}
+***
+
+\textcolor{red}{Question 2.22: What distribution might this fit?}
+Poisson
+
+***
+
+\textcolor{blue}{What does the poisson plot below mean?}
+
+```{r poissonness, fig.keep = 'high', fig.cap = "Evaluation of a Poisson model for motif counts along the sequence.", fig.width = 4, fig.height = 5}
 library("vcd")
 gf = goodfit(numMatches, "poisson")
 summary(gf)
 distplot(numMatches, type = "poisson")
 ```
 
-```{r pattlocIranges1, results="hide"}
-sdMatches = matchPattern(shineDalgarno, ecoli, max.mismatch = 0)
+Inspect the matches using the `matchPattern` function
+
+```{r}
+sdMatches <- matchPattern(shineDalgarno, ecoli, max.mismatch =0)
+sdMatches
+```
+What are the distances between them?
+
+```{r}
+betweenmotifs <- gaps(sdMatches)
 ```
 
-```{r pattlocIranges2}
-betweenmotifs = gaps(sdMatches)
-```
+Find a model for the distribution of gap sizes betrween motifs. If they occur at random locations we expect them to follow an *exponential distribution*.
 
-```{r chap2-r-expplotdata-1, fig.keep = 'high', fig.cap = "Evaluation of fit to the exponential distribution (black line) of the gaps between the motifs.", fig.width = 3.5, fig.height = 4}
+```{r}
 library("Renext")
-expplot(width(betweenmotifs), rate = 1/mean(width(betweenmotifs)),
-        labels = "fit")
+expplot(width(betweenmotifs), rate = 1/mean(width(betweenmotifs)), 
+        labels = "fitted exponential")
 ```
 
-```{r gof, echo = FALSE, eval = FALSE}
-## gofExp.test(width(betweenmotifs))
-```
+***
+
+\textcolor{blue}{Question 2.23: There appears to be a slight deviation from the fitted line in Figure 2.23 at the right tail of the distribution, i.e., for the largest values. What could be the reason?}
+
+Bias in where genes are located?
+
+***
+
+### 2.10.1 Modeling in the case of dependencies
+
+Dependency modelling using a **markov chain**. Discover differences between regions called CpG islands and the rest of the genome.
 
 ```{r chr8HS}
 library("BSgenome.Hsapiens.UCSC.hg19")
@@ -497,9 +628,12 @@ CpGtab = read.table("../../data/model-based-cpg-islands-hg19.txt",
                     header = TRUE)
 nrow(CpGtab)
 head(CpGtab)
-irCpG = with(dplyr::filter(CpGtab, chr == "chr8"),
-             IRanges(start = start, end = end))
+irCpG = with(dplyr::filter(CpGtab, chr == "chr8"), #filter to only include chromosome 8
+             IRanges(start = start, end = end))     #define Iranges object with start and end positions
 ```
+
+**IRanges** is a general "container" for mathematical intervals.
+**GRanges**  is a container for the genomic locations and their associated annotations.
 
 ```{r grCpG}
 grCpG = GRanges(ranges = irCpG, seqnames = "chr8", strand = "+")
@@ -521,15 +655,19 @@ CGIview    = Views(unmasked(Hsapiens$chr8), irCpG)
 NonCGIview = Views(unmasked(Hsapiens$chr8), gaps(irCpG))
 ```
 
+Compute the transition counts in CpG islands and non-islands using the data:
+
 ```{r CGIview2}
-seqCGI      = as(CGIview, "DNAStringSet")
+seqCGI      = as(CGIview, "DNAStringSet") #there are 2855 different sequences
 seqNonCGI   = as(NonCGIview, "DNAStringSet")
-dinucCpG    = sapply(seqCGI, dinucleotideFrequency)
+dinucCpG    = sapply(seqCGI, dinucleotideFrequency) #calculates all dinucleotides for a set of sequences, returns a vector (?) with the dinucleotides in rows and each sequence as a column
 dinucNonCpG = sapply(seqNonCGI, dinucleotideFrequency)
 dinucNonCpG[, 1]
-NonICounts = rowSums(dinucNonCpG)
+NonICounts = rowSums(dinucNonCpG) #there are 16 different dinucleotides -> sum across all sequences
 IslCounts  = rowSums(dinucCpG)
 ```
+
+For a four state Markov chain we define the transition matrix as a matrix where the rows are the "From" state and the columns are the "to" state.
 
 ```{r transitions}
 TI  = matrix( IslCounts, ncol = 4, byrow = TRUE)
@@ -538,6 +676,8 @@ dimnames(TI) = dimnames(TnI) =
   list(c("A", "C", "G", "T"), c("A", "C", "G", "T"))
 ```
 
+Use the counts of numbers of transitions of each type to compute frequencies and put them in matrices:
+
 ```{r MI}
 MI = TI /rowSums(TI)
 MI
@@ -545,12 +685,38 @@ MN = TnI / rowSums(TnI)
 MN
 ```
 
+***
+
+\textcolor{red}{Question 2.24: Are the transitions different in the different rows? i.e., P(A|C) $\neq$ P(A|T)}
+No.
+
+***
+
+***
+\textcolor{red}{Question 2.25: Are the relative frequencies of the different nucleotides different in CpG islands compared to elsewhere?}
+
 ```{r STATI}
 freqIsl = alphabetFrequency(seqCGI, baseOnly = TRUE, collapse = TRUE)[1:4]
 freqIsl / sum(freqIsl)
 freqNon = alphabetFrequency(seqNonCGI, baseOnly = TRUE, collapse = TRUE)[1:4]
 freqNon / sum(freqNon)
 ```
+
+***
+
+***
+
+\textcolor{blue}{Question 2.26: Use a $\chi^2$ statistic to compare the frequencies between the observed and `freqIsl` and `freqNon` frequecies}
+
+```{r}
+t <- data.frame(freqIsl, freqNon)
+chisq.test(t)
+```
+***
+
+Given a sequence for which it's unknown if it's a CpG island or not, ask the probability if it is. Compute a score based on what is called the odds ratio ->use probabilities for each dinucleotide for islands and compare to probability for non-islands. Then take their ratio and see if it's larger or smaller than one. 
+
+Probbilities will be the products of many small terms and become small, so work around this by taking the logarithm. This is the *log-likelihood score*.
 
 ```{r alphabeta}
 alpha = log((freqIsl/sum(freqIsl)) / (freqNon/sum(freqNon)))
@@ -568,8 +734,10 @@ scorefun = function(x) {
   score
 }
 
-scorefun(x)
+testX <- scorefun(x)
 ```
+
+Then pick sequences of length `len = 100` out of the 2855 sequences in the `seqCGI` object and then out of the 2854 `seqNonCGI` object. Drop sequences that contain any letter other than A, c, T, G (i.e. "."). Sample with probabilities proportional to their length minus `len` and pick subsequences of length `len` out of them. 
 
 ```{r scorefun1}
 generateRandomScores = function(s, len = 100, B = 1000) {
@@ -590,82 +758,12 @@ generateRandomScores = function(s, len = 100, B = 1000) {
 scoresCGI    = generateRandomScores(seqCGI)
 scoresNonCGI = generateRandomScores(seqNonCGI)
 ```
-
-```{r chap2-r-ScoreMixture-1, fig.keep = 'high', fig.cap = "Island and non-island scores as generated by the function `generateRandomScores`. This is the first instance of a **mixture** we encounter. We will revisit them in ChapterÂ \\@ref(Chap:Mixtures).", fig.height = 5}
-br = seq(-0.6, 0.7, length.out = 50)
+```{r chap2-r-ScoreMixture-1, fig.keep = 'high', fig.cap = "Island and non-island scores as generated by the function `generateRandomScores`. This is the first instance of a **mixture** we encounter. We will revisit them in Chapter4", fig.height = 5}
+br = seq(-0.7, 0.7, length.out = 50) #need to change this to -0.7 or else the breaks did not span the range of h2
 h1 = hist(scoresCGI,    breaks = br, plot = FALSE)
 h2 = hist(scoresNonCGI, breaks = br, plot = FALSE)
 plot(h1, col = rgb(0, 0, 1, 1/4), xlim = c(-0.5, 0.5), ylim=c(0,120))
 plot(h2, col = rgb(1, 0, 0, 1/4), add = TRUE)
+arrows(testX, 120, testX, 100, lwd = 3, col="red")
 ```
-
-```{r savescoresforChap4, echo = FALSE, eval=FALSE}
-## ###This is for provenance reasons, keep track of how the data
-## ###were generated for the EM exercise in Chapter 4.
-## Mdata=c(scoresCGI,scoresNonCGI)
-## MM1=sample(Mdata[1:1000],800)
-## MM2=sample(Mdata[1001:2000],1000)
-## Myst=c(MM1,MM2);names(Myst)=NULL
-## saveRDS(c(MM1,MM2),"../data/Myst.rds")
-## ###True value of m1,m2,s1 and s2
-## ###
-```
-
-```{r checkhists, echo = FALSE}
-stopifnot(max(h1$counts) < 120, max(h2$counts) < 120,
-          h1$breaks[1] >= br[1], h1$breaks[length(h1$breaks)] <= br[length(br)],
-          h2$breaks[1] >= br[1], h2$breaks[length(h2$breaks)] <= br[length(br)])
-
-mtb = read.table("../../data/M_tuberculosis.txt", header = TRUE)
-head(mtb, n = 4)
-```
-
-```{r ProlMyc}
-pro  =  mtb[ mtb$AmAcid == "Pro", "Number"]
-pro/sum(pro)
-
-staph = readDNAStringSet("../../data/staphsequence.ffn.txt", "fasta")
-```
-
-```{r staphex}
-staph[1:3, ]
-staph
-```
-
-```{r GCfreq}
-letterFrequency(staph[[1]], letters = "ACGT", OR = 0)
-GCstaph = data.frame(
-  ID = names(staph),
-  GC = rowSums(alphabetFrequency(staph)[, 2:3] / width(staph)) * 100
-)
-```
-
-```{r chap2-r-SlidingGC-1, fig.keep = 'high', fig.cap = "GC content along sequence 364 of the *Staphylococcus Aureus* genome.", fig.width = 7}
-window = 100
-gc = rowSums( letterFrequencyInSlidingView(staph[[364]], window,
-                                           c("G","C")))/window
-plot(x = seq(along = gc), y = gc, type = "l")
-```
-
-```{r chap2-r-SmoothSlidingGC-1, fig.keep = 'high', fig.cap = "Smoothed GC content along sequence 364 of the *Staphylococcus Aureus* genome.", fig.width = 7}
-plot(x = seq(along = gc), y = gc, type = "l")
-lines(lowess(x = seq(along = gc), y = gc, f = 0.2), col = 2)
-```
-
-```{r histobeta4, fig.width = 3.5, fig.height = 3.5}
-theta = thetas[1:500]
-dfbetas = data.frame(theta,
-                     db1=  dbeta(theta,0.5,0.5),
-                     db2= dbeta(theta,1,1),
-                     db3= dbeta(theta,10,30),
-                     db4 = dbeta(theta, 20, 60),
-                     db5 = dbeta(theta, 50, 150))
-require(reshape2)
-datalong  =  melt(dfbetas, id="theta")
-ggplot(datalong) +
-  geom_line(aes(x = theta,y=value,colour=variable)) +
-  theme(legend.title=element_blank()) +
-  geom_vline(aes(xintercept=0.25), colour="#990000", linetype="dashed")+
-  scale_colour_discrete(name  ="Prior",
-                        labels=c("B(0.5,0.5)","U(0,1)=B(1,1)","B(10,30)", "B(20,60)","B(50,150)"))
-```
+We can consider this training data. Cool.

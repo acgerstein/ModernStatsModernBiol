@@ -125,7 +125,7 @@
     \date{2019-09-16}
 
 \usepackage{color}
-\usepackage{mathclap}
+\usepackage{mathtools}
 
 \begin{document}
 \maketitle
@@ -138,7 +138,8 @@ modelling}\label{a-simple-example-of-statistical-modelling}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{e99 =}\StringTok{ }\KeywordTok{rpois}\NormalTok{(}\DecValTok{99}\NormalTok{,}\DataTypeTok{lambda=}\FloatTok{0.5}\NormalTok{)}
+\KeywordTok{load}\NormalTok{(}\KeywordTok{url}\NormalTok{(}\StringTok{"http://bios221.stanford.edu/data/e100.RData"}\NormalTok{))}
+\NormalTok{e99 =}\StringTok{ }\NormalTok{e100[}\OperatorTok{-}\KeywordTok{which.max}\NormalTok{(e100)]}
 \KeywordTok{barplot}\NormalTok{(}\KeywordTok{table}\NormalTok{(e99), }\DataTypeTok{space =} \FloatTok{0.8}\NormalTok{, }\DataTypeTok{col =} \StringTok{"chartreuse4"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -180,712 +181,1577 @@ decided which \(\lambda\) to use.)}
 
 \begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
 
-\textcolor{red}{Question 1: To calibrate what such a plot looks liek a known poisson variable, use `rpois` and $\gamma$}
+\textcolor{red}{Question 1: To calibrate what such a plot looks like a known poisson variable, use `rpois` and $\lambda$ = 0.05 to generate 100 Poisson distributed numbers and draw their rootogram}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pv <-}\StringTok{ }\KeywordTok{rpois}\NormalTok{(}\DecValTok{100}\NormalTok{, }\FloatTok{0.05}\NormalTok{)}
+\NormalTok{gf_pv =}\StringTok{ }\KeywordTok{goodfit}\NormalTok{(pv, }\StringTok{"poisson"}\NormalTok{)}
+\KeywordTok{rootogram}\NormalTok{(gf_pv, }\DataTypeTok{xlab =} \StringTok{""}\NormalTok{, }\DataTypeTok{rect_gp =} \KeywordTok{gpar}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"chartreuse4"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{MSMB-Chapter2_files/figure-latex/Q1-1.pdf}
 
 \begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
 
-\subsection{----RootogramPoisson, fig.width= 3, fig.height =
-3.5--------------------}\label{rootogrampoisson-fig.width-3-fig.height-3.5}
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
 
-simp = rpois(100, lambda = 0.05) gf2 = goodfit(simp, ``poisson'')
-rootogram(gf2, xlab = ``'')
+\textcolor{red}{Question 2: Repeat the simulation with different values of $\lambda$. Can you find one that gives cout close to the observed count by trial and error?}
 
-\subsection{----table100------------------------------------------------------------}\label{table100}
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{table}\NormalTok{(e100)}
+\end{Highlighting}
+\end{Shaded}
 
-table(e100)
+\begin{verbatim}
+## e100
+##  0  1  2  7 
+## 58 34  7  1
+\end{verbatim}
 
-\subsection{----table3--------------------------------------------------------------}\label{table3}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pv0.}\DecValTok{5}\NormalTok{ <-}\StringTok{ }\KeywordTok{rpois}\NormalTok{(}\DecValTok{100}\NormalTok{, }\FloatTok{0.5}\NormalTok{)}
+\KeywordTok{table}\NormalTok{(pv0.}\DecValTok{5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-table(rpois(100, 3))
+\begin{verbatim}
+## pv0.5
+##  0  1  2  3 
+## 62 31  6  1
+\end{verbatim}
 
-\subsection{----table101, echo =
-FALSE----------------------------------------------}\label{table101-echo-false-}
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
 
-counts = table(e100) stopifnot(identical(names(counts), c(``0'', ``1'',
-``2'', ``7'')), all(counts==c(58, 34, 7, 1)))
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{loglikelihood  =}\StringTok{  }\ControlFlowTok{function}\NormalTok{(lambda, }\DataTypeTok{data =}\NormalTok{ e100) \{}
+  \KeywordTok{sum}\NormalTok{(}\KeywordTok{log}\NormalTok{(}\KeywordTok{dpois}\NormalTok{(data, lambda)))}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{----poism3--------------------------------------------------------------}\label{poism3}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lambdas =}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\FloatTok{0.05}\NormalTok{, }\FloatTok{0.95}\NormalTok{, }\DataTypeTok{length =} \DecValTok{100}\NormalTok{)}
+\NormalTok{loglik =}\StringTok{ }\KeywordTok{vapply}\NormalTok{(lambdas, loglikelihood, }\KeywordTok{numeric}\NormalTok{(}\DecValTok{1}\NormalTok{))}
+\CommentTok{#this is the same as}
+\CommentTok{#loglik = sapply(lambdas, loglikelihood)}
+\KeywordTok{plot}\NormalTok{(lambdas, loglik, }\DataTypeTok{type =} \StringTok{"l"}\NormalTok{, }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{, }\DataTypeTok{ylab =} \StringTok{""}\NormalTok{, }\DataTypeTok{lwd =} \DecValTok{2}\NormalTok{,}
+     \DataTypeTok{xlab =} \KeywordTok{expression}\NormalTok{(lambda))}
+\NormalTok{m0 =}\StringTok{ }\KeywordTok{mean}\NormalTok{(e100)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{v =}\NormalTok{ m0, }\DataTypeTok{col =} \StringTok{"blue"}\NormalTok{, }\DataTypeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h =} \KeywordTok{loglikelihood}\NormalTok{(m0), }\DataTypeTok{col =} \StringTok{"purple"}\NormalTok{, }\DataTypeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-prod(dpois(c(0, 1, 2, 7), lambda = 3) \^{} (c(58, 34, 7, 1)))
+\begin{figure}
+\centering
+\includegraphics{MSMB-Chapter2_files/figure-latex/chap2-r-poislikel-1-1.pdf}
+\caption{The red curve is the log-likelihood function. The vertical line
+shows the value of \texttt{m} (the mean) and the horizontal line the
+log-likelihood of \texttt{m}. It looks like \texttt{m} maximizes the
+likelihood.}
+\end{figure}
 
-\subsection{----anspois-------------------------------------------------------------}\label{anspois-}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{m0}
+\end{Highlighting}
+\end{Shaded}
 
-prod(dpois(c(0, 1, 2, 7), lambda = 0.4) \^{} (c(58, 34, 7, 1)))
+\begin{verbatim}
+## [1] 0.55
+\end{verbatim}
 
-\subsection{----functionll----------------------------------------------------------}\label{functionll-}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{gf  =}\StringTok{  }\KeywordTok{goodfit}\NormalTok{(e100, }\StringTok{"poisson"}\NormalTok{)}
+\KeywordTok{names}\NormalTok{(gf)}
+\end{Highlighting}
+\end{Shaded}
 
-loglikelihood = function(lambda, data = e100) \{ sum(log(dpois(data,
-lambda))) \}
+\begin{verbatim}
+## [1] "observed" "count"    "fitted"   "type"     "method"   "df"      
+## [7] "par"
+\end{verbatim}
 
-\subsection{\texorpdfstring{----chap2-r-poislikel-1, fig.keep = `high',
-fig.cap = ``The red curve is the log-likelihood function. The vertical
-line shows the value of \texttt{m} (the mean) and the horizontal line
-the log-likelihood of \texttt{m}. It looks like \texttt{m} maximizes the
-likelihood.'',
-fig.width=3.5----}{----chap2-r-poislikel-1, fig.keep = high, fig.cap = The red curve is the log-likelihood function. The vertical line shows the value of m (the mean) and the horizontal line the log-likelihood of m. It looks like m maximizes the likelihood., fig.width=3.5----}}\label{chap2-r-poislikel-1-fig.keep-high-fig.cap-the-red-curve-is-the-log-likelihood-function.-the-vertical-line-shows-the-value-of-m-the-mean-and-the-horizontal-line-the-log-likelihood-of-m.-it-looks-like-m-maximizes-the-likelihood.-fig.width3.5-}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{gf}\OperatorTok{$}\NormalTok{par}
+\end{Highlighting}
+\end{Shaded}
 
-lambdas = seq(0.05, 0.95, length = 100) loglik = vapply(lambdas,
-loglikelihood, numeric(1)) plot(lambdas, loglik, type = ``l'', col =
-``red'', ylab = ``'', lwd = 2, xlab = expression(lambda)) m0 =
-mean(e100) abline(v = m0, col = ``blue'', lwd = 2) abline(h =
-loglikelihood(m0), col = ``purple'', lwd = 2) m0
+\begin{verbatim}
+## $lambda
+## [1] 0.55
+\end{verbatim}
 
-\subsection{----gfpoisson-----------------------------------------------------------}\label{gfpoisson}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cb  =}\StringTok{  }\KeywordTok{c}\NormalTok{(}\KeywordTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{110}\NormalTok{), }\KeywordTok{rep}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{10}\NormalTok{))}
+\KeywordTok{table}\NormalTok{(cb)}
+\end{Highlighting}
+\end{Shaded}
 
-gf = goodfit(e100, ``poisson'') names(gf) gf\$par
+\begin{verbatim}
+## cb
+##   0   1 
+## 110  10
+\end{verbatim}
 
-\subsection{----colorblind, echo =
-FALSE--------------------------------------------}\label{colorblind-echo-false}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{probs  =}\StringTok{  }\KeywordTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{0.3}\NormalTok{, }\DataTypeTok{by =} \FloatTok{0.005}\NormalTok{)}
+\NormalTok{likelihood =}\StringTok{ }\KeywordTok{dbinom}\NormalTok{(}\KeywordTok{sum}\NormalTok{(cb), }\DataTypeTok{prob =}\NormalTok{ probs, }\DataTypeTok{size =} \KeywordTok{length}\NormalTok{(cb))}
+\KeywordTok{plot}\NormalTok{(probs, likelihood, }\DataTypeTok{pch =} \DecValTok{16}\NormalTok{, }\DataTypeTok{xlab =} \StringTok{"probability of success"}\NormalTok{,}
+     \DataTypeTok{ylab =} \StringTok{"likelihood"}\NormalTok{, }\DataTypeTok{cex=}\FloatTok{0.6}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-cb = c(rep(0, 110), rep(1, 10))
-
-\subsection{----cb------------------------------------------------------------------}\label{cb}
-
-table(cb)
-
-\subsection{\texorpdfstring{----likely1, fig.keep = `high', fig.cap =
-``Plot of the likelihood as a function of the probabilities. The
+\begin{figure}
+\centering
+\includegraphics{MSMB-Chapter2_files/figure-latex/likely1-1.pdf}
+\caption{Plot of the likelihood as a function of the probabilities. The
 likelihood is a function on \([0, 1]\); here we have zoomed into the
 range of \([(ref:likely1-1), (ref:likely1-2)]\), as the likelihood is
-practically zero for larger values of \(p\).'', fig.width =
-4----}{----likely1, fig.keep = high, fig.cap = Plot of the likelihood as a function of the probabilities. The likelihood is a function on {[}0, 1{]}; here we have zoomed into the range of {[}(ref:likely1-1), (ref:likely1-2){]}, as the likelihood is practically zero for larger values of p., fig.width = 4----}}\label{likely1-fig.keep-high-fig.cap-plot-of-the-likelihood-as-a-function-of-the-probabilities.-the-likelihood-is-a-function-on-0-1-here-we-have-zoomed-into-the-range-of-reflikely1-1-reflikely1-2-as-the-likelihood-is-practically-zero-for-larger-values-of-p.-fig.width-4-}
+practically zero for larger values of \(p\).}
+\end{figure}
 
-probs = seq(0, 0.3, by = 0.005) likelihood = dbinom(sum(cb), prob =
-probs, size = length(cb)) plot(probs, likelihood, pch = 16, xlab =
-``probability of success'', ylab = ``likelihood'', cex=0.6)
-probs{[}which.max(likelihood){]}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{probs[}\KeywordTok{which.max}\NormalTok{(likelihood)]}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{----check, echo =
-FALSE-------------------------------------------------}\label{check-echo-false-}
+\begin{verbatim}
+## [1] 0.085
+\end{verbatim}
 
-stopifnot(abs(probs{[}which.max(likelihood){]}-1/12) \textless{}
-diff(probs{[}1:2{]}))
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{stopifnot}\NormalTok{(}\KeywordTok{abs}\NormalTok{(probs[}\KeywordTok{which.max}\NormalTok{(likelihood)]}\OperatorTok{-}\DecValTok{1}\OperatorTok{/}\DecValTok{12}\NormalTok{) }\OperatorTok{<}\StringTok{ }\KeywordTok{diff}\NormalTok{(probs[}\DecValTok{1}\OperatorTok{:}\DecValTok{2}\NormalTok{]))}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{----loglike1------------------------------------------------------------}\label{loglike1}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{loglikelihood =}\StringTok{ }\ControlFlowTok{function}\NormalTok{(theta, }\DataTypeTok{n =} \DecValTok{300}\NormalTok{, }\DataTypeTok{k =} \DecValTok{40}\NormalTok{) \{}
+  \DecValTok{115} \OperatorTok{+}\StringTok{ }\NormalTok{k }\OperatorTok{*}\StringTok{ }\KeywordTok{log}\NormalTok{(theta) }\OperatorTok{+}\StringTok{ }\NormalTok{(n }\OperatorTok{-}\StringTok{ }\NormalTok{k) }\OperatorTok{*}\StringTok{ }\KeywordTok{log}\NormalTok{(}\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{theta)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
 
-loglikelihood = function(theta, n = 300, k = 40) \{ 115 + k * log(theta)
-+ (n - k) * log(1 - theta) \}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{thetas =}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DataTypeTok{by =} \FloatTok{0.001}\NormalTok{)}
+\KeywordTok{plot}\NormalTok{(thetas, }\KeywordTok{loglikelihood}\NormalTok{(thetas), }\DataTypeTok{xlab =} \KeywordTok{expression}\NormalTok{(theta),}
+     \DataTypeTok{ylab =} \KeywordTok{expression}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{"log f("}\NormalTok{, theta, }\StringTok{" | y)"}\NormalTok{)),}\DataTypeTok{type =} \StringTok{"l"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{\texorpdfstring{----chap2-r-loglikelihood-1, fig.keep =
-`high', fig.cap = ``Plot of the log likelihood function for \(n=300\)
-and \(y=40\).'', fig.width = 3, fig.height =
-3.2----}{----chap2-r-loglikelihood-1, fig.keep = high, fig.cap = Plot of the log likelihood function for n=300 and y=40., fig.width = 3, fig.height = 3.2----}}\label{chap2-r-loglikelihood-1-fig.keep-high-fig.cap-plot-of-the-log-likelihood-function-for-n300-and-y40.-fig.width-3-fig.height-3.2-}
+\begin{figure}
+\centering
+\includegraphics{MSMB-Chapter2_files/figure-latex/chap2-r-loglikelihood-1-1.pdf}
+\caption{Plot of the log likelihood function for \(n=300\) and
+\(y=40\).}
+\end{figure}
 
-thetas = seq(0, 1, by = 0.001) plot(thetas, loglikelihood(thetas), xlab
-= expression(theta), ylab = expression(paste(``log f('', theta, "
-\textbar{} y)``)),type =''l``)
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(}\StringTok{"Biostrings"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{----staph---------------------------------------------------------------}\label{staph}
+\begin{verbatim}
+## Loading required package: BiocGenerics
+\end{verbatim}
 
-library(``Biostrings'') staph =
-readDNAStringSet(``../data/staphsequence.ffn.txt'', ``fasta'')
+\begin{verbatim}
+## Loading required package: parallel
+\end{verbatim}
 
-\subsection{----firstgenestaph------------------------------------------------------}\label{firstgenestaph}
+\begin{verbatim}
+## 
+## Attaching package: 'BiocGenerics'
+\end{verbatim}
 
-staph{[}1{]} letterFrequency(staph{[}{[}1{]}{]}, letters = ``ACGT'', OR
-= 0)
+\begin{verbatim}
+## The following objects are masked from 'package:parallel':
+## 
+##     clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+##     clusterExport, clusterMap, parApply, parCapply, parLapply,
+##     parLapplyLB, parRapply, parSapply, parSapplyLB
+\end{verbatim}
 
-\subsection{----compareprop---------------------------------------------------------}\label{compareprop}
+\begin{verbatim}
+## The following objects are masked from 'package:stats':
+## 
+##     IQR, mad, sd, var, xtabs
+\end{verbatim}
 
-letterFrq = vapply(staph, letterFrequency, FUN.VALUE = numeric(4),
-letters = ``ACGT'', OR = 0) colnames(letterFrq) = paste0(``gene'',
-seq(along = staph)) tab10 = letterFrq{[}, 1:10{]} computeProportions =
-function(x) \{ x/sum(x) \} prop10 = apply(tab10, 2, computeProportions)
-round(prop10, digits = 2) p0 = rowMeans(prop10) p0
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     anyDuplicated, append, as.data.frame, basename, cbind,
+##     colnames, dirname, do.call, duplicated, eval, evalq, Filter,
+##     Find, get, grep, grepl, intersect, is.unsorted, lapply, Map,
+##     mapply, match, mget, order, paste, pmax, pmax.int, pmin,
+##     pmin.int, Position, rank, rbind, Reduce, rownames, sapply,
+##     setdiff, sort, table, tapply, union, unique, unsplit, which,
+##     which.max, which.min
+\end{verbatim}
 
-\subsection{----outerex-------------------------------------------------------------}\label{outerex-}
+\begin{verbatim}
+## Loading required package: S4Vectors
+\end{verbatim}
 
-cs = colSums(tab10) cs expectedtab10 = outer(p0, cs, FUN = ``*``)
-round(expectedtab10)
+\begin{verbatim}
+## Loading required package: stats4
+\end{verbatim}
 
-\subsection{----genrandomtabs-------------------------------------------------------}\label{genrandomtabs-}
+\begin{verbatim}
+## 
+## Attaching package: 'S4Vectors'
+\end{verbatim}
 
-randomtab10 = sapply(cs, function(s) \{ rmultinom(1, s, p0) \} )
-all(colSums(randomtab10) == cs)
+\begin{verbatim}
+## The following object is masked from 'package:base':
+## 
+##     expand.grid
+\end{verbatim}
 
-\subsection{----assertgenrandomtabs, echo =
-FALSE-----------------------------------}\label{assertgenrandomtabs-echo-false}
+\begin{verbatim}
+## Loading required package: IRanges
+\end{verbatim}
 
-stopifnot(all(colSums(randomtab10) == cs))
+\begin{verbatim}
+## 
+## Attaching package: 'IRanges'
+\end{verbatim}
 
-\subsection{\texorpdfstring{----chap2-r-quant12-1, fig.keep = `high',
-fig.cap = ``Histogram of \texttt{simulstat}. The value of \texttt{S1} is
+\begin{verbatim}
+## The following object is masked from 'package:vcd':
+## 
+##     tile
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: XVector
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'Biostrings'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:base':
+## 
+##     strsplit
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{staph =}\StringTok{ }\KeywordTok{readDNAStringSet}\NormalTok{(}\StringTok{"http://bios221.stanford.edu/data/staphsequence.ffn.txt"}\NormalTok{, }\StringTok{"fasta"}\NormalTok{)}
+\NormalTok{staph[}\DecValTok{1}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   A DNAStringSet instance of length 1
+##     width seq                                          names               
+## [1]  1362 ATGTCGGAAAAAGAAATTTGG...AAGAAATAAGAAATGTATAA lcl|NC_002952.2_c...
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{letterFrequency}\NormalTok{(staph[[}\DecValTok{1}\NormalTok{]], }\DataTypeTok{letters =} \StringTok{"ACGT"}\NormalTok{, }\DataTypeTok{OR =} \DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   A   C   G   T 
+## 522 219 229 392
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\textcolor{red}{Question 2.9: Following a similar procedure to Exercise 1.8, test whether the nucleotides are equally distributed across the four possibilities for this first gene.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lf <-}\StringTok{ }\KeywordTok{letterFrequency}\NormalTok{(staph[[}\DecValTok{1}\NormalTok{]], }\DataTypeTok{letters =} \StringTok{"ACGT"}\NormalTok{, }\DataTypeTok{OR =} \DecValTok{0}\NormalTok{)}
+\KeywordTok{t}\NormalTok{(}\KeywordTok{rmultinom}\NormalTok{(}\DecValTok{1}\NormalTok{, }\KeywordTok{sum}\NormalTok{(lf), }\DataTypeTok{p =} \KeywordTok{rep}\NormalTok{(}\DecValTok{1}\OperatorTok{/}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2] [,3] [,4]
+## [1,]  360  342  323  337
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{oestat <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(o, e) \{}
+  \KeywordTok{sum}\NormalTok{((e}\OperatorTok{-}\NormalTok{o)}\OperatorTok{^}\DecValTok{2} \OperatorTok{/}\StringTok{ }\NormalTok{e)}
+\NormalTok{\}}
+
+\NormalTok{B =}\StringTok{ }\DecValTok{1000}
+\NormalTok{n =}\StringTok{ }\KeywordTok{sum}\NormalTok{(lf)}
+\NormalTok{expected =}\StringTok{ }\KeywordTok{rep}\NormalTok{(n }\OperatorTok{/}\StringTok{ }\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{)}
+
+\NormalTok{oenull <-}\StringTok{ }\KeywordTok{replicate}\NormalTok{(B,}
+  \KeywordTok{oestat}\NormalTok{(}\DataTypeTok{e =}\NormalTok{ expected, }\DataTypeTok{o =} \KeywordTok{rmultinom}\NormalTok{(}\DecValTok{1}\NormalTok{, n, }\DataTypeTok{p =} \KeywordTok{rep}\NormalTok{(}\DecValTok{1}\OperatorTok{/}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{))))}
+\KeywordTok{hist}\NormalTok{(oenull, }\DataTypeTok{breaks =} \DecValTok{100}\NormalTok{, }\DataTypeTok{col =} \StringTok{"skyblue"}\NormalTok{, }\DataTypeTok{main=}\StringTok{""}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{MSMB-Chapter2_files/figure-latex/unnamed-chunk-6-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{oestat}\NormalTok{(}\DataTypeTok{e =}\NormalTok{ expected, }\DataTypeTok{o =} \KeywordTok{t}\NormalTok{(lf))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 184.4023
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dmultinom}\NormalTok{(lf, }\DataTypeTok{prob =} \KeywordTok{rep}\NormalTok{(}\FloatTok{0.25}\NormalTok{, }\DecValTok{4}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 9.026662e-45
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{letterFrq =}\StringTok{ }\KeywordTok{vapply}\NormalTok{(staph, letterFrequency, }\DataTypeTok{FUN.VALUE =} \KeywordTok{numeric}\NormalTok{(}\DecValTok{4}\NormalTok{),}
+                   \DataTypeTok{letters =} \StringTok{"ACGT"}\NormalTok{, }\DataTypeTok{OR =} \DecValTok{0}\NormalTok{)}
+\KeywordTok{colnames}\NormalTok{(letterFrq) =}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{"gene"}\NormalTok{, }\KeywordTok{seq}\NormalTok{(}\DataTypeTok{along =}\NormalTok{ staph))}
+\NormalTok{tab10 =}\StringTok{ }\NormalTok{letterFrq[, }\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{]}
+\NormalTok{computeProportions =}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x) \{ x}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(x) \}}
+\NormalTok{prop10 =}\StringTok{ }\KeywordTok{apply}\NormalTok{(tab10, }\DecValTok{2}\NormalTok{, computeProportions)}
+\KeywordTok{round}\NormalTok{(prop10, }\DataTypeTok{digits =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   gene1 gene2 gene3 gene4 gene5 gene6 gene7 gene8 gene9 gene10
+## A  0.38  0.36  0.35  0.37  0.35  0.33  0.33  0.34  0.38   0.27
+## C  0.16  0.16  0.13  0.15  0.15  0.15  0.16  0.16  0.14   0.16
+## G  0.17  0.17  0.23  0.19  0.22  0.22  0.20  0.21  0.20   0.20
+## T  0.29  0.31  0.30  0.29  0.27  0.30  0.30  0.29  0.28   0.36
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p0 =}\StringTok{ }\KeywordTok{rowMeans}\NormalTok{(prop10)}
+\NormalTok{p0}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         A         C         G         T 
+## 0.3470531 0.1518313 0.2011442 0.2999714
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cs =}\StringTok{ }\KeywordTok{colSums}\NormalTok{(tab10)}
+\NormalTok{cs}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  gene1  gene2  gene3  gene4  gene5  gene6  gene7  gene8  gene9 gene10 
+##   1362   1134    246   1113   1932   2661    831   1515   1287    696
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{expectedtab10 =}\StringTok{ }\KeywordTok{outer}\NormalTok{(p0, cs, }\DataTypeTok{FUN =} \StringTok{"*"}\NormalTok{)}
+\KeywordTok{round}\NormalTok{(expectedtab10)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   gene1 gene2 gene3 gene4 gene5 gene6 gene7 gene8 gene9 gene10
+## A   473   394    85   386   671   924   288   526   447    242
+## C   207   172    37   169   293   404   126   230   195    106
+## G   274   228    49   224   389   535   167   305   259    140
+## T   409   340    74   334   580   798   249   454   386    209
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{randomtab10 =}\StringTok{ }\KeywordTok{sapply}\NormalTok{(cs, }\ControlFlowTok{function}\NormalTok{(s) \{ }\KeywordTok{rmultinom}\NormalTok{(}\DecValTok{1}\NormalTok{, s, p0) \} )}
+\KeywordTok{all}\NormalTok{(}\KeywordTok{colSums}\NormalTok{(randomtab10) }\OperatorTok{==}\StringTok{ }\NormalTok{cs)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{stat =}\StringTok{ }\ControlFlowTok{function}\NormalTok{(obsvd, }\DataTypeTok{exptd =} \DecValTok{20} \OperatorTok{*}\StringTok{ }\NormalTok{pvec) \{}
+  \KeywordTok{sum}\NormalTok{((obsvd }\OperatorTok{-}\StringTok{ }\NormalTok{exptd)}\OperatorTok{^}\DecValTok{2} \OperatorTok{/}\StringTok{ }\NormalTok{exptd)}
+\NormalTok{\}}
+\NormalTok{B =}\StringTok{ }\DecValTok{1000}
+\NormalTok{simulstat =}\StringTok{ }\KeywordTok{replicate}\NormalTok{(B, \{}
+\NormalTok{  randomtab10 =}\StringTok{ }\KeywordTok{sapply}\NormalTok{(cs, }\ControlFlowTok{function}\NormalTok{(s) \{ }\KeywordTok{rmultinom}\NormalTok{(}\DecValTok{1}\NormalTok{, s, p0) \})}
+  \KeywordTok{stat}\NormalTok{(randomtab10, expectedtab10)}
+\NormalTok{\})}
+\NormalTok{S1 =}\StringTok{ }\KeywordTok{stat}\NormalTok{(tab10, expectedtab10)}
+\KeywordTok{sum}\NormalTok{(simulstat }\OperatorTok{>=}\StringTok{ }\NormalTok{S1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{hist}\NormalTok{(simulstat, }\DataTypeTok{col =} \StringTok{"lavender"}\NormalTok{, }\DataTypeTok{breaks =} \KeywordTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{75}\NormalTok{, }\DataTypeTok{length.out=}\DecValTok{50}\NormalTok{))}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{v =}\NormalTok{ S1, }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{v =} \KeywordTok{quantile}\NormalTok{(simulstat, }\DataTypeTok{probs =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.95}\NormalTok{, }\FloatTok{0.99}\NormalTok{)),}
+       \DataTypeTok{col =} \KeywordTok{c}\NormalTok{(}\StringTok{"darkgreen"}\NormalTok{, }\StringTok{"blue"}\NormalTok{), }\DataTypeTok{lty =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+\centering
+\includegraphics{MSMB-Chapter2_files/figure-latex/chap2-r-quant12-1-1.pdf}
+\caption{Histogram of \texttt{simulstat}. The value of \texttt{S1} is
 marked by the vertical red line, those of the 0.95 and 0.99 quantiles
-(see next section) by the dotted lines.'', fig.width = 4, fig.height =
-3.5----}{----chap2-r-quant12-1, fig.keep = high, fig.cap = Histogram of simulstat. The value of S1 is marked by the vertical red line, those of the 0.95 and 0.99 quantiles (see next section) by the dotted lines., fig.width = 4, fig.height = 3.5----}}\label{chap2-r-quant12-1-fig.keep-high-fig.cap-histogram-of-simulstat.-the-value-of-s1-is-marked-by-the-vertical-red-line-those-of-the-0.95-and-0.99-quantiles-see-next-section-by-the-dotted-lines.-fig.width-4-fig.height-3.5-}
+(see next section) by the dotted lines.}
+\end{figure}
 
-stat = function(obsvd, exptd = 20 * pvec) \{ sum((obsvd - exptd)\^{}2 /
-exptd) \} B = 1000 simulstat = replicate(B, \{ randomtab10 = sapply(cs,
-function(s) \{ rmultinom(1, s, p0) \}) stat(randomtab10, expectedtab10)
-\}) S1 = stat(tab10, expectedtab10) sum(simulstat \textgreater{}= S1)
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{qs =}\StringTok{ }\KeywordTok{ppoints}\NormalTok{(}\DecValTok{100}\NormalTok{)}
+\KeywordTok{quantile}\NormalTok{(simulstat, qs)}
+\KeywordTok{quantile}\NormalTok{(}\KeywordTok{qchisq}\NormalTok{(qs, }\DataTypeTok{df =} \DecValTok{30}\NormalTok{), qs)}
+\end{Highlighting}
+\end{Shaded}
 
-hist(simulstat, col = ``lavender'', breaks = seq(0, 75, length.out=50))
-abline(v = S1, col = ``red'') abline(v = quantile(simulstat, probs =
-c(0.95, 0.99)), col = c(``darkgreen'', ``blue''), lty = 2)
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{qqplot}\NormalTok{(}\KeywordTok{qchisq}\NormalTok{(}\KeywordTok{ppoints}\NormalTok{(B), }\DataTypeTok{df =} \DecValTok{30}\NormalTok{), simulstat, }\DataTypeTok{main =} \StringTok{""}\NormalTok{,}
+       \DataTypeTok{xlab =} \KeywordTok{expression}\NormalTok{(chi[nu}\OperatorTok{==}\DecValTok{30}\NormalTok{]}\OperatorTok{^}\DecValTok{2}\NormalTok{), }\DataTypeTok{asp =} \DecValTok{1}\NormalTok{, }\DataTypeTok{cex =} \FloatTok{0.5}\NormalTok{, }\DataTypeTok{pch =} \DecValTok{16}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{a =} \DecValTok{0}\NormalTok{, }\DataTypeTok{b =} \DecValTok{1}\NormalTok{, }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{----checksimulstat, echo =
-FALSE----------------------------------------}\label{checksimulstat-echo-false-}
+\begin{figure}
+\centering
+\includegraphics{MSMB-Chapter2_files/figure-latex/chap2-r-qqplot3-1-1.pdf}
+\caption{Our simulated statistic's distribution compared to
+\(\chi_{30}^2\) using a QQ-plot, which shows the theoretical
+\textbf{quantiles} for the \(\chi^2_{30}\) distribution on the
+horizontal axis and the sampled ones on the vertical axis.}
+\end{figure}
 
-stopifnot(max(simulstat)\textless{}75, S1\textless{}75)
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{1} \OperatorTok{-}\StringTok{ }\KeywordTok{pchisq}\NormalTok{(S1, }\DataTypeTok{df =} \DecValTok{30}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{\texorpdfstring{----quantiles3, results =
-``hide''----------------------------------------}{----quantiles3, results = hide----------------------------------------}}\label{quantiles3-results-hide-}
+\begin{verbatim}
+## [1] 4.74342e-05
+\end{verbatim}
 
-qs = ppoints(100) quantile(simulstat, qs) quantile(qchisq(qs, df = 30),
-qs)
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{load}\NormalTok{(}\KeywordTok{url}\NormalTok{(}\StringTok{"http://bios221.stanford.edu/data/ChargaffTable.RData"}\NormalTok{))}
+\NormalTok{ChargaffTable}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{\texorpdfstring{----chap2-r-qqplot3-1, fig.keep = `high',
-fig.cap = ``Our simulated statistic's distribution compared to
-\(\\chi_{30}^2\) using a QQ-plot, which shows the theoretical
-\textbf{quantiles} for the \(\\chi^2_{30}\) distribution on the
-horizontal axis and the sampled ones on the vertical axis.'', fig.width
-= 3.4, fig.height =
-4----}{----chap2-r-qqplot3-1, fig.keep = high, fig.cap = Our simulated statistic's distribution compared to \textbackslash{}\textbackslash{}chi\_\{30\}\^{}2 using a QQ-plot, which shows the theoretical quantiles for the \textbackslash{}\textbackslash{}chi\^{}2\_\{30\} distribution on the horizontal axis and the sampled ones on the vertical axis., fig.width = 3.4, fig.height = 4----}}\label{chap2-r-qqplot3-1-fig.keep-high-fig.cap-our-simulated-statistics-distribution-compared-to-chi_302-using-a-qq-plot-which-shows-the-theoretical-quantiles-for-the-chi2_30-distribution-on-the-horizontal-axis-and-the-sampled-ones-on-the-vertical-axis.-fig.width-3.4-fig.height-4-}
+\begin{verbatim}
+##                  A    T    C    G
+## Human-Thymus  30.9 29.4 19.9 19.8
+## Mycobac.Tuber 15.1 14.6 34.9 35.4
+## Rat-          28.8 29.2 20.5 21.5
+## Sheep-liver   29.3 29.3 20.5 20.7
+## Sea Urchin    32.8 32.1 17.7 17.3
+## Wheat         27.3 27.1 22.7 22.8
+## Yeast         31.3 32.9 18.7 17.1
+## E.coli        24.7 23.6 26.0 25.7
+\end{verbatim}
 
-qqplot(qchisq(ppoints(B), df = 30), simulstat, main = ``'', xlab =
-expression(chi{[}nu==30{]}\^{}2), asp = 1, cex = 0.5, pch = 16) abline(a
-= 0, b = 1, col = ``red'')
+\begin{figure}
+\centering
+\includegraphics{MSMB-Chapter2_files/figure-latex/ChargaffBars-1.pdf}
+\caption{Barplots for the different rows in \texttt{ChargaffTable}. Can
+you spot the pattern?}
+\end{figure}
 
-\subsection{----pvalueBias----------------------------------------------------------}\label{pvaluebias-}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{statChf =}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x)\{}
+  \KeywordTok{sum}\NormalTok{((x[, }\StringTok{"C"}\NormalTok{] }\OperatorTok{-}\StringTok{ }\NormalTok{x[, }\StringTok{"G"}\NormalTok{])}\OperatorTok{^}\DecValTok{2} \OperatorTok{+}\StringTok{ }\NormalTok{(x[, }\StringTok{"A"}\NormalTok{] }\OperatorTok{-}\StringTok{ }\NormalTok{x[, }\StringTok{"T"}\NormalTok{])}\OperatorTok{^}\DecValTok{2}\NormalTok{)}
+\NormalTok{\}}
+\NormalTok{chfstat =}\StringTok{ }\KeywordTok{statChf}\NormalTok{(ChargaffTable)}
+\NormalTok{permstat =}\StringTok{ }\KeywordTok{replicate}\NormalTok{(}\DecValTok{100000}\NormalTok{, \{}
+\NormalTok{  permuted =}\StringTok{ }\KeywordTok{t}\NormalTok{(}\KeywordTok{apply}\NormalTok{(ChargaffTable, }\DecValTok{1}\NormalTok{, sample))}
+  \KeywordTok{colnames}\NormalTok{(permuted) =}\StringTok{ }\KeywordTok{colnames}\NormalTok{(ChargaffTable)}
+  \KeywordTok{statChf}\NormalTok{(permuted)}
+\NormalTok{\})}
+\NormalTok{pChf =}\StringTok{ }\KeywordTok{mean}\NormalTok{(permstat }\OperatorTok{<=}\StringTok{ }\NormalTok{chfstat)}
+\NormalTok{pChf}
+\end{Highlighting}
+\end{Shaded}
 
-1 - pchisq(S1, df = 30)
+\begin{verbatim}
+## [1] 0.00015
+\end{verbatim}
 
-\subsection{\texorpdfstring{---- ChargaffColdSpring, eval = TRUE, echo =
-FALSE, fig.show = `hold', fig.keep =
-`high'----}{---- ChargaffColdSpring, eval = TRUE, echo = FALSE, fig.show = hold, fig.keep = high----}}\label{chargaffcoldspring-eval-true-echo-false-fig.show-hold-fig.keep-high-}
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{hist}\NormalTok{(permstat, }\DataTypeTok{breaks =} \DecValTok{100}\NormalTok{, }\DataTypeTok{main =} \StringTok{""}\NormalTok{, }\DataTypeTok{col =} \StringTok{"lavender"}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{v =}\NormalTok{ chfstat, }\DataTypeTok{lwd =} \DecValTok{2}\NormalTok{, }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-knitr::include\_graphics(c(`images/ChargaffColdSpring.png'))
+\begin{figure}
+\centering
+\includegraphics{MSMB-Chapter2_files/figure-latex/chap2-r-permstatChf-1-1.pdf}
+\caption{Histogram of our statistic \texttt{statChf} computed from
+simulations using per-row permutations of the columns. The value it
+yields for the observed data is shown by the red line.}
+\end{figure}
 
-\subsection{----Chargaff------------------------------------------------------------}\label{chargaff}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{HairEyeColor[,, }\StringTok{"Female"}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
 
-load(``../data/ChargaffTable.RData'') ChargaffTable
+\begin{verbatim}
+##        Eye
+## Hair    Brown Blue Hazel Green
+##   Black    36    9     5     2
+##   Brown    66   34    29    14
+##   Red      16    7     7     7
+##   Blond     4   64     5     8
+\end{verbatim}
 
-\subsection{\texorpdfstring{----ChargaffBars, fig.keep = `high', fig.cap
-= ``Barplots for the different rows in \texttt{ChargaffTable}. Can you
-spot the pattern?'', fig.margin = FALSE, echo = FALSE, fig.width = 7,
-fig.height =
-3.4----}{----ChargaffBars, fig.keep = high, fig.cap = Barplots for the different rows in ChargaffTable. Can you spot the pattern?, fig.margin = FALSE, echo = FALSE, fig.width = 7, fig.height = 3.4----}}\label{chargaffbars-fig.keep-high-fig.cap-barplots-for-the-different-rows-in-chargafftable.-can-you-spot-the-pattern-fig.margin-false-echo-false-fig.width-7-fig.height-3.4-}
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{str}\NormalTok{(HairEyeColor)}
+\end{Highlighting}
+\end{Shaded}
 
-stopifnot(nrow(ChargaffTable) == 8) mycolors = c(``chocolate'',
-``aquamarine4'', ``cadetblue4'', ``coral3'',
-``chartreuse4'',``darkgoldenrod4'',``darkcyan'',``brown4'')
-par(mfrow=c(2, 4), mai = c(0, 0.7, 0.7, 0)) for (i in 1:8) \{ cbp =
-barplot(ChargaffTable{[}i, {]}, horiz = TRUE, axes = FALSE, axisnames =
-FALSE, col = mycolors{[}i{]}) ax = axis(3, las = 2, labels = FALSE, col
-= mycolors{[}i{]}, cex = 0.5, at = c(0, 10, 20)) mtext(side = 3, at =
-ax, text = paste(ax), col = mycolors{[}i{]}, line = 0, las = 1, cex =
-0.9) mtext(side = 2, at = cbp, text = colnames(ChargaffTable), col =
-mycolors{[}i{]}, line = 0, las = 2, cex = 1)
-title(paste(rownames(ChargaffTable){[}i{]}), col = mycolors{[}i{]}, cex
-= 1.1) \}
+\begin{verbatim}
+##  'table' num [1:4, 1:4, 1:2] 32 53 10 3 11 50 10 30 10 25 ...
+##  - attr(*, "dimnames")=List of 3
+##   ..$ Hair: chr [1:4] "Black" "Brown" "Red" "Blond"
+##   ..$ Eye : chr [1:4] "Brown" "Blue" "Hazel" "Green"
+##   ..$ Sex : chr [1:2] "Male" "Female"
+\end{verbatim}
 
-\subsection{\texorpdfstring{----chap2-r-permstatChf-1, fig.keep =
-`high', fig.cap = ``Histogram of our statistic \texttt{statChf} computed
-from simulations using per-row permutations of the columns. The value it
-yields for the observed data is shown by the red line.'', fig.width =
-3.2, fig.height =
-3----}{----chap2-r-permstatChf-1, fig.keep = high, fig.cap = Histogram of our statistic statChf computed from simulations using per-row permutations of the columns. The value it yields for the observed data is shown by the red line., fig.width = 3.2, fig.height = 3----}}\label{chap2-r-permstatchf-1-fig.keep-high-fig.cap-histogram-of-our-statistic-statchf-computed-from-simulations-using-per-row-permutations-of-the-columns.-the-value-it-yields-for-the-observed-data-is-shown-by-the-red-line.-fig.width-3.2-fig.height-3-}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{? HairEyeColor}
+\end{Highlighting}
+\end{Shaded}
 
-statChf = function(x)\{ sum((x{[}, ``C''{]} - x{[}, ``G''{]})\^{}2 +
-(x{[}, ``A''{]} - x{[}, ``T''{]})\^{}2) \} chfstat =
-statChf(ChargaffTable) permstat = replicate(100000, \{ permuted =
-t(apply(ChargaffTable, 1, sample)) colnames(permuted) =
-colnames(ChargaffTable) statChf(permuted) \}) pChf = mean(permstat
-\textless{}= chfstat) pChf hist(permstat, breaks = 100, main = ``'', col
-= ``lavender'') abline(v = chfstat, lwd = 2, col = ``red'')
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{load}\NormalTok{(}\KeywordTok{url}\NormalTok{(}\StringTok{"http://bios221.stanford.edu/data/Deuteranopia.RData"}\NormalTok{))}
+\NormalTok{Deuteranopia}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{----vcdHC---------------------------------------------------------------}\label{vcdhc}
+\begin{verbatim}
+##           Men Women
+## Deute      19     2
+## NonDeute 1981  1998
+\end{verbatim}
 
-HairEyeColor{[},, ``Female''{]}
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{chisq.test}\NormalTok{(Deuteranopia)}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{----answerHC------------------------------------------------------------}\label{answerhc}
+\begin{verbatim}
+## 
+##  Pearson's Chi-squared test with Yates' continuity correction
+## 
+## data:  Deuteranopia
+## X-squared = 12.255, df = 1, p-value = 0.0004641
+\end{verbatim}
 
-str(HairEyeColor) ? HairEyeColor
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(}\StringTok{"HardyWeinberg"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{----Deuto---------------------------------------------------------------}\label{deuto}
+\begin{verbatim}
+## Loading required package: mice
+\end{verbatim}
 
-load(``../data/Deuteranopia.RData'') Deuteranopia
+\begin{verbatim}
+## Loading required package: lattice
+\end{verbatim}
 
-\subsection{----chisq.test.Deuteranopia---------------------------------------------}\label{chisq.test.deuteranopia}
+\begin{verbatim}
+## 
+## Attaching package: 'mice'
+\end{verbatim}
 
-chisq.test(Deuteranopia)
+\begin{verbatim}
+## The following objects are masked from 'package:IRanges':
+## 
+##     cbind, rbind
+\end{verbatim}
 
-\subsection{\texorpdfstring{----chap2-r-HardyWeinberg-1, fig.keep =
-`high', fig.cap = ``Plot of the log-likelihood for the
-(ref:chap2-r-HardyWeinberg-1-1)
-data.''----}{----chap2-r-HardyWeinberg-1, fig.keep = high, fig.cap = Plot of the log-likelihood for the (ref:chap2-r-HardyWeinberg-1-1) data.----}}\label{chap2-r-hardyweinberg-1-fig.keep-high-fig.cap-plot-of-the-log-likelihood-for-the-refchap2-r-hardyweinberg-1-1-data.-}
+\begin{verbatim}
+## The following objects are masked from 'package:S4Vectors':
+## 
+##     cbind, rbind
+\end{verbatim}
 
-library(``HardyWeinberg'') data(``Mourant'') Mourant{[}214:216,{]} nMM =
-Mourant\(MM[216] nMN = Mourant\)MN{[}216{]} nNN = Mourant\$NN{[}216{]}
-loglik = function(p, q = 1 - p) \{ 2 * nMM * log(p) + nMN *
-log(2\emph{p}q) + 2 * nNN * log(q) \} xv = seq(0.01, 0.99, by = 0.01) yv
-= loglik(xv) plot(x = xv, y = yv, type = ``l'', lwd = 2, xlab = ``p'',
-ylab = ``log-likelihood'') imax = which.max(yv) abline(v = xv{[}imax{]},
-h = yv{[}imax{]}, lwd = 1.5, col = ``blue'') abline(h = yv{[}imax{]},
-lwd = 1.5, col = ``purple'')
+\begin{verbatim}
+## The following objects are masked from 'package:BiocGenerics':
+## 
+##     cbind, rbind
+\end{verbatim}
 
-\subsection{----phat----------------------------------------------------------------}\label{phat-}
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     cbind, rbind
+\end{verbatim}
 
-phat = af(c(nMM, nMN, nNN)) phat pMM = phat\^{}2 qhat = 1 - phat
+\begin{verbatim}
+## Loading required package: Rsolnp
+\end{verbatim}
 
-\subsection{----hweq----------------------------------------------------------------}\label{hweq-}
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{data}\NormalTok{(}\StringTok{"Mourant"}\NormalTok{)}
+\NormalTok{Mourant[}\DecValTok{214}\OperatorTok{:}\DecValTok{216}\NormalTok{,]}
+\end{Highlighting}
+\end{Shaded}
 
-pHW = c(MM = phat\^{}2, MN = 2\emph{phat}qhat, NN = qhat\^{}2)
-sum(c(nMM, nMN, nNN)) * pHW
+\begin{verbatim}
+##     Population    Country Total  MM  MN  NN
+## 214    Oceania Micronesia   962 228 436 298
+## 215    Oceania Micronesia   678  36 229 413
+## 216    Oceania     Tahiti   580 188 296  96
+\end{verbatim}
 
-\subsection{\texorpdfstring{----HWtern, fig.keep = `high', fig.cap =
-``This \textbf{de Finetti plot} shows the points as barycenters of the
-three genotypes using the frequencies as weights on each of the corners
-of the triangle. The Hardy-Weinberg model is the red curve, the
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{nMM =}\StringTok{ }\NormalTok{Mourant}\OperatorTok{$}\NormalTok{MM[}\DecValTok{216}\NormalTok{]}
+\NormalTok{nMN =}\StringTok{ }\NormalTok{Mourant}\OperatorTok{$}\NormalTok{MN[}\DecValTok{216}\NormalTok{]}
+\NormalTok{nNN =}\StringTok{ }\NormalTok{Mourant}\OperatorTok{$}\NormalTok{NN[}\DecValTok{216}\NormalTok{]}
+\NormalTok{loglik =}\StringTok{ }\ControlFlowTok{function}\NormalTok{(p, }\DataTypeTok{q =} \DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{p) \{}
+  \DecValTok{2} \OperatorTok{*}\StringTok{ }\NormalTok{nMM }\OperatorTok{*}\StringTok{ }\KeywordTok{log}\NormalTok{(p) }\OperatorTok{+}\StringTok{ }\NormalTok{nMN }\OperatorTok{*}\StringTok{ }\KeywordTok{log}\NormalTok{(}\DecValTok{2}\OperatorTok{*}\NormalTok{p}\OperatorTok{*}\NormalTok{q) }\OperatorTok{+}\StringTok{ }\DecValTok{2} \OperatorTok{*}\StringTok{ }\NormalTok{nNN }\OperatorTok{*}\StringTok{ }\KeywordTok{log}\NormalTok{(q)}
+\NormalTok{\}}
+\NormalTok{xv =}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\FloatTok{0.01}\NormalTok{, }\FloatTok{0.99}\NormalTok{, }\DataTypeTok{by =} \FloatTok{0.01}\NormalTok{)}
+\NormalTok{yv =}\StringTok{ }\KeywordTok{loglik}\NormalTok{(xv)}
+\KeywordTok{plot}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ xv, }\DataTypeTok{y =}\NormalTok{ yv, }\DataTypeTok{type =} \StringTok{"l"}\NormalTok{, }\DataTypeTok{lwd =} \DecValTok{2}\NormalTok{,}
+     \DataTypeTok{xlab =} \StringTok{"p"}\NormalTok{, }\DataTypeTok{ylab =} \StringTok{"log-likelihood"}\NormalTok{)}
+\NormalTok{imax =}\StringTok{ }\KeywordTok{which.max}\NormalTok{(yv)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{v =}\NormalTok{ xv[imax], }\DataTypeTok{h =}\NormalTok{ yv[imax], }\DataTypeTok{lwd =} \FloatTok{1.5}\NormalTok{, }\DataTypeTok{col =} \StringTok{"blue"}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{h =}\NormalTok{ yv[imax], }\DataTypeTok{lwd =} \FloatTok{1.5}\NormalTok{, }\DataTypeTok{col =} \StringTok{"purple"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+\centering
+\includegraphics{MSMB-Chapter2_files/figure-latex/chap2-r-HardyWeinberg-1-1.pdf}
+\caption{Plot of the log-likelihood for the
+(ref:chap2-r-HardyWeinberg-1-1) data.}
+\end{figure}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{phat  =}\StringTok{  }\KeywordTok{af}\NormalTok{(}\KeywordTok{c}\NormalTok{(nMM, nMN, nNN))}
+\NormalTok{phat}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.5793103
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pMM   =}\StringTok{  }\NormalTok{phat}\OperatorTok{^}\DecValTok{2}
+\NormalTok{qhat  =}\StringTok{  }\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{phat}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pHW =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DataTypeTok{MM =}\NormalTok{ phat}\OperatorTok{^}\DecValTok{2}\NormalTok{, }\DataTypeTok{MN =} \DecValTok{2}\OperatorTok{*}\NormalTok{phat}\OperatorTok{*}\NormalTok{qhat, }\DataTypeTok{NN =}\NormalTok{ qhat}\OperatorTok{^}\DecValTok{2}\NormalTok{)}
+\KeywordTok{sum}\NormalTok{(}\KeywordTok{c}\NormalTok{(nMM, nMN, nNN)) }\OperatorTok{*}\StringTok{ }\NormalTok{pHW}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       MM       MN       NN 
+## 194.6483 282.7034 102.6483
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pops =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{69}\NormalTok{, }\DecValTok{128}\NormalTok{, }\DecValTok{148}\NormalTok{, }\DecValTok{192}\NormalTok{)}
+\NormalTok{genotypeFrequencies =}\StringTok{ }\KeywordTok{as.matrix}\NormalTok{(Mourant[, }\KeywordTok{c}\NormalTok{(}\StringTok{"MM"}\NormalTok{, }\StringTok{"MN"}\NormalTok{, }\StringTok{"NN"}\NormalTok{)])}
+\KeywordTok{HWTernaryPlot}\NormalTok{(genotypeFrequencies[pops, ],}
+              \DataTypeTok{markerlab =}\NormalTok{ Mourant}\OperatorTok{$}\NormalTok{Country[pops],}
+              \DataTypeTok{alpha =} \FloatTok{0.0001}\NormalTok{, }\DataTypeTok{curvecols =} \KeywordTok{c}\NormalTok{(}\StringTok{"red"}\NormalTok{, }\KeywordTok{rep}\NormalTok{(}\StringTok{"purple"}\NormalTok{, }\DecValTok{4}\NormalTok{)),}
+              \DataTypeTok{mcex =} \FloatTok{0.75}\NormalTok{, }\DataTypeTok{vertex.cex =} \DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+\centering
+\includegraphics{MSMB-Chapter2_files/figure-latex/HWtern-1.pdf}
+\caption{This \textbf{de Finetti plot} shows the points as barycenters
+of the three genotypes using the frequencies as weights on each of the
+corners of the triangle. The Hardy-Weinberg model is the red curve, the
 acceptance region is between the two purple lines. We see that the US is
-the furthest from being in HW equilibrium.'', fig.margin = FALSE,
-message = FALSE, warning = FALSE, fig.width = 3.4, fig.height = 3.4,
-results = FALSE, echo =
--1----}{----HWtern, fig.keep = high, fig.cap = This de Finetti plot shows the points as barycenters of the three genotypes using the frequencies as weights on each of the corners of the triangle. The Hardy-Weinberg model is the red curve, the acceptance region is between the two purple lines. We see that the US is the furthest from being in HW equilibrium., fig.margin = FALSE, message = FALSE, warning = FALSE, fig.width = 3.4, fig.height = 3.4, results = FALSE, echo = -1----}}\label{hwtern-fig.keep-high-fig.cap-this-de-finetti-plot-shows-the-points-as-barycenters-of-the-three-genotypes-using-the-frequencies-as-weights-on-each-of-the-corners-of-the-triangle.-the-hardy-weinberg-model-is-the-red-curve-the-acceptance-region-is-between-the-two-purple-lines.-we-see-that-the-us-is-the-furthest-from-being-in-hw-equilibrium.-fig.margin-false-message-false-warning-false-fig.width-3.4-fig.height-3.4-results-false-echo--1-}
+the furthest from being in HW equilibrium.}
+\end{figure}
 
-par(mai = rep(0.1, 4)) pops = c(1, 69, 128, 148, 192)
-genotypeFrequencies = as.matrix(Mourant{[}, c(``MM'', ``MN'',
-``NN''){]}) HWTernaryPlot(genotypeFrequencies{[}pops, {]}, markerlab =
-Mourant\$Country{[}pops{]}, alpha = 0.0001, curvecols = c(``red'',
-rep(``purple'', 4)), mcex = 0.75, vertex.cex = 1)
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{HWTernaryPlot}\NormalTok{(genotypeFrequencies[}\OperatorTok{-}\NormalTok{pops, ], }\DataTypeTok{alpha =} \FloatTok{0.0001}\NormalTok{,}
+              \DataTypeTok{newframe =} \OtherTok{FALSE}\NormalTok{, }\DataTypeTok{cex =} \FloatTok{0.5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{----quesTern, echo =
--1-------------------------------------------------}\label{questern-echo--1-}
+\includegraphics{MSMB-Chapter2_files/figure-latex/quesTern-1.pdf}
 
-HWTernaryPlot(genotypeFrequencies{[}pops, {]}, markerlab =
-Mourant\$Country{[}pops{]}, alpha = 0.0001, curvecols = c(``red'',
-rep(``purple'', 4)), mcex = 0.75, vertex.cex = 1)
-HWTernaryPlot(genotypeFrequencies{[}-pops, {]}, alpha = 0.0001, newframe
-= FALSE, cex = 0.5)
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{newgf =}\StringTok{ }\KeywordTok{round}\NormalTok{(genotypeFrequencies }\OperatorTok{/}\StringTok{ }\DecValTok{50}\NormalTok{)}
+\KeywordTok{HWTernaryPlot}\NormalTok{(newgf[pops, ],}
+              \DataTypeTok{markerlab =}\NormalTok{ Mourant}\OperatorTok{$}\NormalTok{Country[pops],}
+              \DataTypeTok{alpha =} \FloatTok{0.0001}\NormalTok{, }\DataTypeTok{curvecols =} \KeywordTok{c}\NormalTok{(}\StringTok{"red"}\NormalTok{, }\KeywordTok{rep}\NormalTok{(}\StringTok{"purple"}\NormalTok{, }\DecValTok{4}\NormalTok{)),}
+              \DataTypeTok{mcex =} \FloatTok{0.75}\NormalTok{, }\DataTypeTok{vertex.cex =} \DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{----newMNdata-----------------------------------------------------------}\label{newmndata}
+\includegraphics{MSMB-Chapter2_files/figure-latex/newMNdata-1.pdf}
 
-newgf = round(genotypeFrequencies / 50) HWTernaryPlot(newgf{[}pops, {]},
-markerlab = Mourant\$Country{[}pops{]}, alpha = 0.0001, curvecols =
-c(``red'', rep(``purple'', 4)), mcex = 0.75, vertex.cex = 1)
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(}\StringTok{"seqLogo"}\NormalTok{)}
+\KeywordTok{load}\NormalTok{(}\KeywordTok{url}\NormalTok{(}\StringTok{"http://bios221.stanford.edu/data/kozak.RData"}\NormalTok{))}
+\NormalTok{kozak}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{\texorpdfstring{----chap2-r-seqlogo-1, fig.keep = `high',
-fig.cap = ``Here is a diagram called a sequence logo for the position
+\begin{verbatim}
+##   [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9]
+## A 0.33 0.25  0.4 0.15 0.20    1    0    0 0.05
+## C 0.12 0.25  0.1 0.40 0.40    0    0    0 0.05
+## G 0.33 0.25  0.4 0.20 0.25    0    0    1 0.90
+## T 0.22 0.25  0.1 0.25 0.15    0    1    0 0.00
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pwm =}\StringTok{ }\KeywordTok{makePWM}\NormalTok{(kozak)}
+\KeywordTok{seqLogo}\NormalTok{(pwm, }\DataTypeTok{ic.scale =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+\centering
+\includegraphics{MSMB-Chapter2_files/figure-latex/chap2-r-seqlogo-1-1.pdf}
+\caption{Here is a diagram called a sequence logo for the position
 dependent multinomial used to model the Kozak motif. It codifies the
 amount of variation in each of the positions on a log scale. The large
 letters represent positions where there is no uncertainty about which
-nucleotide occurs.'', fig.margin = FALSE, fig.height=5,
-fig.width=5----}{----chap2-r-seqlogo-1, fig.keep = high, fig.cap = Here is a diagram called a sequence logo for the position dependent multinomial used to model the Kozak motif. It codifies the amount of variation in each of the positions on a log scale. The large letters represent positions where there is no uncertainty about which nucleotide occurs., fig.margin = FALSE, fig.height=5, fig.width=5----}}\label{chap2-r-seqlogo-1-fig.keep-high-fig.cap-here-is-a-diagram-called-a-sequence-logo-for-the-position-dependent-multinomial-used-to-model-the-kozak-motif.-it-codifies-the-amount-of-variation-in-each-of-the-positions-on-a-log-scale.-the-large-letters-represent-positions-where-there-is-no-uncertainty-about-which-nucleotide-occurs.-fig.margin-false-fig.height5-fig.width5-}
+nucleotide occurs.}
+\end{figure}
 
-library(``seqLogo'') load(``../data/kozak.RData'') kozak pwm =
-makePWM(kozak) seqLogo(pwm, ic.scale = FALSE)
+\begin{verbatim}
+## Package:  markovchain
+## Version:  0.8.0
+## Date:     2019-09-13
+## BugReport: http://github.com/spedygiorgio/markovchain/issues
+\end{verbatim}
 
-\subsection{----4stateMC, echo =
-FALSE----------------------------------------------}\label{statemc-echo-false-}
+\begin{verbatim}
+## 
+## Attaching package: 'igraph'
+\end{verbatim}
 
-library(``markovchain'') library(``igraph'') sequence = toupper(c(``a'',
-``c'', ``a'', ``c'', ``g'', ``t'', ``t'', ``t'', ``t'', ``c'', ``c'',
-``a'', ``c'', ``g'', ``t'', ``a'',
-``c'',``c'',``c'',``a'',``a'',``a'',``t'',``a'',
-``c'',``g'',``g'',``c'',``a'',``t'',``g'',``t'',``g'',``t'',``g'',``a'',``g'',``c'',``t'',``g''))
-mcFit = markovchainFit(data = sequence) MCgraph =
-markovchain:::.getNet(mcFit\(estimate, round = TRUE) edgelab = round(E(MCgraph)\)weight
-/ 100, 1)
+\begin{verbatim}
+## The following object is masked from 'package:Biostrings':
+## 
+##     union
+\end{verbatim}
 
-\subsection{\texorpdfstring{----statsfourstateMC, fig.keep = `high',
-fig.cap = ``Visualisation of a 4-state Markov chain. The probability of
-each possible digram (e.\textbackslash{},g., CA) is given by the weight
-of the edge between the corresponding nodes. So for instance, the
-probability of CA is given by the edge C\(\\to\) A. We'll see in Chapter
-\textbackslash{}@ref(Chap:Images) how to use \textbf{R} packages to draw
-these type of network graphs.'', echo = FALSE, fig.width = 4, fig.height
-=
-3.5----}{----statsfourstateMC, fig.keep = high, fig.cap = Visualisation of a 4-state Markov chain. The probability of each possible digram (e.\textbackslash{},g., CA) is given by the weight of the edge between the corresponding nodes. So for instance, the probability of CA is given by the edge C\textbackslash{}\textbackslash{}to A. We'll see in Chapter \textbackslash{}@ref(Chap:Images) how to use R packages to draw these type of network graphs., echo = FALSE, fig.width = 4, fig.height = 3.5----}}\label{statsfourstatemc-fig.keep-high-fig.cap-visualisation-of-a-4-state-markov-chain.-the-probability-of-each-possible-digram-e.g.-ca-is-given-by-the-weight-of-the-edge-between-the-corresponding-nodes.-so-for-instance-the-probability-of-ca-is-given-by-the-edge-cto-a.-well-see-in-chapter-refchapimages-how-to-use-r-packages-to-draw-these-type-of-network-graphs.-echo-false-fig.width-4-fig.height-3.5-}
+\begin{verbatim}
+## The following object is masked from 'package:IRanges':
+## 
+##     union
+\end{verbatim}
 
-par(mai=c(0,0,0,0)) \#plot.igraph(MCgraph, edge.label = edgelab, width =
-2, edge.arrow.width = 1.5, \# vertex.size = 40, xlim = c(-1, 1.25))
-plot.igraph(MCgraph, edge.label = edgelab, \#edge.arrow.width = 1.5,
-vertex.size = 40, xlim = c(-1, 1.25))
+\begin{verbatim}
+## The following object is masked from 'package:S4Vectors':
+## 
+##     union
+\end{verbatim}
 
-\subsection{\texorpdfstring{---- FreqBayes-turtles, eval = TRUE, echo =
-FALSE, fig.show = `hold', fig.keep = `high', fig.cap = ``Turtles all the
-way down. Bayesian modeling of the uncertainty of the parameter of a
-distribution is done by using a random variable whose distribution may
-depend on parameters whose uncertainty can be modeled as a random
-variable; these are called hierarchical
-models.''----}{---- FreqBayes-turtles, eval = TRUE, echo = FALSE, fig.show = hold, fig.keep = high, fig.cap = Turtles all the way down. Bayesian modeling of the uncertainty of the parameter of a distribution is done by using a random variable whose distribution may depend on parameters whose uncertainty can be modeled as a random variable; these are called hierarchical models.----}}\label{freqbayes-turtles-eval-true-echo-false-fig.show-hold-fig.keep-high-fig.cap-turtles-all-the-way-down.-bayesian-modeling-of-the-uncertainty-of-the-parameter-of-a-distribution-is-done-by-using-a-random-variable-whose-distribution-may-depend-on-parameters-whose-uncertainty-can-be-modeled-as-a-random-variable-these-are-called-hierarchical-models.-}
+\begin{verbatim}
+## The following objects are masked from 'package:BiocGenerics':
+## 
+##     normalize, path, union
+\end{verbatim}
 
-knitr::include\_graphics(c(`images/turtlesalltheway.png'))
+\begin{verbatim}
+## The following objects are masked from 'package:stats':
+## 
+##     decompose, spectrum
+\end{verbatim}
 
-\subsection{\texorpdfstring{---- STRDefinition, fig.margin = FALSE, eval
-= TRUE, echo = FALSE, fig.show = `hold', fig.keep = `high', fig.cap =
-``A short tandem repeat (STR) in DNA occurs when a pattern of two or
-more nucleotides is repeated and the repeated sequences are directly
-adjacent to each other. An STR is also known as a microsatellite. The
-pattern can range in length from 2 to 13 nucleotides, and the number of
-repeats is highly variable across individuals. STR numbers can be used
-as genetic signatures, called
-haplotypes.''----}{---- STRDefinition, fig.margin = FALSE, eval = TRUE, echo = FALSE, fig.show = hold, fig.keep = high, fig.cap = A short tandem repeat (STR) in DNA occurs when a pattern of two or more nucleotides is repeated and the repeated sequences are directly adjacent to each other. An STR is also known as a microsatellite. The pattern can range in length from 2 to 13 nucleotides, and the number of repeats is highly variable across individuals. STR numbers can be used as genetic signatures, called haplotypes.----}}\label{strdefinition-fig.margin-false-eval-true-echo-false-fig.show-hold-fig.keep-high-fig.cap-a-short-tandem-repeat-str-in-dna-occurs-when-a-pattern-of-two-or-more-nucleotides-is-repeated-and-the-repeated-sequences-are-directly-adjacent-to-each-other.-an-str-is-also-known-as-a-microsatellite.-the-pattern-can-range-in-length-from-2-to-13-nucleotides-and-the-number-of-repeats-is-highly-variable-across-individuals.-str-numbers-can-be-used-as-genetic-signatures-called-haplotypes.-}
+\begin{verbatim}
+## The following object is masked from 'package:base':
+## 
+##     union
+\end{verbatim}
 
-knitr::include\_graphics(c(`images/STRDefinition.png'))
+\begin{figure}
+\centering
+\includegraphics{MSMB-Chapter2_files/figure-latex/statsfourstateMC-1.pdf}
+\caption{Visualisation of a 4-state Markov chain. The probability of
+each possible digram (e.,g., CA) is given by the weight of the edge
+between the corresponding nodes. So for instance, the probability of CA
+is given by the edge C\(\to\) A. We'll see in Chapter @ref(Chap:Images)
+how to use \textbf{R} packages to draw these type of network graphs.}
+\end{figure}
 
-\subsection{----haplo6--------------------------------------------------------------}\label{haplo6}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{haplo6 <-}\StringTok{ }\KeywordTok{read.table}\NormalTok{(}\StringTok{"../../data/haplotype6.txt"}\NormalTok{,}\DataTypeTok{header =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{haplo6}
+\end{Highlighting}
+\end{Shaded}
 
-haplo6=read.table(``../data/haplotype6.txt'',header = TRUE) haplo6
+\begin{verbatim}
+##   Individual DYS19 DXYS156Y DYS389m DYS389n DYS389p
+## 1         H1    14       12       4      12       3
+## 2         H3    15       13       4      13       3
+## 3         H4    15       11       5      11       3
+## 4         H5    17       13       4      11       3
+## 5         H7    13       12       5      12       3
+## 6         H8    16       11       5      12       3
+\end{verbatim}
 
-\subsection{\texorpdfstring{----histobeta2, fig.keep = `high', fig.cap =
-``Beta distributions with \(\\alpha=10,20,50\) and \(\\beta=30,60,150\)
-used as a \{prior\} for a probability of success. These three
-distributions have the same mean (\(\\frac{\\alpha}{\\alpha +\\beta}\)),
-but different concentrations around the mean.'', echo = FALSE, fig.width
-= 3.5, fig.height =
-3.5----}{----histobeta2, fig.keep = high, fig.cap = Beta distributions with \textbackslash{}\textbackslash{}alpha=10,20,50 and \textbackslash{}\textbackslash{}beta=30,60,150 used as a \{prior\} for a probability of success. These three distributions have the same mean (\textbackslash{}\textbackslash{}frac\{\textbackslash{}\textbackslash{}alpha\}\{\textbackslash{}\textbackslash{}alpha +\textbackslash{}\textbackslash{}beta\}), but different concentrations around the mean., echo = FALSE, fig.width = 3.5, fig.height = 3.5----}}\label{histobeta2-fig.keep-high-fig.cap-beta-distributions-with-alpha102050-and-beta3060150-used-as-a-prior-for-a-probability-of-success.-these-three-distributions-have-the-same-mean-fracalphaalpha-beta-but-different-concentrations-around-the-mean.-echo-false-fig.width-3.5-fig.height-3.5-}
+\begin{verbatim}
+## Loading required package: reshape2
+\end{verbatim}
 
-theta = thetas{[}1:500{]} dfbetas = data.frame(theta, db1=
-dbeta(theta,10,30), db2 = dbeta(theta, 20, 60), db3 = dbeta(theta, 50,
-150)) require(reshape2) datalong = melt(dfbetas, id=``theta'')
-ggplot(datalong) + geom\_line(aes(x = theta,y=value,colour=variable)) +
-theme(legend.title=element\_blank()) + geom\_vline(aes(xintercept=0.25),
-colour=``\#990000'', linetype=``dashed'')+ scale\_colour\_discrete(name
-=``Prior'', labels=c(``B(10,30)'', ``B(20,60)'',``B(50,150)''))
+\begin{verbatim}
+## 
+## Attaching package: 'reshape2'
+\end{verbatim}
 
-\subsection{\texorpdfstring{----chap2-r-histmarginal-1, fig.keep =
-`high', fig.cap = ``Marginal Distribution of \(Y\).'', fig.width = 3.5,
-fig.height =
-3.5----}{----chap2-r-histmarginal-1, fig.keep = high, fig.cap = Marginal Distribution of Y., fig.width = 3.5, fig.height = 3.5----}}\label{chap2-r-histmarginal-1-fig.keep-high-fig.cap-marginal-distribution-of-y.-fig.width-3.5-fig.height-3.5-}
+\begin{verbatim}
+## The following object is masked from 'package:tidyr':
+## 
+##     smiths
+\end{verbatim}
 
-rtheta = rbeta(100000, 50, 350) y = vapply(rtheta, function(th) \{
-rbinom(1, prob = th, size = 300) \}, numeric(1)) hist(y, breaks = 50,
-col = ``orange'', main = ``'', xlab = ``'')
+\begin{figure}
+\centering
+\includegraphics{MSMB-Chapter2_files/figure-latex/histobeta2-1.pdf}
+\caption{Beta distributions with \(\alpha=10,20,50\) and
+\(\beta=30,60,150\) used as a \{prior\} for a probability of success.
+These three distributions have the same mean
+(\(\frac{\alpha}{\alpha +\beta}\)), but different concentrations around
+the mean.}
+\end{figure}
 
-\subsection{----freqquesvectorize, echo =
-FALSE-------------------------------------}\label{freqquesvectorize-echo-false-}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{rtheta =}\StringTok{ }\KeywordTok{rbeta}\NormalTok{(}\DecValTok{100000}\NormalTok{, }\DecValTok{50}\NormalTok{, }\DecValTok{350}\NormalTok{)}
+\NormalTok{y =}\StringTok{ }\KeywordTok{vapply}\NormalTok{(rtheta, }\ControlFlowTok{function}\NormalTok{(th) \{}
+  \KeywordTok{rbinom}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DataTypeTok{prob =}\NormalTok{ th, }\DataTypeTok{size =} \DecValTok{300}\NormalTok{)}
+\NormalTok{\}, }\KeywordTok{numeric}\NormalTok{(}\DecValTok{1}\NormalTok{))}
+\KeywordTok{hist}\NormalTok{(y, }\DataTypeTok{breaks =} \DecValTok{50}\NormalTok{, }\DataTypeTok{col =} \StringTok{"orange"}\NormalTok{, }\DataTypeTok{main =} \StringTok{""}\NormalTok{, }\DataTypeTok{xlab =} \StringTok{""}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-set.seed(0xbebe) .w1 = vapply(rtheta, function(th) rbinom(1, prob = th,
-size = 300), integer(1)) set.seed(0xbebe) .w2 = rbinom(length(rtheta),
-rtheta, size = 300) stopifnot(identical(.w1, .w2))
+\begin{figure}
+\centering
+\includegraphics{MSMB-Chapter2_files/figure-latex/chap2-r-histmarginal-1-1.pdf}
+\caption{Marginal Distribution of \(Y\).}
+\end{figure}
 
-\subsection{\texorpdfstring{----chap2-r-densityposterior-1, fig.keep =
-`high', fig.cap = ``Only choosing the values of the distribution with
-\(Y=40\) gives the posterior distribution of \(\\theta\). The histogram
-(green) shows the simulated values for the posteriror distribution, the
-line the theoretical density of a beta distribution with the theoretical
-posterior parameters.'', fig.width = 3.5, fig.height =
-3.5----}{----chap2-r-densityposterior-1, fig.keep = high, fig.cap = Only choosing the values of the distribution with Y=40 gives the posterior distribution of \textbackslash{}\textbackslash{}theta. The histogram (green) shows the simulated values for the posteriror distribution, the line the theoretical density of a beta distribution with the theoretical posterior parameters., fig.width = 3.5, fig.height = 3.5----}}\label{chap2-r-densityposterior-1-fig.keep-high-fig.cap-only-choosing-the-values-of-the-distribution-with-y40-gives-the-posterior-distribution-of-theta.-the-histogram-green-shows-the-simulated-values-for-the-posteriror-distribution-the-line-the-theoretical-density-of-a-beta-distribution-with-the-theoretical-posterior-parameters.-fig.width-3.5-fig.height-3.5-}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{thetaPostEmp =}\StringTok{ }\NormalTok{rtheta[ y }\OperatorTok{==}\StringTok{ }\DecValTok{40}\NormalTok{ ]}
+\KeywordTok{hist}\NormalTok{(thetaPostEmp, }\DataTypeTok{breaks =} \DecValTok{40}\NormalTok{, }\DataTypeTok{col =} \StringTok{"chartreuse4"}\NormalTok{, }\DataTypeTok{main =} \StringTok{""}\NormalTok{,}
+     \DataTypeTok{probability =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{xlab =} \KeywordTok{expression}\NormalTok{(}\StringTok{"posterior"}\OperatorTok{~}\NormalTok{theta))}
+\NormalTok{densPostTheory  =}\StringTok{  }\KeywordTok{dbeta}\NormalTok{(thetas, }\DecValTok{90}\NormalTok{, }\DecValTok{610}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(thetas, densPostTheory, }\DataTypeTok{type=}\StringTok{"l"}\NormalTok{, }\DataTypeTok{lwd =} \DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-thetaPostEmp = rtheta{[} y == 40 {]} hist(thetaPostEmp, breaks = 40, col
-= ``chartreuse4'', main = ``'', probability = TRUE, xlab =
-expression(``posterior''\textasciitilde{}theta)) densPostTheory =
-dbeta(thetas, 90, 610) lines(thetas, densPostTheory, type=``l'', lwd =
-3)
+\begin{figure}
+\centering
+\includegraphics{MSMB-Chapter2_files/figure-latex/chap2-r-densityposterior-1-1.pdf}
+\caption{Only choosing the values of the distribution with \(Y=40\)
+gives the posterior distribution of \(\theta\). The histogram (green)
+shows the simulated values for the posteriror distribution, the line the
+theoretical density of a beta distribution with the theoretical
+posterior parameters.}
+\end{figure}
 
-\subsection{----comparetheory1------------------------------------------------------}\label{comparetheory1}
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{mean}\NormalTok{(thetaPostEmp)}
+\end{Highlighting}
+\end{Shaded}
 
-mean(thetaPostEmp) dtheta = thetas{[}2{]}-thetas{[}1{]} sum(thetas *
-densPostTheory * dtheta)
+\begin{verbatim}
+## [1] 0.1287273
+\end{verbatim}
 
-\subsection{----comparetheory2, echo =
-FALSE----------------------------------------}\label{comparetheory2-echo-false-}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dtheta =}\StringTok{ }\NormalTok{thetas[}\DecValTok{2}\NormalTok{]}\OperatorTok{-}\NormalTok{thetas[}\DecValTok{1}\NormalTok{]}
+\KeywordTok{sum}\NormalTok{(thetas }\OperatorTok{*}\StringTok{ }\NormalTok{densPostTheory }\OperatorTok{*}\StringTok{ }\NormalTok{dtheta)}
+\end{Highlighting}
+\end{Shaded}
 
-stopifnot(abs(mean(thetaPostEmp) - sum(thetas * densPostTheory *
-dtheta)) \textless{} 1e-3)
+\begin{verbatim}
+## [1] 0.1285714
+\end{verbatim}
 
-\subsection{----mcint---------------------------------------------------------------}\label{mcint}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{thetaPostMC =}\StringTok{ }\KeywordTok{rbeta}\NormalTok{(}\DataTypeTok{n =} \FloatTok{1e6}\NormalTok{, }\DecValTok{90}\NormalTok{, }\DecValTok{610}\NormalTok{)}
+\KeywordTok{mean}\NormalTok{(thetaPostMC)}
+\end{Highlighting}
+\end{Shaded}
 
-thetaPostMC = rbeta(n = 1e6, 90, 610) mean(thetaPostMC)
+\begin{verbatim}
+## [1] 0.12857
+\end{verbatim}
 
-\subsection{\texorpdfstring{----chap2-r-qqplotbeta-1, fig.keep = `high',
-fig.cap = ``QQ-plot of our Monte Carlo sample \texttt{thetaPostMC} from
-the theoretical distribution and our simulation sample
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{qqplot}\NormalTok{(thetaPostMC, thetaPostEmp, }\DataTypeTok{type =} \StringTok{"l"}\NormalTok{, }\DataTypeTok{asp =} \DecValTok{1}\NormalTok{)}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{a =} \DecValTok{0}\NormalTok{, }\DataTypeTok{b =} \DecValTok{1}\NormalTok{, }\DataTypeTok{col =} \StringTok{"blue"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+\centering
+\includegraphics{MSMB-Chapter2_files/figure-latex/chap2-r-qqplotbeta-1-1.pdf}
+\caption{QQ-plot of our Monte Carlo sample \texttt{thetaPostMC} from the
+theoretical distribution and our simulation sample
 \texttt{thetaPostEmp}. We could also similarly compare either of these
 two distributions to the theoretical distribution function
 \texttt{pbeta(.,\ 90,\ 610)}. If the curve lies on the line \(y=x\) this
 indicates a good agreement. There are some random differences at the
-tails.'', fig.width = 3.5, fig.height =
-3.5----}{----chap2-r-qqplotbeta-1, fig.keep = high, fig.cap = QQ-plot of our Monte Carlo sample thetaPostMC from the theoretical distribution and our simulation sample thetaPostEmp. We could also similarly compare either of these two distributions to the theoretical distribution function pbeta(., 90, 610). If the curve lies on the line y=x this indicates a good agreement. There are some random differences at the tails., fig.width = 3.5, fig.height = 3.5----}}\label{chap2-r-qqplotbeta-1-fig.keep-high-fig.cap-qq-plot-of-our-monte-carlo-sample-thetapostmc-from-the-theoretical-distribution-and-our-simulation-sample-thetapostemp.-we-could-also-similarly-compare-either-of-these-two-distributions-to-the-theoretical-distribution-function-pbeta.-90-610.-if-the-curve-lies-on-the-line-yx-this-indicates-a-good-agreement.-there-are-some-random-differences-at-the-tails.-fig.width-3.5-fig.height-3.5-}
+tails.}
+\end{figure}
 
-qqplot(thetaPostMC, thetaPostEmp, type = ``l'', asp = 1) abline(a = 0, b
-= 1, col = ``blue'')
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{densPost2 =}\StringTok{ }\KeywordTok{dbeta}\NormalTok{(thetas, }\DecValTok{115}\NormalTok{, }\DecValTok{735}\NormalTok{)}
+\NormalTok{mcPost2   =}\StringTok{ }\KeywordTok{rbeta}\NormalTok{(}\FloatTok{1e6}\NormalTok{, }\DecValTok{115}\NormalTok{, }\DecValTok{735}\NormalTok{)}
 
-\subsection{----postbeta------------------------------------------------------------}\label{postbeta}
+\KeywordTok{sum}\NormalTok{(thetas }\OperatorTok{*}\StringTok{ }\NormalTok{densPost2 }\OperatorTok{*}\StringTok{ }\NormalTok{dtheta)  }\CommentTok{# mean, by numeric integration}
+\end{Highlighting}
+\end{Shaded}
 
-densPost2 = dbeta(thetas, 115, 735) mcPost2 = rbeta(1e6, 115, 735)
+\begin{verbatim}
+## [1] 0.1352941
+\end{verbatim}
 
-sum(thetas * densPost2 * dtheta) \# mean, by numeric integration
-mean(mcPost2) \# mean, by MC thetas{[}which.max(densPost2){]} \# MAP
-estimate
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{mean}\NormalTok{(mcPost2)                     }\CommentTok{# mean, by MC}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{\texorpdfstring{---- roulette-chunk-1, eval = TRUE, echo =
-FALSE, fig.keep =
-`high'-----}{---- roulette-chunk-1, eval = TRUE, echo = FALSE, fig.keep = high-----}}\label{roulette-chunk-1-eval-true-echo-false-fig.keep-high}
+\begin{verbatim}
+## [1] 0.1352951
+\end{verbatim}
 
-knitr::include\_graphics(`images/roulette.png', dpi = 600)
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{thetas[}\KeywordTok{which.max}\NormalTok{(densPost2)]      }\CommentTok{# MAP estimate}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{----quantilespost-------------------------------------------------------}\label{quantilespost-}
+\begin{verbatim}
+## [1] 0.134
+\end{verbatim}
 
-quantile(mcPost2, c(0.025, 0.975))
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{quantile}\NormalTok{(mcPost2, }\KeywordTok{c}\NormalTok{(}\FloatTok{0.025}\NormalTok{, }\FloatTok{0.975}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{\texorpdfstring{---- DESeq2-Prediction-Interval, eval =
-TRUE, echo = FALSE, fig.show = `hold', fig.keep = `high', fig.cap = ``An
-example from @LoveDESeq2 shows plots of the likelihoods (solid lines,
-scaled to integrate to 1) and the posteriors (dashed lines) for the
-green and purple genes and of the prior (solid black line): due to the
-higher dispersion of the purple gene, its likelihood is wider and less
-peaked (indicating less information), and the prior has more influence
-on its posterior than for the green gene. The stronger curvature of the
-green posterior at its maximum translates to a smaller reported standard
-error for the MAP logarithmic fold change (LFC) estimate (horizontal
-error
-bar).''----}{---- DESeq2-Prediction-Interval, eval = TRUE, echo = FALSE, fig.show = hold, fig.keep = high, fig.cap = An example from @LoveDESeq2 shows plots of the likelihoods (solid lines, scaled to integrate to 1) and the posteriors (dashed lines) for the green and purple genes and of the prior (solid black line): due to the higher dispersion of the purple gene, its likelihood is wider and less peaked (indicating less information), and the prior has more influence on its posterior than for the green gene. The stronger curvature of the green posterior at its maximum translates to a smaller reported standard error for the MAP logarithmic fold change (LFC) estimate (horizontal error bar).----}}\label{deseq2-prediction-interval-eval-true-echo-false-fig.show-hold-fig.keep-high-fig.cap-an-example-from-lovedeseq2-shows-plots-of-the-likelihoods-solid-lines-scaled-to-integrate-to-1-and-the-posteriors-dashed-lines-for-the-green-and-purple-genes-and-of-the-prior-solid-black-line-due-to-the-higher-dispersion-of-the-purple-gene-its-likelihood-is-wider-and-less-peaked-indicating-less-information-and-the-prior-has-more-influence-on-its-posterior-than-for-the-green-gene.-the-stronger-curvature-of-the-green-posterior-at-its-maximum-translates-to-a-smaller-reported-standard-error-for-the-map-logarithmic-fold-change-lfc-estimate-horizontal-error-bar.-}
+\begin{verbatim}
+##      2.5%     97.5% 
+## 0.1131418 0.1590594
+\end{verbatim}
 
-knitr::include\_graphics(c(`images/DESeq2-Prediction-Interval.png'))
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(}\StringTok{"Biostrings"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{----callBios------------------------------------------------------------}\label{callbios}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## GENETIC_CODE}
+\NormalTok{## IUPAC_CODE_MAP}
+\NormalTok{## vignette(package = "Biostrings")}
+\NormalTok{## vignette("BiostringsQuickOverview", package = "Biostrings")}
+\end{Highlighting}
+\end{Shaded}
 
-library(``Biostrings'')
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(}\StringTok{"BSgenome"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{\texorpdfstring{----BiostringExplore, results = ``hide'',
-eval =
-FALSE--------------------}{----BiostringExplore, results = hide, eval = FALSE--------------------}}\label{biostringexplore-results-hide-eval-false}
+\begin{verbatim}
+## Loading required package: GenomeInfoDb
+\end{verbatim}
 
-\subsection{GENETIC\_CODE}\label{genetic_code}
+\begin{verbatim}
+## Loading required package: GenomicRanges
+\end{verbatim}
 
-\subsection{IUPAC\_CODE\_MAP}\label{iupac_code_map}
+\begin{verbatim}
+## Loading required package: rtracklayer
+\end{verbatim}
 
-\subsection{\texorpdfstring{vignette(package =
-``Biostrings'')}{vignette(package = Biostrings)}}\label{vignettepackage-biostrings}
+\begin{verbatim}
+## 
+## Attaching package: 'rtracklayer'
+\end{verbatim}
 
-\subsection{\texorpdfstring{vignette(``BiostringsQuickOverview'',
-package =
-``Biostrings'')}{vignette(BiostringsQuickOverview, package = Biostrings)}}\label{vignettebiostringsquickoverview-package-biostrings}
+\begin{verbatim}
+## The following object is masked from 'package:igraph':
+## 
+##     blocks
+\end{verbatim}
 
-\subsection{\texorpdfstring{----BiostringCheck, echo=FALSE, results =
-``hide''------------------------}{----BiostringCheck, echo=FALSE, results = hide------------------------}}\label{biostringcheck-echofalse-results-hide}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ag =}\StringTok{ }\KeywordTok{available.genomes}\NormalTok{()}
+\KeywordTok{length}\NormalTok{(ag)}
+\end{Highlighting}
+\end{Shaded}
 
-GENETIC\_CODE IUPAC\_CODE\_MAP
+\begin{verbatim}
+## [1] 93
+\end{verbatim}
 
-\subsection{----BSgenomes-----------------------------------------------------------}\label{bsgenomes}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ag[}\DecValTok{1}\OperatorTok{:}\DecValTok{2}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
 
-library(``BSgenome'') ag = available.genomes() length(ag) ag{[}1:2{]}
+\begin{verbatim}
+## [1] "BSgenome.Alyrata.JGI.v1"              
+## [2] "BSgenome.Amellifera.BeeBase.assembly4"
+\end{verbatim}
 
-\subsection{\texorpdfstring{----BSGenomeEcoli,
-results=``hide''---------------------------------------}{----BSGenomeEcoli, results=hide---------------------------------------}}\label{bsgenomeecoli-resultshide}
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(}\StringTok{"BSgenome.Ecoli.NCBI.20080805"}\NormalTok{)}
+\NormalTok{Ecoli}
+\NormalTok{shineDalgarno =}\StringTok{ "AGGAGGT"}
+\NormalTok{ecoli =}\StringTok{ }\NormalTok{Ecoli}\OperatorTok{$}\NormalTok{NC_}\DecValTok{010473}
+\end{Highlighting}
+\end{Shaded}
 
-library(``BSgenome.Ecoli.NCBI.20080805'') Ecoli shineDalgarno =
-``AGGAGGT'' ecoli = Ecoli\$NC\_010473
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{window =}\StringTok{ }\DecValTok{50000}
+\NormalTok{starts =}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{, }\KeywordTok{length}\NormalTok{(ecoli) }\OperatorTok{-}\StringTok{ }\NormalTok{window, }\DataTypeTok{by =}\NormalTok{ window)}
+\NormalTok{ends   =}\StringTok{ }\NormalTok{starts }\OperatorTok{+}\StringTok{ }\NormalTok{window }\OperatorTok{-}\StringTok{ }\DecValTok{1}
+\NormalTok{numMatches =}\StringTok{ }\KeywordTok{vapply}\NormalTok{(}\KeywordTok{seq_along}\NormalTok{(starts), }\ControlFlowTok{function}\NormalTok{(i) \{}
+  \KeywordTok{countPattern}\NormalTok{(shineDalgarno, ecoli[starts[i]}\OperatorTok{:}\NormalTok{ends[i]],}
+               \DataTypeTok{max.mismatch =} \DecValTok{0}\NormalTok{)}
+\NormalTok{\}, }\KeywordTok{numeric}\NormalTok{(}\DecValTok{1}\NormalTok{))}
+\KeywordTok{table}\NormalTok{(numMatches)}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{----window--------------------------------------------------------------}\label{window}
+\begin{verbatim}
+## numMatches
+##  0  1  2  3  4 
+## 48 32  8  3  2
+\end{verbatim}
 
-window = 50000 starts = seq(1, length(ecoli) - window, by = window) ends
-= starts + window - 1 numMatches = vapply(seq\_along(starts),
-function(i) \{ countPattern(shineDalgarno,
-ecoli{[}starts{[}i{]}:ends{[}i{]}{]}, max.mismatch = 0) \}, numeric(1))
-table(numMatches)
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(}\StringTok{"vcd"}\NormalTok{)}
+\NormalTok{gf =}\StringTok{ }\KeywordTok{goodfit}\NormalTok{(numMatches, }\StringTok{"poisson"}\NormalTok{)}
+\KeywordTok{summary}\NormalTok{(gf)}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{\texorpdfstring{----poissonness, fig.keep = `high', fig.cap
-= ``Evaluation of a Poisson model for motif counts along the sequence
-\textbackslash{}texttt\{Ecoli\$NC\_010473\}.'', fig.width = 4,
-fig.height =
-5----}{----poissonness, fig.keep = high, fig.cap = Evaluation of a Poisson model for motif counts along the sequence \textbackslash{}texttt\{Ecoli\$NC\_010473\}., fig.width = 4, fig.height = 5----}}\label{poissonness-fig.keep-high-fig.cap-evaluation-of-a-poisson-model-for-motif-counts-along-the-sequence-textttecolinc_010473.-fig.width-4-fig.height-5-}
+\begin{verbatim}
+## 
+##   Goodness-of-fit test for poisson distribution
+## 
+##                       X^2 df  P(> X^2)
+## Likelihood Ratio 4.134932  3 0.2472577
+\end{verbatim}
 
-library(``vcd'') gf = goodfit(numMatches, ``poisson'') summary(gf)
-distplot(numMatches, type = ``poisson'')
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{distplot}\NormalTok{(numMatches, }\DataTypeTok{type =} \StringTok{"poisson"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{\texorpdfstring{----pattlocIranges1,
-results=``hide''-------------------------------------}{----pattlocIranges1, results=hide-------------------------------------}}\label{pattlociranges1-resultshide-}
+\begin{figure}
+\centering
+\includegraphics{MSMB-Chapter2_files/figure-latex/poissonness-1.pdf}
+\caption{Evaluation of a Poisson model for motif counts along the
+sequence \texttt{Ecoli$NC_010473}.}
+\end{figure}
 
-sdMatches = matchPattern(shineDalgarno, ecoli, max.mismatch = 0)
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sdMatches =}\StringTok{ }\KeywordTok{matchPattern}\NormalTok{(shineDalgarno, ecoli, }\DataTypeTok{max.mismatch =} \DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{----pattlocIranges2-----------------------------------------------------}\label{pattlociranges2}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{betweenmotifs =}\StringTok{ }\KeywordTok{gaps}\NormalTok{(sdMatches)}
+\end{Highlighting}
+\end{Shaded}
 
-betweenmotifs = gaps(sdMatches)
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(}\StringTok{"Renext"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{\texorpdfstring{----chap2-r-expplotdata-1, fig.keep =
-`high', fig.cap = ``Evaluation of fit to the exponential distribution
-(black line) of the gaps between the motifs.'', fig.width = 3.5,
-fig.height =
-4----}{----chap2-r-expplotdata-1, fig.keep = high, fig.cap = Evaluation of fit to the exponential distribution (black line) of the gaps between the motifs., fig.width = 3.5, fig.height = 4----}}\label{chap2-r-expplotdata-1-fig.keep-high-fig.cap-evaluation-of-fit-to-the-exponential-distribution-black-line-of-the-gaps-between-the-motifs.-fig.width-3.5-fig.height-4-}
+\begin{verbatim}
+## Loading required package: evd
+\end{verbatim}
 
-library(``Renext'') expplot(width(betweenmotifs), rate =
-1/mean(width(betweenmotifs)), labels = ``fit'')
+\begin{verbatim}
+## 
+## Attaching package: 'evd'
+\end{verbatim}
 
-\subsection{----gof, echo = FALSE, eval =
-FALSE-------------------------------------}\label{gof-echo-false-eval-false-}
+\begin{verbatim}
+## The following object is masked from 'package:igraph':
+## 
+##     clusters
+\end{verbatim}
 
-\subsection{gofExp.test(width(betweenmotifs))}\label{gofexp.testwidthbetweenmotifs}
+\begin{verbatim}
+## The following object is masked from 'package:lattice':
+## 
+##     qq
+\end{verbatim}
 
-\subsection{----chr8HS--------------------------------------------------------------}\label{chr8hs}
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{expplot}\NormalTok{(}\KeywordTok{width}\NormalTok{(betweenmotifs), }\DataTypeTok{rate =} \DecValTok{1}\OperatorTok{/}\KeywordTok{mean}\NormalTok{(}\KeywordTok{width}\NormalTok{(betweenmotifs)),}
+        \DataTypeTok{labels =} \StringTok{"fit"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-library(``BSgenome.Hsapiens.UCSC.hg19'') chr8 = Hsapiens\$chr8 CpGtab =
-read.table(``../data/model-based-cpg-islands-hg19.txt'', header = TRUE)
-nrow(CpGtab) head(CpGtab) irCpG = with(dplyr::filter(CpGtab, chr ==
-``chr8''), IRanges(start = start, end = end))
+\begin{figure}
+\centering
+\includegraphics{MSMB-Chapter2_files/figure-latex/chap2-r-expplotdata-1-1.pdf}
+\caption{Evaluation of fit to the exponential distribution (black line)
+of the gaps between the motifs.}
+\end{figure}
 
-\subsection{----grCpG---------------------------------------------------------------}\label{grcpg}
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(}\StringTok{"BSgenome.Hsapiens.UCSC.hg19"}\NormalTok{)}
+\NormalTok{chr8  =}\StringTok{  }\NormalTok{Hsapiens}\OperatorTok{$}\NormalTok{chr8}
+\NormalTok{CpGtab =}\StringTok{ }\KeywordTok{read.table}\NormalTok{(}\StringTok{"../../data/model-based-cpg-islands-hg19.txt"}\NormalTok{,}
+                    \DataTypeTok{header =} \OtherTok{TRUE}\NormalTok{)}
+\KeywordTok{nrow}\NormalTok{(CpGtab)}
+\end{Highlighting}
+\end{Shaded}
 
-grCpG = GRanges(ranges = irCpG, seqnames = ``chr8'', strand = ``+'')
-genome(grCpG) = ``hg19''
+\begin{verbatim}
+## [1] 65699
+\end{verbatim}
 
-\subsection{\texorpdfstring{----freqandbayes-ideo, fig.keep = `high',
-fig.cap =
-``\textbf{\href{https://bioconductor.org/packages/Gviz/}{Gviz}} plot of
-CpG locations in a selected region of chromosome 8.'', fig.height =
-4----}{----freqandbayes-ideo, fig.keep = high, fig.cap = Gviz plot of CpG locations in a selected region of chromosome 8., fig.height = 4----}}\label{freqandbayes-ideo-fig.keep-high-fig.cap-gviz-plot-of-cpg-locations-in-a-selected-region-of-chromosome-8.-fig.height-4-}
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{head}\NormalTok{(CpGtab)}
+\end{Highlighting}
+\end{Shaded}
 
-library(``Gviz'') ideo = IdeogramTrack(genome = ``hg19'', chromosome =
-``chr8'') plotTracks( list(GenomeAxisTrack(), AnnotationTrack(grCpG,
-name = ``CpG''), ideo), from = 2200000, to = 5800000, shape = ``box'',
-fill = ``\#006400'', stacking = ``dense'')
+\begin{verbatim}
+##     chr  start    end length CpGcount GCcontent pctGC obsExp
+## 1 chr10  93098  93818    721       32       403 0.559  0.572
+## 2 chr10  94002  94165    164       12        97 0.591  0.841
+## 3 chr10  94527  95302    776       65       538 0.693  0.702
+## 4 chr10 119652 120193    542       53       369 0.681  0.866
+## 5 chr10 122133 122621    489       51       339 0.693  0.880
+## 6 chr10 180265 180720    456       32       256 0.561  0.893
+\end{verbatim}
 
-\subsection{----CGIview-------------------------------------------------------------}\label{cgiview-}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{irCpG =}\StringTok{ }\KeywordTok{with}\NormalTok{(dplyr}\OperatorTok{::}\KeywordTok{filter}\NormalTok{(CpGtab, chr }\OperatorTok{==}\StringTok{ "chr8"}\NormalTok{),}
+             \KeywordTok{IRanges}\NormalTok{(}\DataTypeTok{start =}\NormalTok{ start, }\DataTypeTok{end =}\NormalTok{ end))}
+\end{Highlighting}
+\end{Shaded}
 
-CGIview =
-Views(unmasked(Hsapiens\(chr8), irCpG) NonCGIview = Views(unmasked(Hsapiens\)chr8),
-gaps(irCpG))
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{grCpG =}\StringTok{ }\KeywordTok{GRanges}\NormalTok{(}\DataTypeTok{ranges =}\NormalTok{ irCpG, }\DataTypeTok{seqnames =} \StringTok{"chr8"}\NormalTok{, }\DataTypeTok{strand =} \StringTok{"+"}\NormalTok{)}
+\KeywordTok{genome}\NormalTok{(grCpG) =}\StringTok{ "hg19"}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{----CGIview2------------------------------------------------------------}\label{cgiview2}
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(}\StringTok{"Gviz"}\NormalTok{)}
+\NormalTok{ideo =}\StringTok{ }\KeywordTok{IdeogramTrack}\NormalTok{(}\DataTypeTok{genome =} \StringTok{"hg19"}\NormalTok{, }\DataTypeTok{chromosome =} \StringTok{"chr8"}\NormalTok{)}
+\KeywordTok{plotTracks}\NormalTok{(}
+  \KeywordTok{list}\NormalTok{(}\KeywordTok{GenomeAxisTrack}\NormalTok{(),}
+       \KeywordTok{AnnotationTrack}\NormalTok{(grCpG, }\DataTypeTok{name =} \StringTok{"CpG"}\NormalTok{), ideo),}
+  \DataTypeTok{from =} \DecValTok{2200000}\NormalTok{, }\DataTypeTok{to =} \DecValTok{5800000}\NormalTok{,}
+  \DataTypeTok{shape =} \StringTok{"box"}\NormalTok{, }\DataTypeTok{fill =} \StringTok{"#006400"}\NormalTok{, }\DataTypeTok{stacking =} \StringTok{"dense"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-seqCGI = as(CGIview, ``DNAStringSet'') seqNonCGI = as(NonCGIview,
-``DNAStringSet'') dinucCpG = sapply(seqCGI, dinucleotideFrequency)
-dinucNonCpG = sapply(seqNonCGI, dinucleotideFrequency) dinucNonCpG{[},
-1{]} NonICounts = rowSums(dinucNonCpG) IslCounts = rowSums(dinucCpG)
+\begin{figure}
+\centering
+\includegraphics{MSMB-Chapter2_files/figure-latex/freqandbayes-ideo-1.pdf}
+\caption{\textbf{\href{https://bioconductor.org/packages/Gviz/}{Gviz}}
+plot of CpG locations in a selected region of chromosome 8.}
+\end{figure}
 
-\subsection{----transitions---------------------------------------------------------}\label{transitions}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{CGIview    =}\StringTok{ }\KeywordTok{Views}\NormalTok{(}\KeywordTok{unmasked}\NormalTok{(Hsapiens}\OperatorTok{$}\NormalTok{chr8), irCpG)}
+\NormalTok{NonCGIview =}\StringTok{ }\KeywordTok{Views}\NormalTok{(}\KeywordTok{unmasked}\NormalTok{(Hsapiens}\OperatorTok{$}\NormalTok{chr8), }\KeywordTok{gaps}\NormalTok{(irCpG))}
+\end{Highlighting}
+\end{Shaded}
 
-TI = matrix( IslCounts, ncol = 4, byrow = TRUE) TnI = matrix(NonICounts,
-ncol = 4, byrow = TRUE) dimnames(TI) = dimnames(TnI) = list(c(``A'',
-``C'', ``G'', ``T''), c(``A'', ``C'', ``G'', ``T''))
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{seqCGI      =}\StringTok{ }\KeywordTok{as}\NormalTok{(CGIview, }\StringTok{"DNAStringSet"}\NormalTok{)}
+\NormalTok{seqNonCGI   =}\StringTok{ }\KeywordTok{as}\NormalTok{(NonCGIview, }\StringTok{"DNAStringSet"}\NormalTok{)}
+\NormalTok{dinucCpG    =}\StringTok{ }\KeywordTok{sapply}\NormalTok{(seqCGI, dinucleotideFrequency)}
+\NormalTok{dinucNonCpG =}\StringTok{ }\KeywordTok{sapply}\NormalTok{(seqNonCGI, dinucleotideFrequency)}
+\NormalTok{dinucNonCpG[, }\DecValTok{1}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{----MI------------------------------------------------------------------}\label{mi}
+\begin{verbatim}
+##  AA  AC  AG  AT  CA  CC  CG  CT  GA  GC  GG  GT  TA  TC  TG  TT 
+## 389 351 400 436 498 560 112 603 359 336 403 336 330 527 519 485
+\end{verbatim}
 
-MI = TI /rowSums(TI) MI MN = TnI / rowSums(TnI) MN
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{NonICounts =}\StringTok{ }\KeywordTok{rowSums}\NormalTok{(dinucNonCpG)}
+\NormalTok{IslCounts  =}\StringTok{ }\KeywordTok{rowSums}\NormalTok{(dinucCpG)}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{----STATI---------------------------------------------------------------}\label{stati}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{TI  =}\StringTok{ }\KeywordTok{matrix}\NormalTok{( IslCounts, }\DataTypeTok{ncol =} \DecValTok{4}\NormalTok{, }\DataTypeTok{byrow =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{TnI =}\StringTok{ }\KeywordTok{matrix}\NormalTok{(NonICounts, }\DataTypeTok{ncol =} \DecValTok{4}\NormalTok{, }\DataTypeTok{byrow =} \OtherTok{TRUE}\NormalTok{)}
+\KeywordTok{dimnames}\NormalTok{(TI) =}\StringTok{ }\KeywordTok{dimnames}\NormalTok{(TnI) =}
+\StringTok{  }\KeywordTok{list}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"A"}\NormalTok{, }\StringTok{"C"}\NormalTok{, }\StringTok{"G"}\NormalTok{, }\StringTok{"T"}\NormalTok{), }\KeywordTok{c}\NormalTok{(}\StringTok{"A"}\NormalTok{, }\StringTok{"C"}\NormalTok{, }\StringTok{"G"}\NormalTok{, }\StringTok{"T"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
 
-freqIsl = alphabetFrequency(seqCGI, baseOnly = TRUE, collapse =
-TRUE){[}1:4{]} freqIsl / sum(freqIsl) freqNon =
-alphabetFrequency(seqNonCGI, baseOnly = TRUE, collapse = TRUE){[}1:4{]}
-freqNon / sum(freqNon)
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{MI =}\StringTok{ }\NormalTok{TI }\OperatorTok{/}\KeywordTok{rowSums}\NormalTok{(TI)}
+\NormalTok{MI}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{\texorpdfstring{---- book-chunk-1, eval = TRUE, echo =
-FALSE, fig.keep =
-`high'---------}{---- book-chunk-1, eval = TRUE, echo = FALSE, fig.keep = high---------}}\label{book-chunk-1-eval-true-echo-false-fig.keep-high}
+\begin{verbatim}
+##            A         C         G         T
+## A 0.20457773 0.2652333 0.3897678 0.1404212
+## C 0.20128250 0.3442381 0.2371595 0.2173200
+## G 0.18657245 0.3145299 0.3450223 0.1538754
+## T 0.09802105 0.3352314 0.3598984 0.2068492
+\end{verbatim}
 
-knitr::include\_graphics(`images/book\_icon.png', dpi = 400)
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{MN =}\StringTok{ }\NormalTok{TnI }\OperatorTok{/}\StringTok{ }\KeywordTok{rowSums}\NormalTok{(TnI)}
+\NormalTok{MN}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{----alphabeta-----------------------------------------------------------}\label{alphabeta}
+\begin{verbatim}
+##           A         C          G         T
+## A 0.3351380 0.1680007 0.23080886 0.2660524
+## C 0.3641054 0.2464366 0.04177094 0.3476871
+## G 0.2976696 0.2029017 0.24655406 0.2528746
+## T 0.2265813 0.1972407 0.24117528 0.3350027
+\end{verbatim}
 
-alpha = log((freqIsl/sum(freqIsl)) / (freqNon/sum(freqNon))) beta =
-log(MI / MN)
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{freqIsl =}\StringTok{ }\KeywordTok{alphabetFrequency}\NormalTok{(seqCGI, }\DataTypeTok{baseOnly =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{collapse =} \OtherTok{TRUE}\NormalTok{)[}\DecValTok{1}\OperatorTok{:}\DecValTok{4}\NormalTok{]}
+\NormalTok{freqIsl }\OperatorTok{/}\StringTok{ }\KeywordTok{sum}\NormalTok{(freqIsl)}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{----scorepatt-----------------------------------------------------------}\label{scorepatt}
+\begin{verbatim}
+##         A         C         G         T 
+## 0.1781693 0.3201109 0.3206298 0.1810901
+\end{verbatim}
 
-x = ``ACGTTATACTACG'' scorefun = function(x) \{ s = unlist(strsplit(x,
-``'')) score = alpha{[}s{[}1{]}{]} if (length(s) \textgreater{}= 2) for
-(j in 2:length(s)) score = score + beta{[}s{[}j-1{]}, s{[}j{]}{]} score
-\} scorefun(x)
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{freqNon =}\StringTok{ }\KeywordTok{alphabetFrequency}\NormalTok{(seqNonCGI, }\DataTypeTok{baseOnly =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{collapse =} \OtherTok{TRUE}\NormalTok{)[}\DecValTok{1}\OperatorTok{:}\DecValTok{4}\NormalTok{]}
+\NormalTok{freqNon }\OperatorTok{/}\StringTok{ }\KeywordTok{sum}\NormalTok{(freqNon)}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{----scorefun1-----------------------------------------------------------}\label{scorefun1}
+\begin{verbatim}
+##         A         C         G         T 
+## 0.3008292 0.1993832 0.1993737 0.3004139
+\end{verbatim}
 
-generateRandomScores = function(s, len = 100, B = 1000) \{ alphFreq =
-alphabetFrequency(s) isGoodSeq = rowSums(alphFreq{[},
-5:ncol(alphFreq){]}) == 0 s = s{[}isGoodSeq{]} slen = sapply(s, length)
-prob = pmax(slen - len, 0) prob = prob / sum(prob) idx =
-sample(length(s), B, replace = TRUE, prob = prob) ssmp = s{[}idx{]}
-start = sapply(ssmp, function(x) sample(length(x) - len, 1)) scores =
-sapply(seq\_len(B), function(i)
-scorefun(as.character(ssmp{[}{[}i{]}{]}{[}start{[}i{]}+(1:len){]})) )
-scores / len \} scoresCGI = generateRandomScores(seqCGI) scoresNonCGI =
-generateRandomScores(seqNonCGI)
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{alpha =}\StringTok{ }\KeywordTok{log}\NormalTok{((freqIsl}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(freqIsl)) }\OperatorTok{/}\StringTok{ }\NormalTok{(freqNon}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(freqNon)))}
+\NormalTok{beta  =}\StringTok{ }\KeywordTok{log}\NormalTok{(MI }\OperatorTok{/}\StringTok{ }\NormalTok{MN)}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{\texorpdfstring{----chap2-r-ScoreMixture-1, fig.keep =
-`high', fig.cap = ``Island and non-island scores as generated by the
-function \texttt{generateRandomScores}. This is the first instance of a
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x <-}\StringTok{ "ACGTTATACTACG"}
+\NormalTok{scorefun =}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x) \{}
+\NormalTok{  s <-}\StringTok{ }\KeywordTok{unlist}\NormalTok{(}\KeywordTok{strsplit}\NormalTok{(x, }\StringTok{""}\NormalTok{))}
+\NormalTok{  score <-}\StringTok{ }\NormalTok{alpha[s[}\DecValTok{1}\NormalTok{]]}
+  \ControlFlowTok{if}\NormalTok{ (}\KeywordTok{length}\NormalTok{(s) }\OperatorTok{>=}\StringTok{ }\DecValTok{2}\NormalTok{)}
+    \ControlFlowTok{for}\NormalTok{ (j }\ControlFlowTok{in} \DecValTok{2}\OperatorTok{:}\KeywordTok{length}\NormalTok{(s))}
+\NormalTok{      score =}\StringTok{ }\NormalTok{score }\OperatorTok{+}\StringTok{ }\NormalTok{beta[s[j}\OperatorTok{-}\DecValTok{1}\NormalTok{], s[j]]}
+\NormalTok{  score}
+\NormalTok{\}}
+
+\KeywordTok{scorefun}\NormalTok{(x)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          A 
+## -0.2824623
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{generateRandomScores =}\StringTok{ }\ControlFlowTok{function}\NormalTok{(s, }\DataTypeTok{len =} \DecValTok{100}\NormalTok{, }\DataTypeTok{B =} \DecValTok{1000}\NormalTok{) \{}
+\NormalTok{  alphFreq =}\StringTok{ }\KeywordTok{alphabetFrequency}\NormalTok{(s)}
+\NormalTok{  isGoodSeq =}\StringTok{ }\KeywordTok{rowSums}\NormalTok{(alphFreq[, }\DecValTok{5}\OperatorTok{:}\KeywordTok{ncol}\NormalTok{(alphFreq)]) }\OperatorTok{==}\StringTok{ }\DecValTok{0}
+\NormalTok{  s =}\StringTok{ }\NormalTok{s[isGoodSeq]}
+\NormalTok{  slen =}\StringTok{ }\KeywordTok{sapply}\NormalTok{(s, length)}
+\NormalTok{  prob =}\StringTok{ }\KeywordTok{pmax}\NormalTok{(slen }\OperatorTok{-}\StringTok{ }\NormalTok{len, }\DecValTok{0}\NormalTok{)}
+\NormalTok{  prob =}\StringTok{ }\NormalTok{prob }\OperatorTok{/}\StringTok{ }\KeywordTok{sum}\NormalTok{(prob)}
+\NormalTok{  idx  =}\StringTok{ }\KeywordTok{sample}\NormalTok{(}\KeywordTok{length}\NormalTok{(s), B, }\DataTypeTok{replace =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{prob =}\NormalTok{ prob)}
+\NormalTok{  ssmp =}\StringTok{ }\NormalTok{s[idx]}
+\NormalTok{  start =}\StringTok{ }\KeywordTok{sapply}\NormalTok{(ssmp, }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{sample}\NormalTok{(}\KeywordTok{length}\NormalTok{(x) }\OperatorTok{-}\StringTok{ }\NormalTok{len, }\DecValTok{1}\NormalTok{))}
+\NormalTok{  scores =}\StringTok{ }\KeywordTok{sapply}\NormalTok{(}\KeywordTok{seq_len}\NormalTok{(B), }\ControlFlowTok{function}\NormalTok{(i)}
+    \KeywordTok{scorefun}\NormalTok{(}\KeywordTok{as.character}\NormalTok{(ssmp[[i]][start[i]}\OperatorTok{+}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\NormalTok{len)]))}
+\NormalTok{  )}
+\NormalTok{  scores }\OperatorTok{/}\StringTok{ }\NormalTok{len}
+\NormalTok{\}}
+\NormalTok{scoresCGI    =}\StringTok{ }\KeywordTok{generateRandomScores}\NormalTok{(seqCGI)}
+\NormalTok{scoresNonCGI =}\StringTok{ }\KeywordTok{generateRandomScores}\NormalTok{(seqNonCGI)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{br =}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\OperatorTok{-}\FloatTok{0.6}\NormalTok{, }\FloatTok{0.7}\NormalTok{, }\DataTypeTok{length.out =} \DecValTok{50}\NormalTok{)}
+\NormalTok{h1 =}\StringTok{ }\KeywordTok{hist}\NormalTok{(scoresCGI,    }\DataTypeTok{breaks =}\NormalTok{ br, }\DataTypeTok{plot =} \OtherTok{FALSE}\NormalTok{)}
+\NormalTok{h2 =}\StringTok{ }\KeywordTok{hist}\NormalTok{(scoresNonCGI, }\DataTypeTok{breaks =}\NormalTok{ br, }\DataTypeTok{plot =} \OtherTok{FALSE}\NormalTok{)}
+\KeywordTok{plot}\NormalTok{(h1, }\DataTypeTok{col =} \KeywordTok{rgb}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{1}\OperatorTok{/}\DecValTok{4}\NormalTok{), }\DataTypeTok{xlim =} \KeywordTok{c}\NormalTok{(}\OperatorTok{-}\FloatTok{0.5}\NormalTok{, }\FloatTok{0.5}\NormalTok{), }\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{120}\NormalTok{))}
+\KeywordTok{plot}\NormalTok{(h2, }\DataTypeTok{col =} \KeywordTok{rgb}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\OperatorTok{/}\DecValTok{4}\NormalTok{), }\DataTypeTok{add =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+\centering
+\includegraphics{MSMB-Chapter2_files/figure-latex/chap2-r-ScoreMixture-1-1.pdf}
+\caption{Island and non-island scores as generated by the function
+\texttt{generateRandomScores}. This is the first instance of a
 \textbf{mixture} we encounter. We will revisit them in ChapterÂ
-\textbackslash{}@ref(Chap:Mixtures).'', fig.height =
-5----}{----chap2-r-ScoreMixture-1, fig.keep = high, fig.cap = Island and non-island scores as generated by the function generateRandomScores. This is the first instance of a mixture we encounter. We will revisit them in ChapterÂ \textbackslash{}@ref(Chap:Mixtures)., fig.height = 5----}}\label{chap2-r-scoremixture-1-fig.keep-high-fig.cap-island-and-non-island-scores-as-generated-by-the-function-generaterandomscores.-this-is-the-first-instance-of-a-mixture-we-encounter.-we-will-revisit-them-in-chapteruxe2-refchapmixtures.-fig.height-5-}
+@ref(Chap:Mixtures).}
+\end{figure}
 
-br = seq(-0.6, 0.7, length.out = 50) h1 = hist(scoresCGI, breaks = br,
-plot = FALSE) h2 = hist(scoresNonCGI, breaks = br, plot = FALSE)
-plot(h1, col = rgb(0, 0, 1, 1/4), xlim = c(-0.5, 0.5), ylim=c(0,120))
-plot(h2, col = rgb(1, 0, 0, 1/4), add = TRUE)
+\begin{verbatim}
+##   AmAcid Codon Number PerThous
+## 1    Gly   GGG  25874    19.25
+## 2    Gly   GGA  13306     9.90
+## 3    Gly   GGT  25320    18.84
+## 4    Gly   GGC  68310    50.82
+\end{verbatim}
 
-\subsection{----savescoresforChap4, echo = FALSE,
-eval=FALSE------------------------}\label{savescoresforchap4-echo-false-evalfalse}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pro  =}\StringTok{  }\NormalTok{mtb[ mtb}\OperatorTok{$}\NormalTok{AmAcid }\OperatorTok{==}\StringTok{ "Pro"}\NormalTok{, }\StringTok{"Number"}\NormalTok{]}
+\NormalTok{pro}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(pro)}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{\#\#\#This is for provenance reasons, keep track of how the
-data}\label{this-is-for-provenance-reasons-keep-track-of-how-the-data}
+\begin{verbatim}
+## [1] 0.54302025 0.10532985 0.05859765 0.29305225
+\end{verbatim}
 
-\subsection{\#\#\#were generated for the EM exercise in Chapter
-4.}\label{were-generated-for-the-em-exercise-in-chapter-4.}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{staph =}\StringTok{ }\KeywordTok{readDNAStringSet}\NormalTok{(}\StringTok{"../../data/staphsequence.ffn.txt"}\NormalTok{, }\StringTok{"fasta"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{Mdata=c(scoresCGI,scoresNonCGI)}\label{mdatacscorescgiscoresnoncgi}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{staph[}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{, ]}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{MM1=sample(Mdata{[}1:1000{]},800)}\label{mm1samplemdata11000800}
+\begin{verbatim}
+##   A DNAStringSet instance of length 3
+##     width seq                                          names               
+## [1]  1362 ATGTCGGAAAAAGAAATTTGG...AAGAAATAAGAAATGTATAA lcl|NC_002952.2_c...
+## [2]  1134 ATGATGGAATTCACTATTAAA...TACCAATCAGAACTTACTAA lcl|NC_002952.2_c...
+## [3]   246 GTGATTATTTTGGTTCAAGAA...TTCATCAAGGTGAACAATGA lcl|NC_002952.2_c...
+\end{verbatim}
 
-\subsection{MM2=sample(Mdata{[}1001:2000{]},1000)}\label{mm2samplemdata100120001000}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{staph}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{Myst=c(MM1,MM2);names(Myst)=NULL}\label{mystcmm1mm2namesmystnull}
+\begin{verbatim}
+##   A DNAStringSet instance of length 2650
+##        width seq                                       names               
+##    [1]  1362 ATGTCGGAAAAAGAAATTT...AGAAATAAGAAATGTATAA lcl|NC_002952.2_c...
+##    [2]  1134 ATGATGGAATTCACTATTA...ACCAATCAGAACTTACTAA lcl|NC_002952.2_c...
+##    [3]   246 GTGATTATTTTGGTTCAAG...TCATCAAGGTGAACAATGA lcl|NC_002952.2_c...
+##    [4]  1113 ATGAAGTTAAATACACTCC...AGGTGAAATTATAAAGTAA lcl|NC_002952.2_c...
+##    [5]  1932 GTGACTGCATTGTCAGATG...TGCAAACTTAGACTTCTAA lcl|NC_002952.2_c...
+##    ...   ... ...
+## [2646]   720 ATGACTGTAGAATGGTTAG...TCCTTTACTTGAAAAATAA lcl|NC_002952.2_c...
+## [2647]  1878 GTGGTTCAAGAATATGATG...CCAAAGGGTGAGTGACTAA lcl|NC_002952.2_c...
+## [2648]  1380 ATGGATTTAGATACAATTA...ATTCTGCTTAGGTAAATAG lcl|NC_002952.2_c...
+## [2649]   348 TTGGAAAAAGCTTACCGAA...TAATAAAAAGATTAAGTAA lcl|NC_002952.2_c...
+## [2650]   138 ATGGTAAAACGTACTTATC...TAAAGTTTTATCTGCATAA lcl|NC_002952.2_c...
+\end{verbatim}
 
-\subsection{\texorpdfstring{saveRDS(c(MM1,MM2),``../data/Myst.rds'')}{saveRDS(c(MM1,MM2),../data/Myst.rds)}}\label{saverdscmm1mm2..datamyst.rds}
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{letterFrequency}\NormalTok{(staph[[}\DecValTok{1}\NormalTok{]], }\DataTypeTok{letters =} \StringTok{"ACGT"}\NormalTok{, }\DataTypeTok{OR =} \DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{\#\#\#True value of m1,m2,s1 and
-s2}\label{true-value-of-m1m2s1-and-s2}
+\begin{verbatim}
+##   A   C   G   T 
+## 522 219 229 392
+\end{verbatim}
 
-\subsection{}\label{section}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{GCstaph =}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}
+  \DataTypeTok{ID =} \KeywordTok{names}\NormalTok{(staph),}
+  \DataTypeTok{GC =} \KeywordTok{rowSums}\NormalTok{(}\KeywordTok{alphabetFrequency}\NormalTok{(staph)[, }\DecValTok{2}\OperatorTok{:}\DecValTok{3}\NormalTok{] }\OperatorTok{/}\StringTok{ }\KeywordTok{width}\NormalTok{(staph)) }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{----checkhists, echo =
-FALSE--------------------------------------------}\label{checkhists-echo-false}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{window =}\StringTok{ }\DecValTok{100}
+\NormalTok{gc =}\StringTok{ }\KeywordTok{rowSums}\NormalTok{( }\KeywordTok{letterFrequencyInSlidingView}\NormalTok{(staph[[}\DecValTok{364}\NormalTok{]], window,}
+                                           \KeywordTok{c}\NormalTok{(}\StringTok{"G"}\NormalTok{,}\StringTok{"C"}\NormalTok{)))}\OperatorTok{/}\NormalTok{window}
+\KeywordTok{plot}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{seq}\NormalTok{(}\DataTypeTok{along =}\NormalTok{ gc), }\DataTypeTok{y =}\NormalTok{ gc, }\DataTypeTok{type =} \StringTok{"l"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-stopifnot(max(h1\(counts) < 120, max(h2\)counts) \textless{} 120,
-h1\(breaks[1] >= br[1], h1\)breaks{[}length(h1\$breaks){]} \textless{}=
-br{[}length(br){]},
-h2\(breaks[1] >= br[1], h2\)breaks{[}length(h2\$breaks){]} \textless{}=
-br{[}length(br){]})
+\begin{figure}
+\centering
+\includegraphics{MSMB-Chapter2_files/figure-latex/chap2-r-SlidingGC-1-1.pdf}
+\caption{GC content along sequence 364 of the \emph{Staphylococcus
+Aureus} genome.}
+\end{figure}
 
-mtb = read.table(``../data/M\_tuberculosis.txt'', header = TRUE)
-head(mtb, n = 4)
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{seq}\NormalTok{(}\DataTypeTok{along =}\NormalTok{ gc), }\DataTypeTok{y =}\NormalTok{ gc, }\DataTypeTok{type =} \StringTok{"l"}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(}\KeywordTok{lowess}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{seq}\NormalTok{(}\DataTypeTok{along =}\NormalTok{ gc), }\DataTypeTok{y =}\NormalTok{ gc, }\DataTypeTok{f =} \FloatTok{0.2}\NormalTok{), }\DataTypeTok{col =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-\subsection{----ProlMyc-------------------------------------------------------------}\label{prolmyc-}
+\begin{figure}
+\centering
+\includegraphics{MSMB-Chapter2_files/figure-latex/chap2-r-SmoothSlidingGC-1-1.pdf}
+\caption{Smoothed GC content along sequence 364 of the
+\emph{Staphylococcus Aureus} genome.}
+\end{figure}
 
-pro = mtb{[} mtb\$AmAcid == ``Pro'', ``Number''{]} pro/sum(pro)
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{theta =}\StringTok{ }\NormalTok{thetas[}\DecValTok{1}\OperatorTok{:}\DecValTok{500}\NormalTok{]}
+\NormalTok{dfbetas =}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(theta,}
+                     \DataTypeTok{db1=}  \KeywordTok{dbeta}\NormalTok{(theta,}\FloatTok{0.5}\NormalTok{,}\FloatTok{0.5}\NormalTok{),}
+                     \DataTypeTok{db2=} \KeywordTok{dbeta}\NormalTok{(theta,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{),}
+                     \DataTypeTok{db3=} \KeywordTok{dbeta}\NormalTok{(theta,}\DecValTok{10}\NormalTok{,}\DecValTok{30}\NormalTok{),}
+                     \DataTypeTok{db4 =} \KeywordTok{dbeta}\NormalTok{(theta, }\DecValTok{20}\NormalTok{, }\DecValTok{60}\NormalTok{),}
+                     \DataTypeTok{db5 =} \KeywordTok{dbeta}\NormalTok{(theta, }\DecValTok{50}\NormalTok{, }\DecValTok{150}\NormalTok{))}
+\KeywordTok{require}\NormalTok{(reshape2)}
+\NormalTok{datalong  =}\StringTok{  }\KeywordTok{melt}\NormalTok{(dfbetas, }\DataTypeTok{id=}\StringTok{"theta"}\NormalTok{)}
+\KeywordTok{ggplot}\NormalTok{(datalong) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_line}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ theta,}\DataTypeTok{y=}\NormalTok{value,}\DataTypeTok{colour=}\NormalTok{variable)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.title=}\KeywordTok{element_blank}\NormalTok{()) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_vline}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{xintercept=}\FloatTok{0.25}\NormalTok{), }\DataTypeTok{colour=}\StringTok{"#990000"}\NormalTok{, }\DataTypeTok{linetype=}\StringTok{"dashed"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_colour_discrete}\NormalTok{(}\DataTypeTok{name  =}\StringTok{"Prior"}\NormalTok{,}
+                        \DataTypeTok{labels=}\KeywordTok{c}\NormalTok{(}\StringTok{"B(0.5,0.5)"}\NormalTok{,}\StringTok{"U(0,1)=B(1,1)"}\NormalTok{,}\StringTok{"B(10,30)"}\NormalTok{, }\StringTok{"B(20,60)"}\NormalTok{,}\StringTok{"B(50,150)"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
 
-staph = readDNAStringSet(``../data/staphsequence.ffn.txt'', ``fasta'')
-
-\subsection{----staphex-------------------------------------------------------------}\label{staphex-}
-
-staph{[}1:3, {]} staph
-
-\subsection{----GCfreq--------------------------------------------------------------}\label{gcfreq}
-
-letterFrequency(staph{[}{[}1{]}{]}, letters = ``ACGT'', OR = 0) GCstaph
-= data.frame( ID = names(staph), GC =
-rowSums(alphabetFrequency(staph){[}, 2:3{]} / width(staph)) * 100 )
-
-\subsection{\texorpdfstring{----chap2-r-SlidingGC-1, fig.keep = `high',
-fig.cap = ``GC content along sequence 364 of the \emph{Staphylococcus
-Aureus} genome.'', fig.width =
-7----}{----chap2-r-SlidingGC-1, fig.keep = high, fig.cap = GC content along sequence 364 of the Staphylococcus Aureus genome., fig.width = 7----}}\label{chap2-r-slidinggc-1-fig.keep-high-fig.cap-gc-content-along-sequence-364-of-the-staphylococcus-aureus-genome.-fig.width-7-}
-
-window = 100 gc = rowSums(
-letterFrequencyInSlidingView(staph{[}{[}364{]}{]}, window,
-c(``G'',``C'')))/window plot(x = seq(along = gc), y = gc, type = ``l'')
-
-\subsection{\texorpdfstring{----chap2-r-SmoothSlidingGC-1, fig.keep =
-`high', fig.cap = ``Smoothed GC content along sequence 364 of the
-\emph{Staphylococcus Aureus} genome.'', fig.width =
-7----}{----chap2-r-SmoothSlidingGC-1, fig.keep = high, fig.cap = Smoothed GC content along sequence 364 of the Staphylococcus Aureus genome., fig.width = 7----}}\label{chap2-r-smoothslidinggc-1-fig.keep-high-fig.cap-smoothed-gc-content-along-sequence-364-of-the-staphylococcus-aureus-genome.-fig.width-7-}
-
-plot(x = seq(along = gc), y = gc, type = ``l'') lines(lowess(x =
-seq(along = gc), y = gc, f = 0.2), col = 2)
-
-\subsection{----histobeta4, fig.width = 3.5, fig.height =
-3.5-----------------------}\label{histobeta4-fig.width-3.5-fig.height-3.5}
-
-theta = thetas{[}1:500{]} dfbetas = data.frame(theta, db1=
-dbeta(theta,0.5,0.5), db2= dbeta(theta,1,1), db3= dbeta(theta,10,30),
-db4 = dbeta(theta, 20, 60), db5 = dbeta(theta, 50, 150))
-require(reshape2) datalong = melt(dfbetas, id=``theta'')
-ggplot(datalong) + geom\_line(aes(x = theta,y=value,colour=variable)) +
-theme(legend.title=element\_blank()) + geom\_vline(aes(xintercept=0.25),
-colour=``\#990000'', linetype=``dashed'')+ scale\_colour\_discrete(name
-=``Prior'', labels=c(``B(0.5,0.5)'',``U(0,1)=B(1,1)'',``B(10,30)'',
-``B(20,60)'',``B(50,150)''))
+\includegraphics{MSMB-Chapter2_files/figure-latex/histobeta4-1.pdf}
 
 
 \end{document}
