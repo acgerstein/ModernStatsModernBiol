@@ -157,7 +157,8 @@ p0 = rowMeans(prop10)
 p0
 ```
 
-\textcolor{blue}{Outer probaqbility}
+Outer probability:
+If two vectors - make one the top row and one the column and multiply against each other
 
 ```{r outerex}
 cs = colSums(tab10)
@@ -401,8 +402,6 @@ haplo6
 ## 2.9.2 Simulation study of the Bayesian paradigm for the binomial
 
 Instead of assuming our parameter $\Theta$ has one single value, the bayesian world view allows us to see it as a draw from a statistical distribution. When we are looking at a parameter that expresses a proportion or a probability, and that takes its values between 0 and 1, it is convenient to use the *beta distribution*
-
-\textcolor{blue}{Why 50 \& 350 for alpha and beta?}
 
 ```{r histobeta2, fig.keep = 'high', fig.cap = "Beta distributions with $\\alpha=10,20,50$ and $\\beta=30,60,150$ used as a {prior} for a probability of success. These three distributions have the same mean ($\\frac{\\alpha}{\\alpha +\\beta}$), but different concentrations around the mean.", echo = FALSE, fig.width = 3.5, fig.height = 3.5}
 library(tidyverse)
@@ -767,3 +766,131 @@ plot(h2, col = rgb(1, 0, 0, 1/4), add = TRUE)
 arrows(testX, 120, testX, 100, lwd = 3, col="red")
 ```
 We can consider this training data. Cool.
+
+# Exercises
+
+## Exercise 2.1
+Generate 1000 random 0/1 variables that model mutations occuring along a 1000-long gene sequence. These occur independently at a rate of $10^{-4}$. Sum the 1000 positions to count how many mutaitons occur in sequences of length 1000. Find the correct distribution for these mutation sums using a goodness of fit test and make a plot to visualize the quality of the fit.
+
+```{r}
+sums <- replicate(1000, {
+                  sum(rbinom(1000, size = 1, 10^-4))
+})
+table(sums)
+
+gf <- goodfit(sums, "binomial")
+gf2 <- goodfit(sums, "poisson")
+par(mfrow=c(1, 2))
+rootogram(gf, main = "binomial")
+rootogram(gf2, main = "poisson")
+```
+
+## Exercise 2.2 
+Make a function that generates **n** random uniform numbers between 0 and 7 and returns their maximum. Execute the function for **n = 25**. Repeat this procedure $B = 100$ times. Plot the distribution of these maxima. What is the maximum likelihood estimate of the maximum of a sample of size 25 (call it $\hat\theta$). Can you find a theoretical justification and the true maximum of $\theta$? 
+
+```{r}
+randUnif <- function(n) max(runif(n, min = 0, max = 7))
+
+randUnif(25)
+
+randUnif100 <- replicate(100, randUnif(25))
+hist(randUnif100)
+
+theta_hat <- mean(randUnif100)
+
+thetas <- seq(0, 7, by = 0.005)
+```
+
+Maximum should be 7?
+```{r}
+plot(data.frame(thetas, punif(thetas, 0, 7)))
+```
+
+## Exercise 2.3
+A sequence of three nucleotides (a codon) taken in a coding region of a gene can be transcribed into one of 20 possible amino acids. There are 4^3 = 64 possible coding sequences but only 20 amino acids. We say the genetic code is redundant. 
+The multiplicity (the number of codons that code fro the same amino acid) varies from two to six. The different codon spellings do not work with equal probabilities. 
+
+```{r}
+mtb = read.table("../../data/M_tuberculosis.txt", header = TRUE)
+head(mtb, n = 4)
+```
+
+The codons for profile are of the form CC* and they occur with the following frequencies:
+
+```{r}
+pro  =  mtb[ mtb$AmAcid == "Pro", "Number"]
+pro/sum(pro)
+```
+
+Explore `mtb` using `table` to tabulate `AmAcid` and `Codon` varibles. 
+```{r}
+table(mtb$AmAcid)
+table(mtb$Codon)
+```
+
+How was the `PerThous` varible created?
+```{r}
+mtb$PerThous
+length(mtb$PerThous)
+mtb$Number/sum(mtb$Number)*1000
+```
+
+
+Write an R function that you can apply to the table to find which of the amino acids show sthe strongest *codon bias*, i.e., the strongest departure from uniform distribution among its possible spellings
+
+```{r}
+numSpelling <- table(mtb$AmAcid)
+expected <- 1/numSpelling
+
+
+obsAA <- function(tab){
+  deviation <- c()
+  deviation2 <- c()
+  codon <- c()
+  aa <- c()
+  for(i in as.character(unique(tab$AmAcid))){
+    sub <- subset(tab, AmAcid == i)
+    deviation <- append(deviation, (sub$PerThous-sum(sub$PerThous)/nrow(sub))^2/sum(sub$PerThous)/nrow(sub))
+    deviation2 <- append(deviation2, sub$PerThous-sum(sub$PerThous))
+    codon <- append(codon, as.character(sub$Codon))
+    aa <- append(aa, as.character(sub$AmAcid))
+  }
+  data.frame(aa, codon, deviation, deviation2)
+}
+
+t <- obsAA(mtb)
+t[t$deviation == max(t$deviation),]
+t[t$deviation2 == min(t$deviation2),]
+```
+
+## Exercise 2.4
+Display GC content in a running window along the sequence of **Staphylococcus aureus**. Read in a `fasta` file sequence form a file.
+
+```{r}
+library("Biostrings")
+staph = readDNAStringSet("http://bios221.stanford.edu/data/staphsequence.ffn.txt", "fasta")
+```
+
+Look at the complete staph object and then display the first three sequences in the set
+```{r}
+staph
+staph[1:3,]
+```
+Find the GC content in sequence windows of width 100
+
+```{r}
+window = 100
+#starts = seq(1, length(staph$seq) - window, by = window)
+#ends   = starts + window - 1
+#GC_content = lapply(staph, function(x) {
+#letterFrequency(x, letters = "GC", OR = 0)
+#  
+#  sum(letterFrequency(staph[[1]][starts[i]:ends[i]], letters = "GC", OR = 0))
+  
+#  countPattern(shineDalgarno, ecoli[starts[i]:ends[i]],
+#               max.mismatch = 0)
+#}, numeric(1))
+#table(numMatches)
+
+#letterFrequency(staph[[1]], letters = "GC", OR = 0)
+```
