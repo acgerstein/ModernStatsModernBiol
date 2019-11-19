@@ -32,13 +32,17 @@ suppressPackageStartupMessages(library("dbscan"))
 suppressPackageStartupMessages(library("pheatmap"))
 ```
 
+How do you know which distance method to use?
+
+NBclust
+
 ```{r}
 v1 <- seq(0, 1, length.out=100)
 plot(log(v1), asinh(v1), type="l")
 plot(v1, asinh(v1), type= "l")
 v3 <- seq(30, 3000, length = 100)
 plot(log(v3), asinh(v3), type="l")
-````
+```
 
 #5.5 Clustering examples: Flow cytometry
 
@@ -121,8 +125,8 @@ library(grid)
 #https://stackoverflow.com/questions/39590849/using-a-pheatmap-in-arrangegrob
 
 plot_list <- list()
-ph1 <- pheatmap(Morder)
-ph2 <- pheatmap(Morder, clustering_distance_rows = "manhattan")
+ph1 <- pheatmap(as.matrix(dist(Morder)))
+ph2 <- pheatmap(as.matrix(dist(Morder, method = "manhattan")))
 plot_list[[1]] <- ph1[[4]]
 plot_list[[2]] <- ph2[[4]]
 
@@ -136,7 +140,6 @@ res2 <- Morder[c(ph2$tree_row[["order"]]),ph2$tree_col[["order"]]]
 row.names(res1) == row.names(res2)
 ```
 
-#here
 \textcolor{blue}{Question 5.12}
 ```{r}
 library(tidyverse)
@@ -152,17 +155,17 @@ simdatxy <- simdat[, c("x", "y")]
 ggplot(simdat, aes(x = x, y = y, col=class))+
   geom_point()+
   coord_fixed()
-
-rsim1 <- range(c(simdat$x[1:100], simdat$y[1:100]))
-rsim2 <- range(c(simdat$x[101:200], simdat$y[101:200]))
-rsim3 <- range(c(simdat$x[201:300], simdat$y[201:300]))
-rsim4 <- range(c(simdat$x[301:400], simdat$y[301:400]))
+ 
+# rsim1 <- range(c(simdat$x[1:100], simdat$y[1:100]))
+# rsim2 <- range(c(simdat$x[101:200], simdat$y[101:200]))
+# rsim3 <- range(c(simdat$x[201:300], simdat$y[201:300]))
+# rsim4 <- range(c(simdat$x[301:400], simdat$y[301:400]))
 
 simdat_un <- lapply(c(0, 8), function(mx){
   lapply(c(0, 8), function(my){
     tibble(x = runif(100, range(simdat$x)[1], range(simdat$x)[2]),
            y = runif(100, range(simdat$x)[1], range(simdat$x)[2]),
-           class = paste(mx, my, sep=":"))
+           class = paste(x, y, sep=":"))
   }) %>% bind_rows
 }) %>% bind_rows
 simdat_un
@@ -266,6 +269,11 @@ ggplot(twogr, aes(x = x, y = y, colour = seq,fill = seq)) +
 
 \textcolor{blue}{Question 5.16: Take the data seq1 and seq2 and cluster them into two groups according to distance from the group center}
 
+```{r}
+#derepFs <- 
+```
+
+
 ## Exercises
 
 \textcolor{red}{Exercise 5.1}
@@ -273,7 +281,7 @@ ggplot(twogr, aes(x = x, y = y, colour = seq,fill = seq)) +
 library("cluster")
 library("viridis")
 pam4 <- pam(simdatxy, 4)
-sil <- silhouette(pam4, 8)
+sil <- silhouette(pam4, 4)
 plot(sil, col=c("red", "green", "blue", "purple"), main = "Silhouette")
 
 # coloursV <- viridis(10, direction=-1)
@@ -287,9 +295,6 @@ for(k in 2:20){
   sil <- silhouette(pam4, k)
   sil_index[k-1] <- mean(sil[,3])
 }
-
-
-
 
 sil_index_un <- c()
 for(k in 2:20){
@@ -310,12 +315,10 @@ dune_cor = cor(dune)
 symnum(dune_cor)
 
 pheatmap(dune_cor, cluster_rows = FALSE, cluster_cols = FALSE, color = viridis(20))
-
 ```
 
 \textcolor{red}{Exercise 5.3}
 ```{r}
 library(kernlab)
 data(spirals)
-
 ```
