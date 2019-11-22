@@ -1,0 +1,325 @@
+---
+title: "MSMB-Chapter5-Clustering"
+author: "Aleeza Gerstein"
+date: '2019-11-06'
+output:
+  rmarkdown::pdf_document:
+  fig_caption: yes
+includes:
+  in_header: preamble-latex.tex
+header-includes:
+  - \usepackage{color}
+  - \usepackage{mathtools}
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.pos = 'H')
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+#BiocManager::install("ggfortify")
+#install.packages("phyloseq")
+suppressPackageStartupMessages(library("ggplot2"))
+suppressPackageStartupMessages(library("dplyr"))
+suppressPackageStartupMessages(library("GGally"))
+suppressPackageStartupMessages(library("pheatmap"))
+suppressPackageStartupMessages(library("kableExtra"))
+suppressPackageStartupMessages(library("SummarizedExperiment"))
+suppressPackageStartupMessages(library("factoextra"))
+suppressPackageStartupMessages(library("MASS"))
+suppressPackageStartupMessages(library("phyloseq"))
+suppressPackageStartupMessages(library("airway"))
+suppressPackageStartupMessages(library("ade4"))
+suppressPackageStartupMessages(library("ggcorplot"))
+```
+
+```{r}
+turtles <-read.table("../../data/PaintedTurtles.txt", header = TRUE)
+turtles[1:4, ]
+
+load("../../data/athletes.RData")
+athletes[1:3, ]
+
+load("../../data/Msig3transp.RData")
+round(Msig3transp,2)[1:5, 1:6]
+
+data("GlobalPatterns", package = "phyloseq")
+GPOTUs = as.matrix(t(phyloseq::otu_table(GlobalPatterns)))
+GPOTUs[1:4, 6:13]
+
+data("airway", package = "airway")
+assay(airway)[1:3, 1:4]
+
+metab = t(as.matrix(read.csv("../../data/metabolites.csv", row.names = 1)))
+metab[1:4, 1:4]
+```
+
+
+\textcolor{red}{Task: Tabulate the frequency of zeros in these data matrices}
+```{r}
+table(assay(airway))[1]
+table(GPOTUs)[1]
+```
+
+\textcolor{red}{Question 7.1)
+a) Columns are usually taxa
+b) Rows are usually genes
+c) a cell represents the number of reads
+d) athletes[5, 3]
+
+\textcolor{red}{Question 7.2)
+```{r}
+head(turtles)
+cor(turtles[,2:4])
+```
+
+\textcolor{red}{Question 7.3)
+```{r}
+ggpairs(turtles[,-1])
+```
+
+\textcolor{red}{Question 7.4)
+```{r}
+pheatmap(cor(athletes), cell.width=10, cell.height =10)
+```
+
+\textcolor{red}{Question 7.5}{Compute the means and standard deviations of the tutles data, then use the scale function to center and standarize the continuous variables. Make a scatterplot of the scaled and centered width and height variables and color the points by their sex}
+```{r}
+apply(turtles[,-1], 2, sd)
+
+apply(turtles[,-1], 2, mean)
+
+scaledTurtles <- scale(turtles[,-1])
+apply(scaledTurtles, 2, mean)
+apply(scaledTurtles, 2, sd)
+
+data.frame(scaledTurtles, sex = turtles[,1]) %>% 
+  ggplot(aes(x = width, y = height)) +
+  geom_point(aes(color= sex)) +
+  coord_fixed()
+```
+\textcolor{blue}{group  = sex in textbook unnecessary}
+
+
+```{r}
+athletes = data.frame(scale(athletes))
+ath_gg = ggplot(athletes, aes(x = weight, y = disc)) +
+  geom_point(size = 2, shape = 21)
+ath_gg + geom_point(aes(y = 0), colour = "red") +
+  geom_segment(aes(xend = weight, yend = 0), linetype = "dashed")
+```
+
+## ----Reg1, fig.keep = 'high', fig.cap = "The blue line minimizes the sum 
+
+\textcolor{red}{Task: Calculate the variance of the red points in Figure 7.6}
+```{r}
+var(athletes$weight)
+```
+\textcolor{red}{Make a plot showing projection lines on the y-axis and projected points}
+```{r}
+ath_gg = ggplot(athletes, aes(x = weight, y = disc)) +
+  geom_point(size = 2, shape = 21)
+ath_gg + geom_point(aes(x = 0), colour = "red") +
+  geom_segment(aes(yend = disc, xend = 0), linetype = "dashed")
+```
+\textcolor{red}{Compute the variance of the points projected onto the vertical y axis}
+```{r}
+var(athletes$disc)
+```
+
+##7.3.2 How do we summarize two dimensional data by a line?
+
+```{r}
+reg1 = lm(disc ~ weight, data = athletes)
+a1 = reg1$coefficients[1] # intercept
+b1 = reg1$coefficients[2] # slope
+pline1 = ath_gg + geom_abline(intercept = a1, slope = b1,
+                              col = "blue", lwd = 1.5)
+pline1 + geom_segment(aes(xend = weight, yend = reg1$fitted),
+                      colour = "red", arrow = arrow(length = unit(0.15, "cm")))
+```
+
+```{r}
+reg2 = lm(weight ~ disc, data = athletes)
+a2 = reg2$coefficients[1] # intercept
+b2 = reg2$coefficients[2] # slope
+pline2 = ath_gg + geom_abline(intercept = -a2/b2, slope = 1/b2,
+                              col = "darkgreen", lwd = 1.5)
+pline2 + geom_segment(aes(xend=reg2$fitted, yend=disc),
+                      colour = "orange", arrow = arrow(length = unit(0.15, "cm")))
+```
+
+\textcolor{blue}{7.6 How large is the variance of the projected points that lie on the blue line of Figure 7.7? Pythagorus? But this is not squared?}
+```{r}
+var(athletes$weight) + var(reg1$fitted)
+```
+```{r}
+xy = cbind(athletes$disc, athletes$weight)
+svda <- svd(xy)
+pc = xy %*% svda$v[, 1] %*% t(svda$v[, 1])
+bp = svda$v[2, 1] / svda$v[1, 1]
+ap = mean(pc[, 2]) - bp * mean(pc[, 1])
+ath_gg + geom_segment(xend = pc[, 1], yend = pc[, 2]) +
+  geom_abline(intercept = ap, slope = bp, col = "purple", lwd = 1.5)
+```
+## 7.6 The inner workings of PCA
+
+```{r}
+.savedopt = options(digits = 3)
+X = matrix(c(780,  75, 540,
+             936,  90, 648,
+             1300, 125, 900,
+             728,  70, 504), nrow = 3)
+u = c(0.8196, 0.0788, 0.5674)
+v = c(0.4053, 0.4863, 0.6754, 0.3782)
+s1 = 2348.2
+sum(u^2)
+sum(v^2)
+s1 * u %*% t(v)
+X - s1 * u %*% t(v)
+options(.savedopt)
+```
+
+
+```{r}
+svd(X)
+```
+```{r}
+svd(X)$u[, 1]
+svd(X)$v[, 1]
+sum(svd(X)$u[, 1]^2)
+sum(svd(X)$v[, 1]^2)
+svd(X)$d
+```
+
+```{r}
+Xtwo = matrix(c(12.5, 35.0, 25.0, 25, 9, 14, 26, 18, 16, 21, 49, 32,
+                18, 28, 52, 36, 18, 10.5, 64.5, 36), ncol = 4, byrow = TRUE)
+USV = svd(Xtwo)
+```
+
+```{r}
+names(USV)
+USV$d
+```
+
+```{r}
+Xtwo - USV$d[1] * USV$u[, 1] %*% t(USV$v[, 1])
+Xtwo - USV$d[1] * USV$u[, 1] %*% t(USV$v[, 1]) -
+  USV$d[2] * USV$u[, 2] %*% t(USV$v[, 2])
+```
+
+```{r}
+stopifnot(max(abs(
+  Xtwo - USV$d[1] * USV$u[, 1] %*% t(USV$v[, 1]) -
+    USV$d[2] * USV$u[, 2] %*% t(USV$v[, 2]))) < 1e-12,
+  max(abs(USV$d[3:4])) < 1e-13)
+```
+
+```{r}
+t(USV$u) %*% USV$u
+t(USV$v) %*% USV$v
+```
+
+```{r}
+turtles.svd = svd(scaledTurtles)
+turtles.svd$d
+turtles.svd$v
+dim(turtles.svd$u)
+```
+
+```{r}
+sum(turtles.svd$v[,1]^2)
+sum(turtles.svd$d^2) / 47
+```
+
+\textcolor{red}{7.18 Compute the first principal component for the turtles data}
+```{r}
+turtles.svd$d[1] %*% turtles.svd$u[,1]
+scaledTurtles %*% turtles.svd$v[,1]
+```
+
+\textcolor{red}{7.19 What part of the output of the svd functions leads us to the first PC coefficients, also known as PC loadings?}
+```{r}
+svda$v[,1]
+```
+
+\textcol
+
+```{r}
+ppdf = tibble(PC1n = -svda$u[, 1] * svda$d[1],
+              PC2n = svda$u[, 2] * svda$d[2])
+ggplot(ppdf, aes(x = PC1n, y = PC2n)) + geom_point() + xlab("PC1 ")+
+  ylab("PC2") + geom_point(aes(x=PC1n,y=0),color="red") +
+  geom_segment(aes(xend = PC1n, yend = 0), color = "red") +
+  geom_hline(yintercept = 0, color = "purple", lwd=1.5, alpha=0.5) +
+  xlim(-3.5, 2.7) + ylim(-2,2) + coord_fixed()
+segm = tibble(xmin = pmin(ppdf$PC1n, 0), xmax = pmax(ppdf$PC1n, 0), yp = seq(-1, -2, length = nrow(ppdf)), yo = ppdf$PC2n)
+ggplot(ppdf, aes(x = PC1n, y = PC2n)) + geom_point() + ylab("PC2") + xlab("PC1") +
+  geom_hline(yintercept=0,color="purple",lwd=1.5,alpha=0.5) +
+  geom_point(aes(x=PC1n,y=0),color="red")+
+  xlim(-3.5, 2.7)+ylim(-2,2)+coord_fixed() +
+  geom_segment(aes(xend=PC1n,yend=0), color="red")+
+  geom_segment(data=segm,aes(x=xmin,xend=xmax,y=yo,yend=yo), color="blue",alpha=0.5)
+```
+
+\textcolor{red}{7.20: What is the mean of the sum of squares of the red segments above equal to? How does this compare to the variance of the red points? Compute the ratio of the standard deviation of the red segments to the blue segments. Compare this to the ratio of singular values 1 and 2}
+```{r}
+svda$d[2]^2
+```
+
+\textcolor{red}{Task: use prcomp to compute the PCA of the first two columns of the athletes data; look at the output. Compare to the singluar value decomposition}
+```{r}
+athprc <- prcomp(athletes[,1:2])
+athsvd <- svd(athletes[,1:2])
+```
+
+## 7.7.1 PCA of the turtles data
+
+```{r}
+cor(scaledTurtles)
+pcaturtles = princomp(scaledTurtles)
+pcaturtles
+fviz_eig(pcaturtles, geom = "bar", bar_width = 0.4) + ggtitle("")
+```
+
+\textcolor{red}{7.21: Many PCA functions have been created, compare the following}
+```{r}
+svd(scaledTurtles)$v[, 1]
+prcomp(turtles[, -1])$rotation[, 1]
+princomp(scaledTurtles)$loadings[, 1]
+dudi.pca(turtles[, -1], nf = 2, scannf = FALSE)$c1[, 1]
+```
+
+What happens when you disable the scaling in prcomp and princomp?
+\textcolor{blue}{Scaling is off by default in prcomp? How to do in princomp?}
+```{r}
+prcomp(turtles[, -1], scale = TRUE)$rotation[, 1]
+```
+
+\textcolor{red}{Question 7.22: The coordinates of the observations in the new variables from prcomp (call it res) are in the scores slot of the result. Take a look at PC1 for turtles and compare it to res$scores. Compare the standard deviation sd1 to that in the res object and to that of the scores}
+```{r}
+res = princomp(scaledTurtles)
+PC1 = scaledTurtles %*% res$loadings[,1]
+res$scores[,1]
+sd1 = sqrt(mean(res$scores[, 1]^2))
+sd(res$scores[,1])
+sd(PC1)
+```
+
+\textcolor{blue}{7.23: Check the orthogonality of the res$scores matrix. Why can't we say that it is orthogonal?}
+```{r}
+svd(res$scores)$v
+```
+
+```{r}
+fviz_pca_biplot(pcaturtles, label = "var", habillage = turtles[, 1]) +
+  ggtitle("")
+```
+
+```{r}
+pcadudit = dudi.pca(scaledTurtles, nf = 2, scannf = FALSE)
+apply(pcadudit$li, 2, function(x) sum(x^2)/48)
+pcadudit$eig
+```
